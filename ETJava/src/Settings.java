@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,11 +11,11 @@ public class Settings extends AbstractScreen {
         mainPanel.setLayout(new BorderLayout());
 
         // Add a label in the center of the screen
-        Label label = new Label("Settings", Label.CENTER);
+        JLabel label = new JLabel("Settings", JLabel.CENTER);
         mainPanel.add(label, BorderLayout.CENTER);
 
         // Add a button at the bottom of the screen
-        Button backButton = new Button("Back to Main Screen");
+        JButton backButton = new JButton("Back to Main Screen");
         backButton.setPreferredSize(new Dimension(100, 80)); // Set a custom size for the button (width, height)
 
         backButton.addActionListener(new ActionListener() {

@@ -1,15 +1,15 @@
-import java.awt.*;
+import javax.swing.*;
 
-public abstract class AbstractScreen extends Panel {
-    protected Panel mainPanel;
+public abstract class AbstractScreen extends JPanel {
+    protected JPanel mainPanel;
     protected GameController gameController;
 
     public AbstractScreen(GameController gameController) {
-        mainPanel = new Panel();
+        mainPanel = new JPanel();
         this.gameController = gameController;
     }
 
-    public Panel getPanel(){
+    public JPanel getPanel() {
         return mainPanel;
     }
 }
