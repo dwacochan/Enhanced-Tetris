@@ -44,7 +44,6 @@ public class MainMenu extends AbstractScreen implements ActionListener {
         exitButton.addActionListener(this);
         centerPanel.add(exitButton);
 
-        // Author label
         JLabel authorLabel = new JLabel("Author: Daniel De Calmer", JLabel.CENTER);
         centerPanel.add(authorLabel);
 
@@ -58,19 +57,15 @@ public class MainMenu extends AbstractScreen implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == playButton) {
             System.out.println("Play button clicked");
-            // Add your play logic here
             gameController.showGameLoop();
         } else if (e.getSource() == configButton) {
             System.out.println("Settings button clicked");
-            // Add your settings logic here
             gameController.showSettings();
         } else if (e.getSource() == highScoresButton) {
             System.out.println("High Scores button clicked");
-            // Add your high scores logic here
             gameController.showHighScores();
         } else if (e.getSource() == exitButton) {
             System.out.println("Exit button clicked");
-            // Add your exit logic here
             System.exit(0);
         }
     }

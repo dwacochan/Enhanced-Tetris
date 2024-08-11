@@ -13,7 +13,7 @@ public class SplashScreen extends AbstractScreen {
 
         // Load the PNG image
         try {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("resources/splashScreen.png");
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("resources/splashScreenOption2.png");
             if (inputStream == null) {
                 System.out.println("Image not found!");
             } else {
@@ -26,7 +26,6 @@ public class SplashScreen extends AbstractScreen {
         mainPanel.setLayout(new BorderLayout());
         mainPanel.setBackground(Color.WHITE);
 
-        // Add the custom panel to draw the image
         mainPanel.add(new ImagePanel(), BorderLayout.CENTER);
 
         setVisible(true);
@@ -37,17 +36,14 @@ public class SplashScreen extends AbstractScreen {
         public void paint(Graphics g) {
             super.paint(g);
             if (splashImage != null) {
-                // Get the dimensions of the panel and the image
                 int panelWidth = getWidth();
                 int panelHeight = getHeight();
                 int imageWidth = splashImage.getWidth();
                 int imageHeight = splashImage.getHeight();
 
-                // Calculate the best fit position
                 int x = (panelWidth - imageWidth) / 2;
                 int y = (panelHeight - imageHeight) / 2;
 
-                // Draw the image
                 g.drawImage(splashImage, x, y, this);
             }
         }

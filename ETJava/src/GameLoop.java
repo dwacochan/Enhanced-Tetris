@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class GameLoop extends AbstractScreen {
 
@@ -10,20 +8,11 @@ public class GameLoop extends AbstractScreen {
 
         mainPanel.setLayout(new BorderLayout());
 
-        // Add a label in the center of the screen
         JLabel label = new JLabel("GameLoop", JLabel.CENTER);
+        label.setFont(new Font("Arial", Font.BOLD, 24));
         mainPanel.add(label, BorderLayout.CENTER);
 
-        // Add a button at the bottom of the screen
-        JButton backButton = new JButton("Back to Main Screen");
-        backButton.setPreferredSize(new Dimension(100, 80)); // Set a custom size for the button (width, height)
-
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                gameController.showMainMenu();
-            }
-        });
-        mainPanel.add(backButton, BorderLayout.SOUTH);
+        BottomPanel bottomPanel = new BottomPanel(gameController, "I think Anton be doin' this screen");
+        mainPanel.add(bottomPanel, BorderLayout.SOUTH);
     }
 }
