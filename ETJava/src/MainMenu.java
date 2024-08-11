@@ -1,14 +1,17 @@
 import java.awt.*;
 import java.awt.event.*;
 
-public class TetrisMainMenu extends Frame implements ActionListener {
-
+public class MainMenu extends AbstractScreen implements ActionListener {
     Button playButton, configButton, highScoresButton, exitButton;
 
-    public TetrisMainMenu() {
-        setLayout(new GridLayout(1, 3));
 
-        add(new Panel());
+
+    public MainMenu(GameController gameController) {
+        super(gameController);
+
+        mainPanel.setLayout(new GridLayout(1, 3));
+
+        mainPanel.add(new Panel());
 
 
         Panel centerPanel = new Panel(new GridLayout(6, 12, 10, 10));
@@ -46,12 +49,10 @@ public class TetrisMainMenu extends Frame implements ActionListener {
         centerPanel.add(authorLabel);
 
 
-        add(centerPanel);
+        mainPanel.add(centerPanel);
 
-        add(new Panel());
+        mainPanel.add(new Panel());
 
-        setTitle("Tetris");
-        setSize(400, 300);
         setVisible(true);
     }
 
@@ -59,12 +60,15 @@ public class TetrisMainMenu extends Frame implements ActionListener {
         if (e.getSource() == playButton) {
             System.out.println("Play button clicked");
             // Add your play logic here
+            gameController.showGameLoop();
         } else if (e.getSource() == configButton) {
             System.out.println("Settings button clicked");
             // Add your settings logic here
+            gameController.showSettings();
         } else if (e.getSource() == highScoresButton) {
             System.out.println("High Scores button clicked");
             // Add your high scores logic here
+            gameController.showHighScores();
         } else if (e.getSource() == exitButton) {
             System.out.println("Exit button clicked");
             // Add your exit logic here
@@ -72,7 +76,5 @@ public class TetrisMainMenu extends Frame implements ActionListener {
         }
     }
 
-    public static void main(String[] args) {
-        new TetrisMainMenu();
-    }
+
 }
