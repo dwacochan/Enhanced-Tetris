@@ -24,7 +24,9 @@ public class GameArea extends JPanel implements Runnable {
     }
 
     private void update(){
-        gameplay.update();
+        if(!Controls.pause) {
+            gameplay.update();
+        }
     }
 
     @Override

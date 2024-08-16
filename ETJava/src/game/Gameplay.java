@@ -3,6 +3,7 @@ package game;
 import tetrominos.*;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Gameplay {
     final int WIDTH = 200;
@@ -14,6 +15,7 @@ public class Gameplay {
     Tetromino currentTetromino;
     final int TETROMINOSTART_X;
     final int TETROMINOSTART_Y;
+    public static ArrayList<Block> settledTetrominos = new ArrayList<>();
 
     public Gameplay(){
         left_x = (GameArea.WIDTH/2) - (WIDTH/2);
@@ -29,7 +31,24 @@ public class Gameplay {
     }
 
     public void update(){
-        currentTetromino.update();
+
+        if (currentTetromino.settled){
+
+            settledTetrominos.add(currentTetromino.blocks[0]);
+            settledTetrominos.add(currentTetromino.blocks[1]);
+            settledTetrominos.add(currentTetromino.blocks[2]);
+            settledTetrominos.add(currentTetromino.blocks[3]);
+
+
+            currentTetromino = new L();
+            currentTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
+
+        } else {
+
+            currentTetromino.update();
+
+        }
+
     }
 
     public void draw(Graphics2D g2d){
@@ -42,5 +61,19 @@ public class Gameplay {
         if(currentTetromino != null){
             currentTetromino.draw(g2d);
         }
+
+        for (Block block : settledTetrominos) {
+            block.draw(g2d);
+        }
+
+        g2d.setColor(Color.BLACK);
+        g2d.setFont(g2d.getFont().deriveFont(30f));
+        if(Controls.pause){
+            int x = left_x - 215;
+            int y = top_y + 200;
+            g2d.drawString("PAUSED", x, y);
+            g2d.drawString("Press P to unpause", x - 65, y + 50);
+        }
+
     }
 }
