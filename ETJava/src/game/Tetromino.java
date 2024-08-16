@@ -11,6 +11,8 @@ public class Tetromino {
     public boolean rightCollide;
     public boolean bottomCollide;
     public boolean settled = false;
+    public boolean settling;
+    int settlingTimer = 0;
 
     public void create(Color color){
         blocks[0] = new Block(color);
@@ -150,6 +152,10 @@ public class Tetromino {
 
     public void update(){
 
+        if (settling){
+            settle();
+        }
+
         checkMovementCollision();
 
         if (Controls.left) {
@@ -206,7 +212,7 @@ public class Tetromino {
 
         if (bottomCollide){
 
-            settled = true;
+            settling = true;
 
         } else {
 
@@ -220,9 +226,20 @@ public class Tetromino {
             }
 
         }
+    }
 
+    private void settle(){
 
+        settlingTimer += 1;
+        if (settlingTimer == 45){
 
+            settlingTimer = 0;
+            checkMovementCollision();
+            if (bottomCollide){
+                settled = true;
+            }
+
+        }
 
     }
 
