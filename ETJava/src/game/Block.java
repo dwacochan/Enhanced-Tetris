@@ -1,4 +1,4 @@
-package tetrominos;
+package game;
 
 import java.awt.*;
 

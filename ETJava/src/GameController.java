@@ -1,3 +1,5 @@
+import game.Controls;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -44,6 +46,9 @@ public class GameController {
 
     public void showGameLoop(){
         ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "GameLoop");
+
+        //starts the game when the screen is shown
+        gameLoop.gameArea.startGame();
     }
 
     public void showSettings(){

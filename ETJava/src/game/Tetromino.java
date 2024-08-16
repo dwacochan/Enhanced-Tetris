@@ -1,6 +1,4 @@
-package tetrominos;
-
-import game.Controls;
+package game;
 
 import java.awt.*;
 
@@ -34,6 +32,8 @@ public class Tetromino {
             blocks[1].x -= Block.SIZE;
             blocks[2].x -= Block.SIZE;
             blocks[3].x -= Block.SIZE;
+
+            Controls.left = false;
         }
 
         if (Controls.right){
@@ -41,6 +41,8 @@ public class Tetromino {
             blocks[1].x += Block.SIZE;
             blocks[2].x += Block.SIZE;
             blocks[3].x += Block.SIZE;
+
+            Controls.right = false;
         }
 
         if (Controls.down){
