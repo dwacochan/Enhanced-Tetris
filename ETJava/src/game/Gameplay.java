@@ -4,6 +4,7 @@ import tetrominos.*;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Gameplay {
     final int WIDTH = 200;
@@ -26,8 +27,27 @@ public class Gameplay {
         TETROMINOSTART_X = left_x + (WIDTH/2) - Block.SIZE;
         TETROMINOSTART_Y = top_y + Block.SIZE;
 
-        currentTetromino = new L();
+        currentTetromino = selectShape();
         currentTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
+    }
+
+    private Tetromino selectShape(){
+
+        Tetromino shape = null;
+        int n = new Random().nextInt(7);
+
+        switch(n){
+            case 0: shape = new I(); break;
+            case 1: shape = new O(); break;
+            case 2: shape = new T(); break;
+            case 3: shape = new S(); break;
+            case 4: shape = new Z(); break;
+            case 5: shape = new J(); break;
+            case 6: shape = new L(); break;
+        }
+
+        return shape;
+
     }
 
     public void update(){
@@ -39,16 +59,68 @@ public class Gameplay {
             settledTetrominos.add(currentTetromino.blocks[2]);
             settledTetrominos.add(currentTetromino.blocks[3]);
 
+            currentTetromino.settling = false;
 
-            currentTetromino = new L();
+            currentTetromino = selectShape();
             currentTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
+            checkFullRow();
 
         } else {
 
             currentTetromino.update();
 
         }
+    }
 
+    private void checkFullRow(){
+        int x = left_x;
+        int y = top_y;
+        int blockNum = 0;
+
+        while (x < right_x && y < bottom_y){
+
+            for (Block settledBlock : settledTetrominos){
+
+                if (settledBlock.x == x && settledBlock.y == y){
+
+                    blockNum += 1;
+
+                }
+            }
+
+
+            x += Block.SIZE;
+            if (x == right_x){
+
+                if (blockNum == 10) {
+
+                    for (int n = settledTetrominos.size() - 1; n > -1; n -= 1) {
+
+                        if (settledTetrominos.get(n).y == y) {
+
+                            settledTetrominos.remove(n);
+
+                        }
+
+                    }
+
+                    for (Block settledBlock : settledTetrominos) {
+
+                        if (settledBlock.y < y) {
+
+                            settledBlock.y += Block.SIZE;
+
+                        }
+                    }
+
+                }
+
+                blockNum = 0;
+                x = left_x;
+                y += Block.SIZE;
+
+            }
+        }
     }
 
     public void draw(Graphics2D g2d){
