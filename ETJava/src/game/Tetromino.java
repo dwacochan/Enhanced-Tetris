@@ -3,9 +3,8 @@ package game;
 import java.awt.*;
 
 public class Tetromino {
-    public Block blocks[] = new Block[4];
-    public Block tempBlocks[] = new Block[4];
-    private boolean falling = false;
+    public Block[] blocks = new Block[4];
+    public Block[] tempBlocks = new Block[4];
     public int rotation = 0;
     public boolean leftCollide;
     public boolean rightCollide;
@@ -15,14 +14,10 @@ public class Tetromino {
     int settlingTimer = 0;
 
     public void create(Color color){
-        blocks[0] = new Block(color);
-        blocks[1] = new Block(color);
-        blocks[2] = new Block(color);
-        blocks[3] = new Block(color);
-        tempBlocks[0] = new Block(color);
-        tempBlocks[1] = new Block(color);
-        tempBlocks[2] = new Block(color);
-        tempBlocks[3] = new Block(color);
+        for (int i = 0; i < 4; i++) {
+            blocks[i] = new Block(color);
+            tempBlocks[i] = new Block(color);
+        }
     }
 
     public void setPosition(int x, int y){
@@ -34,36 +29,21 @@ public class Tetromino {
         checkRotationCollision();
 
         if (!leftCollide && !rightCollide && !bottomCollide) {
-
             this.rotation = rotation;
-
-            blocks[0].x = tempBlocks[0].x;
-            blocks[0].y = tempBlocks[0].y;
-            blocks[1].x = tempBlocks[1].x;
-            blocks[1].y = tempBlocks[1].y;
-            blocks[2].x = tempBlocks[2].x;
-            blocks[2].y = tempBlocks[2].y;
-            blocks[3].x = tempBlocks[3].x;
-            blocks[3].y = tempBlocks[3].y;
-
+            for (int i = 0; i < 4; i++) {
+                blocks[i].x = tempBlocks[i].x;
+                blocks[i].y = tempBlocks[i].y;
+            }
         }
     }
 
-    public void getRotation0(){
+    protected void getRotation0(){}
 
-    }
+    protected void getRotation1(){}
 
-    public void getRotation1(){
+    protected void getRotation2(){}
 
-    }
-
-    public void getRotation2(){
-
-    }
-
-    public void getRotation3(){
-
-    }
+    protected void getRotation3(){}
 
     public void checkMovementCollision(){
 
@@ -76,18 +56,21 @@ public class Tetromino {
         for (Block block : blocks) {
             if (block.x == Gameplay.left_x) {
                 leftCollide = true;
+                break;
             }
         }
 
         for (Block block : blocks) {
             if (block.x + Block.SIZE == Gameplay.right_x) {
                 rightCollide = true;
+                break;
             }
         }
 
         for (Block block : blocks) {
             if (block.y + Block.SIZE >= Gameplay.bottom_y) {
                 bottomCollide = true;
+                break;
             }
         }
 
@@ -104,129 +87,140 @@ public class Tetromino {
         for (Block block : tempBlocks) {
             if (block.x < Gameplay.left_x) {
                 leftCollide = true;
+                break;
             }
         }
 
         for (Block block : tempBlocks) {
             if (block.x + Block.SIZE > Gameplay.right_x) {
                 rightCollide = true;
+                break;
             }
         }
 
         for (Block block : tempBlocks) {
             if (block.y + Block.SIZE >= Gameplay.bottom_y) {
                 bottomCollide = true;
+                break;
             }
         }
 
     }
 
-    private void checkSettledTetrominoCollision(){
-
-        for (Block settledBlock : Gameplay.settledTetrominos){
-
+    private void checkSettledTetrominoCollision() {
+        for (Block settledBlock : Gameplay.settledTetrominos) {
             int settledX = settledBlock.x;
             int settledY = settledBlock.y;
 
-            for (Block block : blocks){
-                if (block.x == settledX && block.y + Block.SIZE >= settledY){
+            for (Block block : blocks) {
+                if (isBottomCollision(block, settledX, settledY)) {
                     bottomCollide = true;
                 }
-            }
-
-            for (Block block : blocks){
-                if (block.x - Block.SIZE == settledX && block.y >= settledY && block.y < settledY + Block.SIZE){
+                if (isLeftCollision(block, settledX, settledY)) {
                     leftCollide = true;
                 }
-            }
-
-            for (Block block : blocks){
-                if (block.x + Block.SIZE == settledX && block.y >= settledY && block.y < settledY + Block.SIZE){
+                if (isRightCollision(block, settledX, settledY)) {
                     rightCollide = true;
                 }
             }
-
         }
-
     }
 
-    public void update(){
+    private boolean isBottomCollision(Block block, int settledX, int settledY) {
+        return block.x == settledX && block.y + Block.SIZE >= settledY;
+    }
 
-        if (settling){
+    private boolean isLeftCollision(Block block, int settledX, int settledY) {
+        return block.x - Block.SIZE == settledX && block.y >= settledY && block.y < settledY + Block.SIZE;
+    }
+
+    private boolean isRightCollision(Block block, int settledX, int settledY) {
+        return block.x + Block.SIZE == settledX && block.y >= settledY && block.y < settledY + Block.SIZE;
+    }
+
+
+    public void update() {
+        if (settling) {
             settle();
         }
 
         checkMovementCollision();
 
-        if (Controls.left) {
-            if (!leftCollide) {
-                blocks[0].x -= Block.SIZE;
-                blocks[1].x -= Block.SIZE;
-                blocks[2].x -= Block.SIZE;
-                blocks[3].x -= Block.SIZE;
-            }
+        handleMovement();
+        handleRotation();
 
+        if (bottomCollide) {
+            settling = true;
+        } else {
+            handleFalling();
+        }
+    }
+
+    private void handleMovement() {
+        if (Controls.left && !leftCollide) {
+            moveLeft();
             Controls.left = false;
         }
 
-        if (Controls.right) {
-            if (!rightCollide) {
-                blocks[0].x += Block.SIZE;
-                blocks[1].x += Block.SIZE;
-                blocks[2].x += Block.SIZE;
-                blocks[3].x += Block.SIZE;
-            }
-
+        if (Controls.right && !rightCollide) {
+            moveRight();
             Controls.right = false;
         }
 
-        if (Controls.down) {
-            if (!bottomCollide) {
-                blocks[0].y += Block.SIZE;
-                blocks[1].y += Block.SIZE;
-                blocks[2].y += Block.SIZE;
-                blocks[3].y += Block.SIZE;
-            }
-
+        if (Controls.down && !bottomCollide) {
+            moveDown();
             Controls.down = false;
         }
+    }
 
+    private void handleRotation() {
         if (Controls.up) {
-            switch (rotation) {
-                case 0:
-                    getRotation1();
-                    break;
-                case 1:
-                    getRotation2();
-                    break;
-                case 2:
-                    getRotation3();
-                    break;
-                case 3:
-                    getRotation0();
-                    break;
-            }
-
+            rotate();
             Controls.up = false;
         }
+    }
 
-        if (bottomCollide){
-
-            settling = true;
-
-        } else {
-
-            falling = true;
-            if (falling) {
-                blocks[0].y += 1;
-                blocks[1].y += 1;
-                blocks[2].y += 1;
-                blocks[3].y += 1;
-                falling = false;
-            }
-
+    private void moveLeft() {
+        for (Block block : blocks) {
+            block.x -= Block.SIZE;
         }
     }
+
+    private void moveRight() {
+        for (Block block : blocks) {
+            block.x += Block.SIZE;
+        }
+    }
+
+    private void moveDown() {
+        for (Block block : blocks) {
+            block.y += Block.SIZE;
+        }
+    }
+
+    private void rotate() {
+        switch (rotation) {
+            case 0:
+                getRotation1();
+                break;
+            case 1:
+                getRotation2();
+                break;
+            case 2:
+                getRotation3();
+                break;
+            case 3:
+                getRotation0();
+                break;
+        }
+    }
+
+    private void handleFalling() {
+        for (Block block : blocks) {
+            block.y += 1;
+        }
+    }
+
 
     private void settle(){
 

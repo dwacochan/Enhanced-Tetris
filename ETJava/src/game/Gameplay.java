@@ -4,6 +4,7 @@ import tetrominos.*;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class Gameplay {
@@ -36,92 +37,70 @@ public class Gameplay {
         Tetromino shape = null;
         int n = new Random().nextInt(7);
 
-        switch(n){
-            case 0: shape = new I(); break;
-            case 1: shape = new O(); break;
-            case 2: shape = new T(); break;
-            case 3: shape = new S(); break;
-            case 4: shape = new Z(); break;
-            case 5: shape = new J(); break;
-            case 6: shape = new L(); break;
-        }
+        shape = switch (n) {
+            case 0 -> new I();
+            case 1 -> new O();
+            case 2 -> new T();
+            case 3 -> new S();
+            case 4 -> new Z();
+            case 5 -> new J();
+            case 6 -> new L();
+            default -> shape;
+        };
 
         return shape;
 
     }
 
-    public void update(){
-
-        if (currentTetromino.settled){
-
-            settledTetrominos.add(currentTetromino.blocks[0]);
-            settledTetrominos.add(currentTetromino.blocks[1]);
-            settledTetrominos.add(currentTetromino.blocks[2]);
-            settledTetrominos.add(currentTetromino.blocks[3]);
+    public void update() {
+        if (currentTetromino.settled) {
+            settledTetrominos.addAll(Arrays.asList(currentTetromino.blocks));
 
             currentTetromino.settling = false;
-
             currentTetromino = selectShape();
             currentTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
-            checkFullRow();
-
+            checkRowErasure();
         } else {
-
             currentTetromino.update();
-
         }
     }
 
-    private void checkFullRow(){
-        int x = left_x;
-        int y = top_y;
-        int blockNum = 0;
-
-        while (x < right_x && y < bottom_y){
-
-            for (Block settledBlock : settledTetrominos){
-
-                if (settledBlock.x == x && settledBlock.y == y){
-
-                    blockNum += 1;
-
+    private void checkRowErasure(){
+        ArrayList<Integer> fullRows = new ArrayList<>();
+        checkFullRow(fullRows);
+        removeFullRow(fullRows);
+        shiftDownRemainingRows(fullRows);
+    }
+    private void checkFullRow(ArrayList<Integer> fullRows) {
+        for (int y = top_y; y < bottom_y; y += Block.SIZE) {
+            int blockNum = 0;
+            for (Block settledBlock : settledTetrominos) {
+                if (settledBlock.y == y) {
+                    blockNum++;
                 }
             }
+            if (blockNum == (right_x - left_x) / Block.SIZE) {
+                fullRows.add(y);
+            }
+        }
 
+    }
+    private void removeFullRow(ArrayList<Integer> fullRows){
+        for (int row : fullRows) {
+            settledTetrominos.removeIf(block -> block.y == row);
+        }
+    }
 
-            x += Block.SIZE;
-            if (x == right_x){
-
-                if (blockNum == 10) {
-
-                    for (int n = settledTetrominos.size() - 1; n > -1; n -= 1) {
-
-                        if (settledTetrominos.get(n).y == y) {
-
-                            settledTetrominos.remove(n);
-
-                        }
-
-                    }
-
-                    for (Block settledBlock : settledTetrominos) {
-
-                        if (settledBlock.y < y) {
-
-                            settledBlock.y += Block.SIZE;
-
-                        }
-                    }
-
+    private void shiftDownRemainingRows(ArrayList<Integer> fullRows){
+        for (int row : fullRows) {
+            for (Block settledBlock : settledTetrominos) {
+                if (settledBlock.y < row) {
+                    settledBlock.y += Block.SIZE;
                 }
-
-                blockNum = 0;
-                x = left_x;
-                y += Block.SIZE;
-
             }
         }
     }
+
 
     public void draw(Graphics2D g2d){
         g2d.setColor(Color.LIGHT_GRAY);
@@ -148,4 +127,6 @@ public class Gameplay {
         }
 
     }
+
+
 }
