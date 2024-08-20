@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import game.*;
 
 public class MainMenu extends AbstractScreen implements ActionListener {
     JButton playButton, configButton, highScoresButton, exitButton;
@@ -65,8 +66,13 @@ public class MainMenu extends AbstractScreen implements ActionListener {
             System.out.println("High Scores button clicked");
             gameController.showHighScores();
         } else if (e.getSource() == exitButton) {
-            System.out.println("Exit button clicked");
-            System.exit(0);
+            int response = JOptionPane.showConfirmDialog(this,
+                    "Are you sure you want to exit?",
+                    "Exit Confirmation",
+                    JOptionPane.YES_NO_OPTION);
+            if (response == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            }
         }
     }
 }
