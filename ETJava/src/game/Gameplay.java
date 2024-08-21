@@ -129,4 +129,11 @@ public class Gameplay {
     }
 
 
+    public void reset() {
+        settledTetrominos.clear();
+
+        currentTetromino = selectShape();
+        currentTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
+    }
+
 }

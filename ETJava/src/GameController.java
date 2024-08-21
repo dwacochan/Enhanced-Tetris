@@ -1,9 +1,10 @@
-
 import javax.swing.*;
 import java.awt.*;
+import game.*;
 
 public class GameController {
     private final JFrame mainFrame;
+    private boolean isRunning; // Tracks if the game is currently running
 
     // Screens
     private MainMenu mainMenu;
@@ -46,8 +47,9 @@ public class GameController {
     public void showGameLoop(){
         ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "GameLoop");
 
-        //starts the game when the screen is shown
+        // Starts the game when the screen is shown
         gameLoop.gameArea.startGame();
+        isRunning = true; // Set the game as running
     }
 
     public void showSettings(){
@@ -62,5 +64,29 @@ public class GameController {
         for (Component comp : mainFrame.getContentPane().getComponents()) {
             comp.setVisible(false);
         }
+    }
+
+    public boolean isGameRunning() {
+        return isRunning;
+    }
+
+    public void pauseGame() {
+        if (isRunning) {
+            gameLoop.gameArea.pauseGame(); // Pause the game area logic
+            isRunning = false; // Mark the game as not running
+        }
+    }
+
+    public void resumeGame() {
+        if (!isRunning) {
+            gameLoop.gameArea.resumeGame(); // Resume the game area logic
+            isRunning = true; // Mark the game as running again
+        }
+    }
+
+    public void stopGame() {
+        gameLoop.gameArea.stopGame(); // Stop the game area logic
+        isRunning = false; // Mark the game as not running
+        gameLoop.gameArea.resetGame();
     }
 }
