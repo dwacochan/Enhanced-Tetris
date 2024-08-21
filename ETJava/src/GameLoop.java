@@ -16,7 +16,7 @@ public class GameLoop extends AbstractScreen {
 
         mainPanel.add(gameArea, BorderLayout.CENTER);
 
-        BottomPanel bottomPanel = new BottomPanel(gameController, "Anton");
+        BottomPanel bottomPanel = new BottomPanel(gameController, "Anton Koulakov");
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
     }
 }
