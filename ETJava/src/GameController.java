@@ -89,4 +89,8 @@ public class GameController {
         isRunning = false; // Mark the game as not running
         gameLoop.gameArea.resetGame();
     }
+
+    public boolean checkGameOver(){
+        return Gameplay.gameOver;
+    }
 }

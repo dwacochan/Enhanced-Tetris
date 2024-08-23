@@ -106,6 +106,8 @@ public class Tetromino {
             int settledX = settledBlock.x;
             int settledY = settledBlock.y;
 
+
+
             for (Block block : blocks) {
                 if (isBottomCollision(block, settledX, settledY)) {
                     bottomCollide = true;
@@ -117,6 +119,7 @@ public class Tetromino {
                     rightCollide = true;
                 }
             }
+
         }
 
     }
@@ -133,6 +136,8 @@ public class Tetromino {
         return block.x + Block.SIZE == settledX && block.y >= settledY && block.y < settledY + Block.SIZE;
     }
 
+
+
     public void update() {
         if (settling) {
             settle();
@@ -140,7 +145,6 @@ public class Tetromino {
         }
 
         checkMovementCollision();
-
         if (bottomCollide) {
             settling = true;
         } else {
@@ -239,6 +243,12 @@ public class Tetromino {
 
             if (bottomCollide) {
                 settled = true;
+                for (Block block : blocks) {
+                    if (block.y < Gameplay.top_y + Block.SIZE) {
+                        Gameplay.gameOver = true;
+                        break;
+                    }
+                }
             }
         }
     }
