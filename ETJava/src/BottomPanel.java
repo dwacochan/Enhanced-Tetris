@@ -24,26 +24,28 @@ public class BottomPanel extends JPanel {
         if(gameController.checkGameOver()){
             gameController.stopGame();
             gameController.showMainMenu();
+
             return;
         }
 
         // Pause the game
         gameController.pauseGame();
+        if (wasRunning){
+            // Show confirmation dialog
+            int choice = JOptionPane.showConfirmDialog(this,
+                    "Do you want to stop the game and return to the main menu?",
+                    "Confirm Exit",
+                    JOptionPane.YES_NO_OPTION);
 
-        // Show confirmation dialog
-        int choice = JOptionPane.showConfirmDialog(this,
-                "Do you want to stop the game and return to the main menu?",
-                "Confirm Exit",
-                JOptionPane.YES_NO_OPTION);
-
-        if (choice == JOptionPane.YES_OPTION) {
-            gameController.stopGame();
+            if (choice == JOptionPane.YES_OPTION) {
+                gameController.stopGame();
+                gameController.showMainMenu();
+            } else {
+                    gameController.resumeGame();
+                }
+        }else{
             gameController.showMainMenu();
-        } else {
-            // Resume the game only if it was running before the pause
-            if (wasRunning) {
-                gameController.resumeGame();
-            }
         }
     }
 }
+

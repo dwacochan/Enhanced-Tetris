@@ -38,9 +38,6 @@ public class GameArea extends JPanel implements Runnable {
     public void resumeGame() {
         if (running && paused) {
             paused = false;
-            synchronized (this) {
-                notify();  // Wake up the thread if it was waiting
-            }
         }
     }
 
@@ -74,6 +71,7 @@ public class GameArea extends JPanel implements Runnable {
     private void update() {
         if (!paused && !Controls.pause) {
             gameplay.update();
+
         }
     }
 
@@ -93,17 +91,6 @@ public class GameArea extends JPanel implements Runnable {
                 update();
                 repaint();
                 delta--;
-            }
-
-            // Pausing the game by making the thread wait
-            if (paused) {
-                synchronized (this) {
-                    try {
-                        wait(); // Pause the game thread
-                    } catch (InterruptedException e) {
-                        System.out.println("Pausing game");
-                    }
-                }
             }
         }
     }
