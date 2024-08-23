@@ -244,7 +244,7 @@ public class Tetromino {
             if (bottomCollide) {
                 settled = true;
                 for (Block block : blocks) {
-                    if (block.y < Gameplay.top_y + Block.SIZE) {
+                    if (block.y < Gameplay.top_y + Block.SIZE + 1) {
                         Gameplay.gameOver = true;
                         break;
                     }
