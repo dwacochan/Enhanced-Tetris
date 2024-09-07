@@ -114,7 +114,7 @@ public class Tetromino {
         if (block.x + Block.SIZE > Gameplay.right_x) {
             rightCollide = true;
         }
-        if (block.y + Block.SIZE >= Gameplay.bottom_y) {
+        if (block.y + Block.SIZE > Gameplay.bottom_y) {
             bottomCollide = true;
         }
     }

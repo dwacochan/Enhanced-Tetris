@@ -20,6 +20,15 @@ public class BottomPanel extends JPanel {
     private void handleBackButtonClick(GameController gameController) {
         boolean wasRunning = gameController.isGameRunning();
 
+
+        // Check for game over
+        if(gameController.checkGameOver()){
+            gameController.stopGame();
+            gameController.showMainMenu();
+
+            return;
+        }
+
         // Pause the game
         gameController.pauseGame();
         if (wasRunning){
