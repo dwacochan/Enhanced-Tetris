@@ -6,10 +6,10 @@ public class Tetromino {
     public Block[] blocks = new Block[4];
     public Block[] tempBlocks = new Block[4];
     public int rotation = 0;
-    public boolean leftCollide, rightCollide, bottomCollide;
+    public boolean leftCollide = false, rightCollide = false, bottomCollide = false;
     public boolean settled = false;
-    public boolean settling;
-    int settlingTimer = 0;
+    public boolean settling = false;
+    private int settlingTimer = 0;
 
     public void create(Color color) {
         for (int i = 0; i < 4; i++) {
@@ -35,13 +35,11 @@ public class Tetromino {
                 blocks[i].y = tempBlocks[i].y;
             }
         } else {
-
             snapBackRotation();
         }
     }
 
     private void snapBackRotation() {
-
         switch (this.rotation) {
             case 0 -> getRotation0();
             case 1 -> getRotation1();
@@ -56,57 +54,36 @@ public class Tetromino {
     protected void getRotation3() {}
 
     private void checkMovementCollision() {
-        leftCollide = false;
-        rightCollide = false;
-        bottomCollide = false;
-
-        checkSettledTetrominoCollision();
-
+        resetCollisions();
+        checkSettledTetrominoCollision(blocks);
         for (Block block : blocks) {
-            if (block.x + Block.SIZE== Gameplay.left_x) {
-                leftCollide = true;
-                break;
-            }
-            if (block.x == Gameplay.right_x) {
-                rightCollide = true;
-                break;
-            }
-            if (block.y + Block.SIZE >= Gameplay.bottom_y) {
-                bottomCollide = true;
-                break;
-            }
+            checkWallCollision(block);
         }
     }
 
     private void checkRotationCollision() {
-        leftCollide = false;
-        rightCollide = false;
-        bottomCollide = false;
-
-        checkSettledTetrominoCollision();
-
+        resetCollisions();
+        checkSettledTetrominoCollision(tempBlocks);
         for (Block block : tempBlocks) {
-            if (block.x < Gameplay.left_x) {
-                leftCollide = true;
-                break;
-            }
-            if (block.x + Block.SIZE > Gameplay.right_x) {
-                rightCollide = true;
-                break;
-            }
-            if (block.y + Block.SIZE >= Gameplay.bottom_y) {
-                bottomCollide = true;
-                break;
-            }
+            checkWallCollision(block);
         }
     }
 
-    private void checkSettledTetrominoCollision() {
+    private void resetCollisions() {
+        leftCollide = false;
+        rightCollide = false;
+        bottomCollide = false;
+    }
+
+    private void checkSettledTetrominoCollision(Block[] blocksToCheck) {
         for (Block settledBlock : Gameplay.settledTetrominos) {
+<<<<<<< HEAD
+            for (Block block : blocksToCheck) {
+                if (isCollision(block, settledBlock)) {
+                    updateCollisionFlags(block, settledBlock);
+=======
             int settledX = settledBlock.x;
             int settledY = settledBlock.y;
-
-
 
             for (Block block : blocks) {
                 if (isBottomCollision(block, settledX, settledY)) {
@@ -117,26 +94,45 @@ public class Tetromino {
                 }
                 if (isRightCollision(block, settledX, settledY)) {
                     rightCollide = true;
+>>>>>>> parent of bc04a42 (Fixed game over behaviour)
                 }
             }
-
         }
-
     }
 
-    private boolean isBottomCollision(Block block, int settledX, int settledY) {
-        return block.x == settledX && block.y + Block.SIZE >= settledY;
+    private boolean isCollision(Block movingBlock, Block settledBlock) {
+        // Checks for block overlap with settledBlock
+        return movingBlock.x < settledBlock.x + Block.SIZE &&
+                movingBlock.x + Block.SIZE > settledBlock.x &&
+                movingBlock.y < settledBlock.y + Block.SIZE &&
+                movingBlock.y + Block.SIZE > settledBlock.y;
     }
 
-    private boolean isLeftCollision(Block block, int settledX, int settledY) {
-        return block.x - Block.SIZE == settledX && block.y >= settledY && block.y < settledY + Block.SIZE;
+    private void updateCollisionFlags(Block block, Block settledBlock) {
+        if (block.y + Block.SIZE > settledBlock.y && block.y < settledBlock.y + Block.SIZE) {
+            if (block.x + Block.SIZE > settledBlock.x && block.x < settledBlock.x + Block.SIZE) {
+                rightCollide = true;
+            }
+            if (block.x < settledBlock.x + Block.SIZE && block.x + Block.SIZE > settledBlock.x) {
+                leftCollide = true;
+            }
+            if (block.x + Block.SIZE > settledBlock.x && block.x < settledBlock.x + Block.SIZE) {
+                bottomCollide = true;
+            }
+        }
     }
 
-    private boolean isRightCollision(Block block, int settledX, int settledY) {
-        return block.x + Block.SIZE == settledX && block.y >= settledY && block.y < settledY + Block.SIZE;
+    private void checkWallCollision(Block block) {
+        if (block.x < Gameplay.left_x) {
+            leftCollide = true;
+        }
+        if (block.x + Block.SIZE > Gameplay.right_x) {
+            rightCollide = true;
+        }
+        if (block.y + Block.SIZE >= Gameplay.bottom_y) {
+            bottomCollide = true;
+        }
     }
-
-
 
     public void update() {
         if (settling) {
@@ -145,11 +141,16 @@ public class Tetromino {
         }
 
         checkMovementCollision();
+
+<<<<<<< HEAD
+        handleFalling();
+=======
         if (bottomCollide) {
             settling = true;
         } else {
             handleFalling();
         }
+>>>>>>> parent of bc04a42 (Fixed game over behaviour)
 
         handleMovement();
         handleRotation();
@@ -186,6 +187,7 @@ public class Tetromino {
     }
 
     private void handleRotation() {
+        if (settling) return;
         if (Controls.up) {
             rotate();
             Controls.up = false;
@@ -225,7 +227,7 @@ public class Tetromino {
         }
         checkRotationCollision();
         if (leftCollide || rightCollide || bottomCollide) {
-            snapBackRotation();  // Snap back if collision occurs
+            snapBackRotation();
         }
     }
 
@@ -233,31 +235,39 @@ public class Tetromino {
         for (Block block : blocks) {
             block.y += 1;
         }
+        checkMovementCollision();
+        if (bottomCollide) {
+            settling = true;
+            for (Block block : blocks) {
+                block.y -= 1;
+            }
+        }
     }
 
     private void settle() {
         settlingTimer += 1;
         if (settlingTimer == 45) {
             settlingTimer = 0;
-            checkMovementCollision();
 
             if (bottomCollide) {
                 settled = true;
+<<<<<<< HEAD
                 for (Block block : blocks) {
                     if (block.y < Gameplay.top_y + Block.SIZE + 1) {
                         Gameplay.gameOver = true;
                         break;
                     }
                 }
+=======
+>>>>>>> parent of bc04a42 (Fixed game over behaviour)
             }
         }
     }
 
     public void draw(Graphics2D g2d) {
         g2d.setColor(blocks[0].color);
-        g2d.fillRect(blocks[0].x, blocks[0].y, Block.SIZE, Block.SIZE);
-        g2d.fillRect(blocks[1].x, blocks[1].y, Block.SIZE, Block.SIZE);
-        g2d.fillRect(blocks[2].x, blocks[2].y, Block.SIZE, Block.SIZE);
-        g2d.fillRect(blocks[3].x, blocks[3].y, Block.SIZE, Block.SIZE);
+        for (Block block : blocks) {
+            g2d.fillRect(block.x, block.y, Block.SIZE, Block.SIZE);
+        }
     }
 }
