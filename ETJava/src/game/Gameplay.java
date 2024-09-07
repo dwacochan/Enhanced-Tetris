@@ -64,6 +64,7 @@ public class Gameplay {
             currentTetromino.settling = false;
             currentTetromino = selectShape();
             currentTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
+
             checkRowErasure();
         } else {
             currentTetromino.update();
@@ -88,15 +89,15 @@ public class Gameplay {
                 fullRows.add(y);
             }
         }
-
     }
-    private void removeFullRow(ArrayList<Integer> fullRows){
+
+    private void removeFullRow(ArrayList<Integer> fullRows) {
         for (int row : fullRows) {
             settledTetrominos.removeIf(block -> block.y == row);
         }
     }
 
-    private void shiftDownRemainingRows(ArrayList<Integer> fullRows){
+    private void shiftDownRemainingRows(ArrayList<Integer> fullRows) {
         for (int row : fullRows) {
             for (Block settledBlock : settledTetrominos) {
                 if (settledBlock.y < row) {
@@ -105,6 +106,7 @@ public class Gameplay {
             }
         }
     }
+
 
 
     public void draw(Graphics2D g2d){
