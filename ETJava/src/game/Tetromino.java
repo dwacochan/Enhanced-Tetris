@@ -77,24 +77,9 @@ public class Tetromino {
 
     private void checkSettledTetrominoCollision(Block[] blocksToCheck) {
         for (Block settledBlock : Gameplay.settledTetrominos) {
-<<<<<<< HEAD
             for (Block block : blocksToCheck) {
                 if (isCollision(block, settledBlock)) {
                     updateCollisionFlags(block, settledBlock);
-=======
-            int settledX = settledBlock.x;
-            int settledY = settledBlock.y;
-
-            for (Block block : blocks) {
-                if (isBottomCollision(block, settledX, settledY)) {
-                    bottomCollide = true;
-                }
-                if (isLeftCollision(block, settledX, settledY)) {
-                    leftCollide = true;
-                }
-                if (isRightCollision(block, settledX, settledY)) {
-                    rightCollide = true;
->>>>>>> parent of bc04a42 (Fixed game over behaviour)
                 }
             }
         }
@@ -142,15 +127,7 @@ public class Tetromino {
 
         checkMovementCollision();
 
-<<<<<<< HEAD
         handleFalling();
-=======
-        if (bottomCollide) {
-            settling = true;
-        } else {
-            handleFalling();
-        }
->>>>>>> parent of bc04a42 (Fixed game over behaviour)
 
         handleMovement();
         handleRotation();
@@ -251,15 +228,12 @@ public class Tetromino {
 
             if (bottomCollide) {
                 settled = true;
-<<<<<<< HEAD
                 for (Block block : blocks) {
                     if (block.y < Gameplay.top_y + Block.SIZE + 1) {
                         Gameplay.gameOver = true;
                         break;
                     }
                 }
-=======
->>>>>>> parent of bc04a42 (Fixed game over behaviour)
             }
         }
     }

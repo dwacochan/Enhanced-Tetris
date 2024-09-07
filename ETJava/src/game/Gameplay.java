@@ -18,6 +18,8 @@ public class Gameplay {
     final int TETROMINOSTART_X;
     final int TETROMINOSTART_Y;
     public static ArrayList<Block> settledTetrominos = new ArrayList<>();
+    public static boolean gameOver = false;
+
 
     public Gameplay(){
         left_x = (GameArea.WIDTH/2) - (WIDTH/2);
@@ -53,6 +55,9 @@ public class Gameplay {
     }
 
     public void update() {
+        if (gameOver){
+            return;
+        }
         if (currentTetromino.settled) {
             settledTetrominos.addAll(Arrays.asList(currentTetromino.blocks));
 
@@ -131,7 +136,8 @@ public class Gameplay {
 
     public void reset() {
         settledTetrominos.clear();
-
+        Controls.pause = false;
+        gameOver = false;
         currentTetromino = selectShape();
         currentTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
     }
