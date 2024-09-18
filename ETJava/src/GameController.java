@@ -19,7 +19,9 @@ public class GameController {
 
     public GameController(){
         highScores = new HighScores();
-        configurations = new Configurations();
+        configurations = Configurations.loadFromFile();
+        highScores = new HighScores();
+        highScores.loadFromFile();
 
         mainFrame = new JFrame("Tetris");
         mainFrame.setSize(800, 600);
@@ -59,6 +61,7 @@ public class GameController {
 
     public void showSettings(){
         ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "Settings");
+        configurations = Configurations.loadFromFile();
     }
 
     public void showHighScores(){
@@ -93,6 +96,17 @@ public class GameController {
         gameLoop.gameArea.stopGame();
         isRunning = false;
         gameLoop.gameArea.resetGame();
+        configurations.saveToFile();
+        highScores.saveToFile();
+    }
+
+    public void updateHighScores(int score, String name) {
+        highScores.addScore(score, name);
+        highScores.saveToFile();
+    }
+
+    public void updateConfigurations() {
+        configurations.saveToFile();
     }
 
     public boolean checkGameOver(){

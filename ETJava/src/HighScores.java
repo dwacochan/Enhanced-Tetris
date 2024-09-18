@@ -1,9 +1,15 @@
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HighScores {
     private List<Score> scores;
-    
+    private static final String HIGH_SCORES_FILE_PATH = "highscores.json";
 
     public HighScores() {
         scores = new ArrayList<>();
@@ -36,6 +42,31 @@ public class HighScores {
         scores.add(new Score(1650, "Isabella"));
         scores.add(new Score(1600, "David"));
         scores.add(new Score(1550, "Mia"));
+    }
+
+
+    // Save high scores to JSON
+    public void saveToFile() {
+        Gson gson = new Gson();
+        try (FileWriter writer = new FileWriter(HIGH_SCORES_FILE_PATH)) {
+            System.out.println("Highscore Saved");
+            gson.toJson(scores, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Load high scores from JSON
+    public void loadFromFile() {
+        Gson gson = new Gson();
+        try (FileReader reader = new FileReader(HIGH_SCORES_FILE_PATH)) {
+            Type scoreListType = new TypeToken<List<Score>>() {}.getType();
+            System.out.println("Highscore Read");
+            scores = gson.fromJson(reader, scoreListType);
+        } catch (IOException e) {
+            e.printStackTrace();
+            loadScores(); // Load default scores if there's an issue
+        }
     }
 }
 

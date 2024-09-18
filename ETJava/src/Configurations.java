@@ -1,3 +1,9 @@
+import com.google.gson.Gson;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+
 public class Configurations {
     private int fieldWidth;
     private int fieldHeight;
@@ -6,6 +12,8 @@ public class Configurations {
     private boolean soundEffectsOn;
     private boolean aiPlayOn;
     private boolean extendModeOn;
+
+    private static final String CONFIG_FILE_PATH = "configurations.json";
 
     public Configurations() {
         // Default configurations
@@ -39,4 +47,28 @@ public class Configurations {
 
     public boolean isExtendModeOn() { return extendModeOn; }
     public void setExtendModeOn(boolean extendModeOn) { this.extendModeOn = extendModeOn; }
+
+
+    // Save configuration to JSON
+    public void saveToFile() {
+        Gson gson = new Gson();
+        try (FileWriter writer = new FileWriter(CONFIG_FILE_PATH)) {
+            gson.toJson(this, writer);
+            System.out.println("Config Saved");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Load configuration from JSON
+    public static Configurations loadFromFile() {
+        Gson gson = new Gson();
+        try (FileReader reader = new FileReader(CONFIG_FILE_PATH)) {
+            System.out.println("Config Read");
+            return gson.fromJson(reader, Configurations.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new Configurations(); // Return default if there's an issue
+        }
+    }
 }

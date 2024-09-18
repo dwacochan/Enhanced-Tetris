@@ -4,6 +4,8 @@ import java.awt.*;
 public class ConfigurationScreen extends AbstractScreen {
 
     private Configurations configurations;
+    private JSlider fieldWidthSlider, fieldHeightSlider, gameLevelSlider;
+    private JCheckBox musicCheckBox, soundEffectCheckBox, aiPlayCheckBox, extendModeCheckBox;
 
     public ConfigurationScreen(GameController gameController, Configurations configurations) {
         super(gameController);
@@ -18,7 +20,10 @@ public class ConfigurationScreen extends AbstractScreen {
         JPanel configurationPanel = getConfigurationPanel();
         mainPanel.add(configurationPanel, BorderLayout.CENTER);
 
-        BottomPanel bottomPanel = new BottomPanel(gameController, "Draco Zhang");
+        BottomPanel bottomPanel = new BottomPanel(gameController, "Draco Zhang", e -> {
+            saveConfigurations();
+            gameController.showMainMenu();
+        });
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
     }
 
@@ -42,18 +47,18 @@ public class ConfigurationScreen extends AbstractScreen {
         JPanel controlsPanel = new JPanel();
         controlsPanel.setLayout(new GridLayout(7, 1, 10, 10));
 
-        JSlider fieldWidthSlider = new JSlider(5, 15, configurations.getFieldWidth());
-        JSlider fieldHeightSlider = new JSlider(15, 30, configurations.getFieldHeight());
-        JSlider gameLevelSlider = new JSlider(1, 10, configurations.getGameLevel());
-        JCheckBox musicCheckBox = new JCheckBox("", configurations.isMusicOn());
-        JCheckBox soundEffectCheckBox = new JCheckBox("", configurations.isSoundEffectsOn());
-        JCheckBox aiPlayCheckBox = new JCheckBox("", configurations.isAiPlayOn());
-        JCheckBox extendModeCheckBox = new JCheckBox("", configurations.isExtendModeOn());
+        fieldWidthSlider = new JSlider(5, 15, configurations.getFieldWidth());
+        fieldHeightSlider = new JSlider(15, 30, configurations.getFieldHeight());
+        gameLevelSlider = new JSlider(1, 10, configurations.getGameLevel());
+        musicCheckBox = new JCheckBox("", configurations.isMusicOn());
+        soundEffectCheckBox = new JCheckBox("", configurations.isSoundEffectsOn());
+        aiPlayCheckBox = new JCheckBox("", configurations.isAiPlayOn());
+        extendModeCheckBox = new JCheckBox("", configurations.isExtendModeOn());
 
         configureSlider(fieldWidthSlider, fieldHeightSlider, gameLevelSlider);
         addComponentsToPanel(controlsPanel, fieldWidthSlider, fieldHeightSlider, gameLevelSlider, musicCheckBox, soundEffectCheckBox, aiPlayCheckBox, extendModeCheckBox);
 
-        // Column 3: Values (not needed in this case, but for visual confirmation if desired)
+        // Column 3: Values (for visual confirmation)
         JPanel valuesPanel = new JPanel();
         valuesPanel.setLayout(new GridLayout(7, 1, 10, 10));
 
@@ -112,5 +117,19 @@ public class ConfigurationScreen extends AbstractScreen {
             return checkBox.isSelected() ? "On" : "Off";
         }
         return "";
+    }
+
+    // Save the current configuration to JSON
+    private void saveConfigurations() {
+        configurations.setFieldWidth(fieldWidthSlider.getValue());
+        configurations.setFieldHeight(fieldHeightSlider.getValue());
+        configurations.setGameLevel(gameLevelSlider.getValue());
+        configurations.setMusicOn(musicCheckBox.isSelected());
+        configurations.setSoundEffectsOn(soundEffectCheckBox.isSelected());
+        configurations.setAiPlayOn(aiPlayCheckBox.isSelected());
+        configurations.setExtendModeOn(extendModeCheckBox.isSelected());
+
+        // Save to JSON
+        configurations.saveToFile();
     }
 }
