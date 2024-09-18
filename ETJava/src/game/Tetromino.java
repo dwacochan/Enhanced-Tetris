@@ -20,8 +20,8 @@ public class Tetromino {
 
     public void setPosition(int x, int y) {
         for (Block block : blocks) {
-            block.x = x;
-            block.y = y;
+            block.setX(x);
+            block.setY(y);
         }
     }
 
@@ -31,8 +31,8 @@ public class Tetromino {
         if (!leftCollide && !rightCollide && !bottomCollide) {
             this.rotation = rotation;
             for (int i = 0; i < 4; i++) {
-                blocks[i].x = tempBlocks[i].x;
-                blocks[i].y = tempBlocks[i].y;
+                blocks[i].setX(tempBlocks[i].getX());
+                blocks[i].setY(tempBlocks[i].getY());
             }
         } else {
             snapBackRotation();
@@ -87,34 +87,34 @@ public class Tetromino {
 
     private boolean isCollision(Block movingBlock, Block settledBlock) {
         // Checks for block overlap with settledBlock
-        return movingBlock.x < settledBlock.x + Block.SIZE &&
-                movingBlock.x + Block.SIZE > settledBlock.x &&
-                movingBlock.y < settledBlock.y + Block.SIZE &&
-                movingBlock.y + Block.SIZE > settledBlock.y;
+        return movingBlock.getX() < settledBlock.getX() + Block.SIZE &&
+                movingBlock.getX() + Block.SIZE > settledBlock.getX() &&
+                movingBlock.getY() < settledBlock.getY() + Block.SIZE &&
+                movingBlock.getY() + Block.SIZE > settledBlock.getY();
     }
 
     private void updateCollisionFlags(Block block, Block settledBlock) {
-        if (block.y + Block.SIZE > settledBlock.y && block.y < settledBlock.y + Block.SIZE) {
-            if (block.x + Block.SIZE > settledBlock.x && block.x < settledBlock.x + Block.SIZE) {
+        if (block.getY() + Block.SIZE > settledBlock.getY() && block.getY() < settledBlock.getY() + Block.SIZE) {
+            if (block.getX() + Block.SIZE > settledBlock.getX() && block.getX() < settledBlock.getX() + Block.SIZE) {
                 rightCollide = true;
             }
-            if (block.x < settledBlock.x + Block.SIZE && block.x + Block.SIZE > settledBlock.x) {
+            if (block.getX() < settledBlock.getX() + Block.SIZE && block.getX() + Block.SIZE > settledBlock.getX()) {
                 leftCollide = true;
             }
-            if (block.x + Block.SIZE > settledBlock.x && block.x < settledBlock.x + Block.SIZE) {
+            if (block.getX() + Block.SIZE > settledBlock.getX() && block.getX() < settledBlock.getX() + Block.SIZE) {
                 bottomCollide = true;
             }
         }
     }
 
     private void checkWallCollision(Block block) {
-        if (block.x < Gameplay.left_x) {
+        if (block.getX() < Gameplay.left_x) {
             leftCollide = true;
         }
-        if (block.x + Block.SIZE > Gameplay.right_x) {
+        if (block.getX() + Block.SIZE > Gameplay.right_x) {
             rightCollide = true;
         }
-        if (block.y + Block.SIZE > Gameplay.bottom_y) {
+        if (block.getY() + Block.SIZE > Gameplay.bottom_y) {
             bottomCollide = true;
         }
     }
@@ -173,25 +173,25 @@ public class Tetromino {
 
     private void moveLeft() {
         for (Block block : blocks) {
-            block.x -= Block.SIZE;
+            block.setX(block.getX() - Block.SIZE);
         }
     }
 
     private void moveRight() {
         for (Block block : blocks) {
-            block.x += Block.SIZE;
+            block.setX(block.getX() + Block.SIZE);
         }
     }
 
     private void moveDown() {
         for (Block block : blocks) {
-            block.y += Block.SIZE;
+            block.setY(block.getY() + Block.SIZE);
         }
     }
 
     private void moveUp() {
         for (Block block : blocks) {
-            block.y -= Block.SIZE;
+            block.setY(block.getY() - Block.SIZE);
         }
     }
 
@@ -210,13 +210,13 @@ public class Tetromino {
 
     private void handleFalling() {
         for (Block block : blocks) {
-            block.y += 1;
+            block.setY(block.getY() + 1);
         }
         checkMovementCollision();
         if (bottomCollide) {
             settling = true;
             for (Block block : blocks) {
-                block.y -= 1;
+                block.setY(block.getY() - 1);
             }
         }
     }
@@ -229,7 +229,7 @@ public class Tetromino {
             if (bottomCollide) {
                 settled = true;
                 for (Block block : blocks) {
-                    if (block.y < Gameplay.top_y + Block.SIZE + 1) {
+                    if (block.getY() < Gameplay.top_y + Block.SIZE + 1) {
                         Gameplay.gameOver = true;
                         break;
                     }
@@ -239,9 +239,9 @@ public class Tetromino {
     }
 
     public void draw(Graphics2D g2d) {
-        g2d.setColor(blocks[0].color);
+        g2d.setColor(blocks[0].getColor());
         for (Block block : blocks) {
-            g2d.fillRect(block.x, block.y, Block.SIZE, Block.SIZE);
+            g2d.fillRect(block.getX(), block.getY(), Block.SIZE, Block.SIZE);
         }
     }
 }

@@ -7,6 +7,7 @@ public class HighScores {
 
     public HighScores() {
         scores = new ArrayList<>();
+
         loadScores();
     }
 

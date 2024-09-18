@@ -81,7 +81,7 @@ public class Gameplay {
         for (int y = top_y; y < bottom_y; y += Block.SIZE) {
             int blockNum = 0;
             for (Block settledBlock : settledTetrominos) {
-                if (settledBlock.y == y) {
+                if (settledBlock.getY() == y) {
                     blockNum++;
                 }
             }
@@ -93,15 +93,15 @@ public class Gameplay {
 
     private void removeFullRow(ArrayList<Integer> fullRows) {
         for (int row : fullRows) {
-            settledTetrominos.removeIf(block -> block.y == row);
+            settledTetrominos.removeIf(block -> block.getY() == row);
         }
     }
 
     private void shiftDownRemainingRows(ArrayList<Integer> fullRows) {
         for (int row : fullRows) {
             for (Block settledBlock : settledTetrominos) {
-                if (settledBlock.y < row) {
-                    settledBlock.y += Block.SIZE;
+                if (settledBlock.getY() < row) {
+                    settledBlock.setY(settledBlock.getY() + Block.SIZE);
                 }
             }
         }
