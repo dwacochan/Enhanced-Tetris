@@ -4,16 +4,23 @@ import game.*;
 
 public class GameController {
     private final JFrame mainFrame;
-    private boolean isRunning; // Tracks if the game is currently running
+    private boolean isRunning;
+
+    // Data models
+    private HighScores highScores;
+    private Configurations configurations;
 
     // Screens
     private MainMenu mainMenu;
     private SplashScreen splashScreen;
     private GameLoop gameLoop;
-    private Settings settings;
-    private HighScores highScores;
+    private ConfigurationScreen configurationScreen;
+    private HighScoreScreen highScoreScreen;
 
     public GameController(){
+        highScores = new HighScores();
+        configurations = new Configurations();
+
         mainFrame = new JFrame("Tetris");
         mainFrame.setSize(800, 600);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -23,14 +30,14 @@ public class GameController {
         mainMenu = new MainMenu(this);
         splashScreen = new SplashScreen(this);
         gameLoop = new GameLoop(this);
-        settings = new Settings(this);
-        highScores = new HighScores(this);
+        configurationScreen = new ConfigurationScreen(this, configurations);  // Pass Configurations to Settings
+        highScoreScreen = new HighScoreScreen(this, highScores);
 
         mainFrame.getContentPane().add(mainMenu.getPanel(), "MainMenu");
         mainFrame.getContentPane().add(splashScreen.getPanel(), "SplashScreen");
         mainFrame.getContentPane().add(gameLoop.getPanel(), "GameLoop");
-        mainFrame.getContentPane().add(settings.getPanel(), "Settings");
-        mainFrame.getContentPane().add(highScores.getPanel(), "HighScores");
+        mainFrame.getContentPane().add(configurationScreen.getPanel(), "Settings");
+        mainFrame.getContentPane().add(highScoreScreen.getPanel(), "HighScoreScreen");
 
         mainFrame.setVisible(true);
     }
@@ -46,10 +53,8 @@ public class GameController {
 
     public void showGameLoop(){
         ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "GameLoop");
-
-        // Starts the game when the screen is shown
         gameLoop.gameArea.startGame();
-        isRunning = true; // Set the game as running
+        isRunning = true;
     }
 
     public void showSettings(){
@@ -57,7 +62,7 @@ public class GameController {
     }
 
     public void showHighScores(){
-        ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "HighScores");
+        ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "HighScoreScreen");
     }
 
     public void hideAllScreens() {
@@ -72,24 +77,23 @@ public class GameController {
 
     public void pauseGame() {
         if (isRunning) {
-            gameLoop.gameArea.pauseGame(); // Pause the game area logic
-            isRunning = false; // Mark the game as not running
+            gameLoop.gameArea.pauseGame();
+            isRunning = false;
         }
     }
 
     public void resumeGame() {
         if (!isRunning) {
-            gameLoop.gameArea.resumeGame(); // Resume the game area logic
-            isRunning = true; // Mark the game as running again
+            gameLoop.gameArea.resumeGame();
+            isRunning = true;
         }
     }
 
     public void stopGame() {
-        gameLoop.gameArea.stopGame(); // Stop the game area logic
-        isRunning = false; // Mark the game as not running
+        gameLoop.gameArea.stopGame();
+        isRunning = false;
         gameLoop.gameArea.resetGame();
     }
-
 
     public boolean checkGameOver(){
         return Gameplay.gameOver;

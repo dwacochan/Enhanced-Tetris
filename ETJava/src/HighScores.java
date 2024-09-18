@@ -1,68 +1,43 @@
-import javax.swing.*;
-import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class HighScores extends AbstractScreen {
+public class HighScores {
+    private List<Score> scores;
+    
 
-    public HighScores(GameController gameController) {
-        super(gameController);
+    public HighScores() {
+        scores = new ArrayList<>();
+        loadScores();
+    }
 
-        mainPanel.setLayout(new BorderLayout());
+    public void addScore(int score, String name) {
+        scores.add(new Score(score, name));
+    }
 
-        JLabel titleLabel = new JLabel("High Scores", JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-        mainPanel.add(titleLabel, BorderLayout.NORTH);
+    public List<Score> getScores() {
+        scores.sort((s1, s2) -> Integer.compare(s2.score(), s1.score()));
+        return scores;
+    }
 
-        JPanel scoresPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(5, 30, 5, 30); // Padding between rows
 
-        String[] names = {
-                "John", "Emily", "Michael", "Sophia", "Daniel",
-                "Olivia", "James", "Isabella", "David", "Mia",
-                "Benjamin", "Charlotte", "Matthew", "Amelia", "Joseph",
-                "Evelyn", "Henry", "Abigail", "Samuel", "Harper",
-                "William", "Ava", "Alexander", "Lily", "Elijah",
-                "Grace", "Lucas", "Chloe", "Jackson", "Ella"
-        };
+    public record Score(int score, String name) {
+    }
 
-        int[] scores = {
-                2000, 1950, 1900, 1850, 1800,
-                1750, 1700, 1650, 1600, 1550,
-                1500, 1450, 1400, 1350, 1300,
-                1250, 1200, 1150, 1100, 1050,
-                1000, 950, 900, 850, 800,
-                750, 700, 650, 600, 550
-        };
 
-        JLabel nameHeader = new JLabel("Name", JLabel.CENTER);
-        JLabel scoreHeader = new JLabel("Score", JLabel.CENTER);
-        nameHeader.setFont(new Font("Arial", Font.BOLD, 18));
-        scoreHeader.setFont(new Font("Arial", Font.BOLD, 18));
-
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        scoresPanel.add(nameHeader, gbc);
-
-        gbc.gridx = 1;
-        scoresPanel.add(scoreHeader, gbc);
-
-        for (int i = 0; i < names.length; i++) {
-            gbc.gridx = 0;
-            gbc.gridy = i + 1; // Start after the header
-            JLabel nameLabel = new JLabel(names[i], JLabel.CENTER);
-            scoresPanel.add(nameLabel, gbc);
-
-            gbc.gridx = 1;
-            JLabel scoreLabel = new JLabel(String.valueOf(scores[i]), JLabel.CENTER);
-            scoresPanel.add(scoreLabel, gbc);
-        }
-
-        JScrollPane scrollPane = new JScrollPane(scoresPanel);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-
-        BottomPanel bottomPanel = new BottomPanel(gameController, "Elijah De Calmer");
-        mainPanel.add(bottomPanel, BorderLayout.SOUTH);
+    private void loadScores() {
+        scores.add(new Score(2000, "John"));
+        scores.add(new Score(1950, "Emily"));
+        scores.add(new Score(1900, "Michael"));
+        scores.add(new Score(1850, "Sophia"));
+        scores.add(new Score(1800, "Daniel"));
+        scores.add(new Score(1750, "Olivia"));
+        scores.add(new Score(1700, "James"));
+        scores.add(new Score(1650, "Isabella"));
+        scores.add(new Score(1600, "David"));
+        scores.add(new Score(1550, "Mia"));
     }
 }
+
+
+
+
