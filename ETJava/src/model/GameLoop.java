@@ -1,4 +1,4 @@
-package view;
+package model;
 
 import controller.Controls;
 import controller.Gameplay;
@@ -6,7 +6,7 @@ import controller.Gameplay;
 import javax.swing.*;
 import java.awt.*;
 
-public class GameArea extends JPanel implements Runnable {
+public class GameLoop extends JPanel implements Runnable {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
     final int FPS = 60;
@@ -15,7 +15,7 @@ public class GameArea extends JPanel implements Runnable {
     private boolean paused = false;
     Gameplay gameplay;
 
-    public GameArea() {
+    public GameLoop() {
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBackground(Color.WHITE);
         this.setLayout(null);
@@ -104,4 +104,5 @@ public class GameArea extends JPanel implements Runnable {
         Graphics2D g2d = (Graphics2D) g;
         gameplay.draw(g2d);
     }
+
 }

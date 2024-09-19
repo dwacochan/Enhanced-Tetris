@@ -10,7 +10,12 @@ public class Controls {
     public static boolean left;
     public static boolean pause;
 
-    public static void bindKeys(JComponent comp){
+    public static void bindKeys(JComponent comp) {
+        if (comp == null) {
+            throw new IllegalArgumentException("Component cannot be null");
+        }
+
+        // Bind UP key
         comp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("UP"), "up");
         comp.getActionMap().put("up", new AbstractAction() {
             @Override
@@ -19,6 +24,7 @@ public class Controls {
             }
         });
 
+        // Bind RIGHT key
         comp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("RIGHT"), "right");
         comp.getActionMap().put("right", new AbstractAction() {
             @Override
@@ -27,6 +33,7 @@ public class Controls {
             }
         });
 
+        // Bind DOWN key
         comp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("DOWN"), "down");
         comp.getActionMap().put("down", new AbstractAction() {
             @Override
@@ -35,6 +42,7 @@ public class Controls {
             }
         });
 
+        // Bind LEFT key
         comp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("LEFT"), "left");
         comp.getActionMap().put("left", new AbstractAction() {
             @Override
@@ -43,21 +51,16 @@ public class Controls {
             }
         });
 
+        // Bind PAUSE key (toggle between paused and unpaused states)
         comp.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("P"), "pause");
         comp.getActionMap().put("pause", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!pause){
-                    pause = true;
-                } else {
-                    pause = false;
-                    up = false;
-                    right = false;
-                    down = false;
-                    left = false;
+                pause = !pause;
+                if (pause) {
+                    up = right = down = left = false;
                 }
             }
         });
     }
-
 }

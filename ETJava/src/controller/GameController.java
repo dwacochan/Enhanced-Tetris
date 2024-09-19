@@ -1,108 +1,104 @@
 package controller;
 
-import javax.swing.*;
-import java.awt.*;
+import model.Configurations;
+import model.GameLoop;
+import model.HighScores;
 
-import model.*;
-import view.SplashScreen;
-import view.*;
+import javax.swing.*;
 
 public class GameController {
-    private final JFrame mainFrame;
+
+    private final ScreenController screenController;
+    private final HighScores highScores;
+    private final Configurations configurations;
     private boolean isRunning;
 
-    // Data models
-    private HighScores highScores;
-    private Configurations configurations;
+    // Game model
+    private GameLoop gameLoop;
 
-    // Screens
-    private MainMenu mainMenu;
-    private SplashScreen splashScreen;
-    private GameScreen gameScreen;
-    private ConfigurationScreen configurationScreen;
-    private HighScoreScreen highScoreScreen;
-
-    public GameController(){
-        highScores = new HighScores();
+    // Private constructor to prevent direct instantiation
+    private GameController() {
+        // Load configurations and high scores from file
         configurations = Configurations.loadFromFile();
         highScores = new HighScores();
         highScores.loadFromFile();
 
-        mainFrame = new JFrame("Tetris");
+        // Set up the main frame
+        JFrame mainFrame = new JFrame("Tetris");
         mainFrame.setSize(800, 600);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameLoop = new GameLoop();
+        // Initialize screen controller using the singleton pattern
+        screenController = ScreenController.getInstance(mainFrame, this, configurations, highScores);
 
-        mainFrame.getContentPane().setLayout(new CardLayout());
-
-        mainMenu = new MainMenu(this);
-        splashScreen = new SplashScreen(this);
-        gameScreen = new GameScreen(this);
-        configurationScreen = new ConfigurationScreen(this, configurations);  // Pass model.Configurations to Settings
-        highScoreScreen = new HighScoreScreen(this, highScores);
-
-        mainFrame.getContentPane().add(mainMenu.getPanel(), "view.MainMenu");
-        mainFrame.getContentPane().add(splashScreen.getPanel(), "view.SplashScreen");
-        mainFrame.getContentPane().add(gameScreen.getPanel(), "view.GameScreen");
-        mainFrame.getContentPane().add(configurationScreen.getPanel(), "Settings");
-        mainFrame.getContentPane().add(highScoreScreen.getPanel(), "view.HighScoreScreen");
-
-        mainFrame.setVisible(true);
+        // Show splash screen initially
+        screenController.showSplashScreen();
+        Controls.bindKeys(this.gameLoop);
     }
 
-    public void showMainMenu(){
-        hideAllScreens();
-        ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "view.MainMenu");
+    private static final class GameControllerHolder {
+        // Singleton instance
+        private static final GameController instance = new GameController();
     }
 
-    public void showSplashScreen(){
-        ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "view.SplashScreen");
+    // Public static method to provide the singleton instance
+    public static GameController getInstance() {
+        return GameControllerHolder.instance;
     }
 
-    public void showGameLoop(){
-        ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "view.GameScreen");
-        gameScreen.gameArea.startGame();
+    public GameLoop getGameLoop(){
+        return this.gameLoop;
+    }
+
+    // Screen control methods
+    public void showMainMenu() {
+        screenController.showMainMenu();
+    }
+
+    public void showGameScreen() {
+        screenController.showGameScreen();
+        gameLoop.resetGame();
         isRunning = true;
+        gameLoop.startGame();
     }
 
-    public void showSettings(){
-        ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "Settings");
-        configurations = Configurations.loadFromFile();
+    public void showSettings() {
+        screenController.showSettings();
+        Configurations.loadFromFile();
     }
 
-    public void showHighScores(){
-        ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "view.HighScoreScreen");
+    public void showHighScores() {
+        screenController.showHighScores();
     }
 
     public void hideAllScreens() {
-        for (Component comp : mainFrame.getContentPane().getComponents()) {
-            comp.setVisible(false);
-        }
+        screenController.hideAllScreens();
     }
 
-    public boolean isGameRunning() {
-        return isRunning;
-    }
-
+    // Game control methods
     public void pauseGame() {
         if (isRunning) {
-            gameScreen.gameArea.pauseGame();
+            gameLoop.pauseGame();
             isRunning = false;
         }
     }
 
     public void resumeGame() {
         if (!isRunning) {
-            gameScreen.gameArea.resumeGame();
+            gameLoop.resumeGame();
             isRunning = true;
         }
     }
 
     public void stopGame() {
-        gameScreen.gameArea.stopGame();
+        gameLoop.stopGame();
         isRunning = false;
-        gameScreen.gameArea.resetGame();
         configurations.saveToFile();
         highScores.saveToFile();
+    }
+
+    public boolean isGameRunning() {
+        return isRunning;
     }
 
     public void updateHighScores(int score, String name) {
@@ -114,7 +110,7 @@ public class GameController {
         configurations.saveToFile();
     }
 
-    public boolean checkGameOver(){
-        return Gameplay.gameOver;
+    public boolean checkGameOver() {
+        return Gameplay.isGameOver();
     }
 }

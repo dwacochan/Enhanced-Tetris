@@ -1,10 +1,9 @@
 package controller;
 
-import controller.Controls;
 import model.Block;
 import model.Tetromino;
 import model.tetrominos.*;
-import view.GameArea;
+import model.GameLoop;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -22,11 +21,11 @@ public class Gameplay {
     final int TETROMINOSTART_X;
     final int TETROMINOSTART_Y;
     public static ArrayList<Block> settledTetrominos = new ArrayList<>();
-    public static boolean gameOver = false;
+    private static boolean gameOver = false;
 
 
     public Gameplay(){
-        left_x = (GameArea.WIDTH/2) - (WIDTH/2);
+        left_x = (GameLoop.WIDTH/2) - (WIDTH/2);
         right_x = left_x + WIDTH;
         top_y = 50;
         bottom_y = top_y + HEIGHT;
@@ -36,6 +35,14 @@ public class Gameplay {
 
         currentTetromino = selectShape();
         currentTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
+    }
+
+    public static boolean isGameOver() {
+        return gameOver;
+    }
+
+    public static void setGameOver(boolean gameOver) {
+        Gameplay.gameOver = gameOver;
     }
 
     private Tetromino selectShape(){
@@ -59,7 +66,7 @@ public class Gameplay {
     }
 
     public void update() {
-        if (gameOver){
+        if (isGameOver()){
             return;
         }
         if (currentTetromino.settled) {
@@ -143,7 +150,7 @@ public class Gameplay {
     public void reset() {
         settledTetrominos.clear();
         Controls.pause = false;
-        gameOver = false;
+        setGameOver(false);
         currentTetromino = selectShape();
         currentTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
     }
