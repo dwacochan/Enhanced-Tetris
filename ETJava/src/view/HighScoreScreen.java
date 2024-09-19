@@ -1,3 +1,9 @@
+package view;
+
+import controller.GameController;
+import model.HighScores;
+import model.AbstractScreen;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;

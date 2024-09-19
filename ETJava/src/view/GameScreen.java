@@ -1,12 +1,15 @@
-import game.Controls;
-import game.GameArea;
+package view;
+
+import controller.GameController;
+import controller.Controls;
+import model.AbstractScreen;
 
 import java.awt.*;
 
-public class GameLoop extends AbstractScreen {
-    GameArea gameArea;
+public class GameScreen extends AbstractScreen {
+    public GameArea gameArea;
 
-    public GameLoop(GameController gameController) {
+    public GameScreen(GameController gameController) {
         super(gameController);
 
         mainPanel.setLayout(new BorderLayout());

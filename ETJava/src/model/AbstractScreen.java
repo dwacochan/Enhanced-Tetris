@@ -1,4 +1,7 @@
+package model;
+
 import javax.swing.*;
+import controller.GameController;
 
 public abstract class AbstractScreen extends JPanel {
     protected JPanel mainPanel;

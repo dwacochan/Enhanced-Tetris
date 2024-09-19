@@ -1,6 +1,10 @@
-package game;
+package controller;
 
-import tetrominos.*;
+import controller.Controls;
+import model.Block;
+import model.Tetromino;
+import model.tetrominos.*;
+import view.GameArea;
 
 import java.awt.*;
 import java.util.ArrayList;

@@ -1,3 +1,5 @@
+import controller.GameController;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 

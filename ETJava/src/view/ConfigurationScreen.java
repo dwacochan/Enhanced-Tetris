@@ -1,3 +1,9 @@
+package view;
+
+import controller.GameController;
+import model.Configurations;
+import model.AbstractScreen;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -13,7 +19,7 @@ public class ConfigurationScreen extends AbstractScreen {
 
         mainPanel.setLayout(new BorderLayout());
 
-        JLabel label = new JLabel("Configurations", JLabel.CENTER);
+        JLabel label = new JLabel("model.Configurations", JLabel.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 24));
         mainPanel.add(label, BorderLayout.NORTH);
 
