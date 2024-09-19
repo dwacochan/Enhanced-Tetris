@@ -1,14 +1,14 @@
-package tetrominos;
+package model.tetrominos;
 
-import game.Block;
-import game.Tetromino;
+import model.Block;
+import model.Tetromino;
 
 import java.awt.*;
 
-public class T extends Tetromino {
+public class J extends Tetromino {
 
-    public T(){
-        create(Color.MAGENTA);
+    public J(){
+        create(Color.BLUE);
     }
 
     public void setPosition(int x, int y){
@@ -16,10 +16,10 @@ public class T extends Tetromino {
         blocks[0].setY(y);
         blocks[1].setX(x);
         blocks[1].setY(y - Block.SIZE);
-        blocks[2].setX(x - Block.SIZE);
-        blocks[2].setY(y);
-        blocks[3].setX(x + Block.SIZE);
-        blocks[3].setY(y);
+        blocks[2].setX(x);
+        blocks[2].setY(y + Block.SIZE);
+        blocks[3].setX(x - Block.SIZE);
+        blocks[3].setY(y + Block.SIZE);
     }
 
     public void getRotation0(){
@@ -28,10 +28,10 @@ public class T extends Tetromino {
         tempBlocks[0].setY(blocks[0].getY());
         tempBlocks[1].setX(blocks[0].getX());
         tempBlocks[1].setY(blocks[0].getY() - Block.SIZE);
-        tempBlocks[2].setX(blocks[0].getX() - Block.SIZE);
-        tempBlocks[2].setY(blocks[0].getY());
-        tempBlocks[3].setX(blocks[0].getX() + Block.SIZE);
-        tempBlocks[3].setY(blocks[0].getY());
+        tempBlocks[2].setX(blocks[0].getX());
+        tempBlocks[2].setY(blocks[0].getY() + Block.SIZE);
+        tempBlocks[3].setX(blocks[0].getX() - Block.SIZE);
+        tempBlocks[3].setY(blocks[0].getY() + Block.SIZE);
 
         updateRotation(0);
 
@@ -43,10 +43,10 @@ public class T extends Tetromino {
         tempBlocks[0].setY(blocks[0].getY());
         tempBlocks[1].setX(blocks[0].getX() + Block.SIZE);
         tempBlocks[1].setY(blocks[0].getY());
-        tempBlocks[2].setX(blocks[0].getX());
-        tempBlocks[2].setY(blocks[0].getY() - Block.SIZE);
-        tempBlocks[3].setX(blocks[0].getX());
-        tempBlocks[3].setY(blocks[0].getY() + Block.SIZE);
+        tempBlocks[2].setX(blocks[0].getX() - Block.SIZE);
+        tempBlocks[2].setY(blocks[0].getY());
+        tempBlocks[3].setX(blocks[0].getX() - Block.SIZE);
+        tempBlocks[3].setY(blocks[0].getY() - Block.SIZE);
 
         updateRotation(1);
 
@@ -58,10 +58,10 @@ public class T extends Tetromino {
         tempBlocks[0].setY(blocks[0].getY());
         tempBlocks[1].setX(blocks[0].getX());
         tempBlocks[1].setY(blocks[0].getY() + Block.SIZE);
-        tempBlocks[2].setX(blocks[0].getX() + Block.SIZE);
-        tempBlocks[2].setY(blocks[0].getY());
-        tempBlocks[3].setX(blocks[0].getX() - Block.SIZE);
-        tempBlocks[3].setY(blocks[0].getY());
+        tempBlocks[2].setX(blocks[0].getX());
+        tempBlocks[2].setY(blocks[0].getY() - Block.SIZE);
+        tempBlocks[3].setX(blocks[0].getX() + Block.SIZE);
+        tempBlocks[3].setY(blocks[0].getY() - Block.SIZE);
 
         updateRotation(2);
 
@@ -73,10 +73,10 @@ public class T extends Tetromino {
         tempBlocks[0].setY(blocks[0].getY());
         tempBlocks[1].setX(blocks[0].getX() - Block.SIZE);
         tempBlocks[1].setY(blocks[0].getY());
-        tempBlocks[2].setX(blocks[0].getX());
-        tempBlocks[2].setY(blocks[0].getY() + Block.SIZE);
-        tempBlocks[3].setX(blocks[0].getX());
-        tempBlocks[3].setY(blocks[0].getY() - Block.SIZE);
+        tempBlocks[2].setX(blocks[0].getX() + Block.SIZE);
+        tempBlocks[2].setY(blocks[0].getY());
+        tempBlocks[3].setX(blocks[0].getX() + Block.SIZE);
+        tempBlocks[3].setY(blocks[0].getY() + Block.SIZE);
 
         updateRotation(3);
 

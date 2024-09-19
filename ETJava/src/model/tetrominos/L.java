@@ -1,7 +1,7 @@
-package tetrominos;
+package model.tetrominos;
 
-import game.Block;
-import game.Tetromino;
+import model.Block;
+import model.Tetromino;
 
 import java.awt.*;
 

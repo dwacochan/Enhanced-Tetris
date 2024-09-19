@@ -1,8 +1,12 @@
+package view;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import game.*;
+
+import controller.GameController;
+import model.AbstractScreen;
 
 public class MainMenu extends AbstractScreen implements ActionListener {
     JButton playButton, configButton, highScoresButton, exitButton;

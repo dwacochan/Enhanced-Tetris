@@ -1,4 +1,7 @@
-package game;
+package model;
+
+import controller.Controls;
+import controller.Gameplay;
 
 import java.awt.*;
 

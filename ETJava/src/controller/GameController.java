@@ -1,6 +1,11 @@
+package controller;
+
 import javax.swing.*;
 import java.awt.*;
-import game.*;
+
+import model.*;
+import view.SplashScreen;
+import view.*;
 
 public class GameController {
     private final JFrame mainFrame;
@@ -13,7 +18,7 @@ public class GameController {
     // Screens
     private MainMenu mainMenu;
     private SplashScreen splashScreen;
-    private GameLoop gameLoop;
+    private GameScreen gameScreen;
     private ConfigurationScreen configurationScreen;
     private HighScoreScreen highScoreScreen;
 
@@ -31,31 +36,31 @@ public class GameController {
 
         mainMenu = new MainMenu(this);
         splashScreen = new SplashScreen(this);
-        gameLoop = new GameLoop(this);
-        configurationScreen = new ConfigurationScreen(this, configurations);  // Pass Configurations to Settings
+        gameScreen = new GameScreen(this);
+        configurationScreen = new ConfigurationScreen(this, configurations);  // Pass model.Configurations to Settings
         highScoreScreen = new HighScoreScreen(this, highScores);
 
-        mainFrame.getContentPane().add(mainMenu.getPanel(), "MainMenu");
-        mainFrame.getContentPane().add(splashScreen.getPanel(), "SplashScreen");
-        mainFrame.getContentPane().add(gameLoop.getPanel(), "GameLoop");
+        mainFrame.getContentPane().add(mainMenu.getPanel(), "view.MainMenu");
+        mainFrame.getContentPane().add(splashScreen.getPanel(), "view.SplashScreen");
+        mainFrame.getContentPane().add(gameScreen.getPanel(), "view.GameScreen");
         mainFrame.getContentPane().add(configurationScreen.getPanel(), "Settings");
-        mainFrame.getContentPane().add(highScoreScreen.getPanel(), "HighScoreScreen");
+        mainFrame.getContentPane().add(highScoreScreen.getPanel(), "view.HighScoreScreen");
 
         mainFrame.setVisible(true);
     }
 
     public void showMainMenu(){
         hideAllScreens();
-        ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "MainMenu");
+        ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "view.MainMenu");
     }
 
     public void showSplashScreen(){
-        ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "SplashScreen");
+        ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "view.SplashScreen");
     }
 
     public void showGameLoop(){
-        ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "GameLoop");
-        gameLoop.gameArea.startGame();
+        ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "view.GameScreen");
+        gameScreen.gameArea.startGame();
         isRunning = true;
     }
 
@@ -65,7 +70,7 @@ public class GameController {
     }
 
     public void showHighScores(){
-        ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "HighScoreScreen");
+        ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "view.HighScoreScreen");
     }
 
     public void hideAllScreens() {
@@ -80,22 +85,22 @@ public class GameController {
 
     public void pauseGame() {
         if (isRunning) {
-            gameLoop.gameArea.pauseGame();
+            gameScreen.gameArea.pauseGame();
             isRunning = false;
         }
     }
 
     public void resumeGame() {
         if (!isRunning) {
-            gameLoop.gameArea.resumeGame();
+            gameScreen.gameArea.resumeGame();
             isRunning = true;
         }
     }
 
     public void stopGame() {
-        gameLoop.gameArea.stopGame();
+        gameScreen.gameArea.stopGame();
         isRunning = false;
-        gameLoop.gameArea.resetGame();
+        gameScreen.gameArea.resetGame();
         configurations.saveToFile();
         highScores.saveToFile();
     }
