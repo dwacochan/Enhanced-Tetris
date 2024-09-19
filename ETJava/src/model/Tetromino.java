@@ -233,7 +233,7 @@ public class Tetromino {
                 settled = true;
                 for (Block block : blocks) {
                     if (block.getY() < Gameplay.top_y + Block.SIZE + 1) {
-                        Gameplay.gameOver = true;
+                        Gameplay.setGameOver(true);
                         break;
                     }
                 }

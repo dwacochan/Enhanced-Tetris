@@ -1,23 +1,22 @@
 package view;
 
 import controller.GameController;
-import controller.Controls;
 import model.AbstractScreen;
+import model.GameLoop;
 
 import java.awt.*;
 
 public class GameScreen extends AbstractScreen {
-    public GameArea gameArea;
+    private GameLoop gameLoop;
 
     public GameScreen(GameController gameController) {
         super(gameController);
 
         mainPanel.setLayout(new BorderLayout());
 
-        this.gameArea = new GameArea();
-        Controls.bindKeys(this.gameArea);
+        this.gameLoop = gameController.getGameLoop();
 
-        mainPanel.add(gameArea, BorderLayout.CENTER);
+        mainPanel.add(gameLoop, BorderLayout.CENTER);
 
         BottomPanel bottomPanel = new BottomPanel(gameController, "Anton Koulakov");
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);

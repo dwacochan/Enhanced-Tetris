@@ -62,7 +62,7 @@ public class MainMenu extends AbstractScreen implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == playButton) {
             System.out.println("Play button clicked");
-            gameController.showGameLoop();
+            gameController.showGameScreen();
         } else if (e.getSource() == configButton) {
             System.out.println("Settings button clicked");
             gameController.showSettings();
