@@ -5,6 +5,7 @@ import controller.GameController;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
 public class BottomPanel extends JPanel {
 
@@ -19,10 +20,8 @@ public class BottomPanel extends JPanel {
 
         backButton = new JButton("Back");
         backButton.setPreferredSize(new Dimension(150, 50));
-        backButton.addActionListener(e -> handleBackButtonClick(gameController)); // Default behavior
-        if (backButtonListener != null) {
-            backButton.addActionListener(backButtonListener); // Additional custom behavior
-        }
+        // Default behavior
+        backButton.addActionListener(Objects.requireNonNullElseGet(backButtonListener, () -> e -> gameController.showMainMenu())); // Additional custom behavior
         add(backButton, BorderLayout.SOUTH);
 
         JLabel authorLabel = new JLabel("Author: " + authorName, JLabel.CENTER);
@@ -36,33 +35,5 @@ public class BottomPanel extends JPanel {
         this(gameController, authorName, null); // No additional listener
     }
 
-    private void handleBackButtonClick(GameController gameController) {
-        boolean wasRunning = gameController.isGameRunning();
 
-        // Check for game over
-        if (gameController.checkGameOver()) {
-            gameController.stopGame();
-            gameController.showMainMenu();
-            return;
-        }
-
-        // Pause the game
-        gameController.pauseGame();
-        if (wasRunning) {
-            // Show confirmation dialog
-            int choice = JOptionPane.showConfirmDialog(this,
-                    "Do you want to stop the game and return to the main menu?",
-                    "Confirm Exit",
-                    JOptionPane.YES_NO_OPTION);
-
-            if (choice == JOptionPane.YES_OPTION) {
-                gameController.stopGame();
-                gameController.showMainMenu();
-            } else {
-                gameController.resumeGame();
-            }
-        } else {
-            gameController.showMainMenu();
-        }
-    }
 }
