@@ -1,7 +1,7 @@
 package model;
 
+import controller.facade.GameFacade;
 import controller.Controls;
-import controller.Gameplay;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,18 +14,16 @@ public class GameLoop extends JPanel implements Runnable {
     private boolean running = false;
     private boolean paused = false;
 
-    public Gameplay getGameplay() {
-        return gameplay;
-    }
-
-    Gameplay gameplay;
+    // Use the facade instead of direct access to Gameplay
+    private GameFacade gameFacade;
 
     public GameLoop() {
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBackground(Color.WHITE);
         this.setLayout(null);
 
-        gameplay = new Gameplay();
+        // Initialize the GameFacade with custom width and height
+        gameFacade = new GameFacade(200, 400);
     }
 
     public void startGame() {
@@ -73,13 +71,12 @@ public class GameLoop extends JPanel implements Runnable {
 
     public void resetGame() {
         stopGame();
-        gameplay.reset();
+        gameFacade.startNewGame(); // Reset the game using the facade
     }
 
     private void update() {
         if (!paused && !Controls.pause) {
-            gameplay.update();
-
+            gameFacade.updateGame();  // Use the facade to update the game
         }
     }
 
@@ -107,8 +104,14 @@ public class GameLoop extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-        gameplay.draw(g2d);
+        gameFacade.renderGame(g2d);
     }
 
+    public void adjustGameDimensions(int width, int height) {
+        gameFacade.setGameDimensions(width, height);
+    }
 
+    public boolean isGameOver(){
+        return gameFacade.isGameOver();
+    }
 }

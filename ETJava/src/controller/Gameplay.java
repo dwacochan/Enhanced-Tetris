@@ -11,30 +11,40 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Gameplay {
-    final int WIDTH = 200;
-    final int HEIGHT = 400;
+
+
+    private int width;
+    private int height;
     public int left_x;
     public int right_x;
     public int top_y;
     public int bottom_y;
     private Tetromino currentTetromino;
-    final int TETROMINOSTART_X;
-    final int TETROMINOSTART_Y;
+    private int TETROMINOSTART_X;
+    private int TETROMINOSTART_Y;
     private ArrayList<Block> settledTetrominos = new ArrayList<>();
     private boolean gameOver = false;
 
-    public Gameplay(){
-        left_x = (GameLoop.WIDTH / 2) - (WIDTH / 2);
-        right_x = left_x + WIDTH;
-        top_y = 50;
-        bottom_y = top_y + HEIGHT;
-
-        TETROMINOSTART_X = left_x + (WIDTH / 2) - Block.SIZE;
-        TETROMINOSTART_Y = top_y + Block.SIZE;
-
+    public Gameplay(int width, int height) {
+        this.width = width;
+        this.height = height;
+        initializeDimensions();
         currentTetromino = selectShape();
         currentTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
         currentTetromino.setGameplay(this);  // Pass instance of Gameplay to Tetromino
+    }
+
+    private void initializeDimensions() {
+        left_x = (GameLoop.WIDTH / 2) - (width / 2);
+        right_x = left_x + width;
+        top_y = 50;
+        bottom_y = top_y + height;
+        TETROMINOSTART_X = left_x + (width / 2) - Block.SIZE;
+        TETROMINOSTART_Y = top_y + Block.SIZE;
+    }
+
+    public void resetDimensions() {
+        initializeDimensions();
     }
 
     public boolean isGameOver() {
@@ -106,10 +116,10 @@ public class Gameplay {
 
     public void draw(Graphics2D g2d) {
         g2d.setColor(Color.LIGHT_GRAY);
-        g2d.fillRect(left_x - 2, top_y - 2, WIDTH + 4, HEIGHT + 4);
+        g2d.fillRect(left_x - 2, top_y - 2, width + 4, height + 4);
         g2d.setColor(Color.BLACK);
         g2d.setStroke(new BasicStroke(2));
-        g2d.drawRect(left_x - 2, top_y - 2, WIDTH + 4, HEIGHT + 4);
+        g2d.drawRect(left_x - 2, top_y - 2, width + 4, height + 4);
 
         if (currentTetromino != null) {
             currentTetromino.draw(g2d);
@@ -136,6 +146,22 @@ public class Gameplay {
         currentTetromino = selectShape();
         currentTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
         currentTetromino.setGameplay(this);
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     public ArrayList<Block> getSettledTetrominos() {
