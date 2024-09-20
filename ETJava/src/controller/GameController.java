@@ -27,7 +27,7 @@ public class GameController {
         JFrame mainFrame = new JFrame("Tetris");
         mainFrame.setSize(800, 600);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gameLoop = new GameLoop();
+        gameLoop = new GameLoop(true);
         // Initialize screen controller using the singleton pattern
         screenController = ScreenController.getInstance(mainFrame, this, configurations, highScores);
 

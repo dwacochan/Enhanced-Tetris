@@ -14,16 +14,26 @@ public class GameLoop extends JPanel implements Runnable {
     private boolean running = false;
     private boolean paused = false;
 
-    // Use the facade instead of direct access to Gameplay
-    private GameFacade gameFacade;
+    // Two facades, one for each player
+    private GameFacade player1Facade;
+    private GameFacade player2Facade;
 
-    public GameLoop() {
+    // Toggle for two-player mode
+    private boolean isTwoPlayerMode;
+
+    public GameLoop(boolean isTwoPlayerMode) {
+        this.isTwoPlayerMode = isTwoPlayerMode; // Set whether the game is single-player or two-player
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBackground(Color.WHITE);
         this.setLayout(null);
 
-        // Initialize the GameFacade with custom width and height
-        gameFacade = new GameFacade(200, 400,2);
+        // Initialize game facade(s) depending on the mode
+        player1Facade = new GameFacade(200, 400, 1); // Player 1 is always present
+
+        if (isTwoPlayerMode) {
+            // Player 2's game area (right side) only initialized in two-player mode
+            player2Facade = new GameFacade(200, 400, 2);
+        }
     }
 
     public void startGame() {
@@ -71,12 +81,18 @@ public class GameLoop extends JPanel implements Runnable {
 
     public void resetGame() {
         stopGame();
-        gameFacade.startNewGame(); // Reset the game using the facade
+        player1Facade.startNewGame(); // Reset Player 1's game
+        if (isTwoPlayerMode) {
+            player2Facade.startNewGame(); // Reset Player 2's game in two-player mode
+        }
     }
 
     private void update() {
         if (!paused && !Controls.pause) {
-            gameFacade.updateGame();  // Use the facade to update the game
+            player1Facade.updateGame();  // Update Player 1's game
+            if (isTwoPlayerMode) {
+                player2Facade.updateGame();  // Update Player 2's game in two-player mode
+            }
         }
     }
 
@@ -104,14 +120,34 @@ public class GameLoop extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-        gameFacade.renderGame(g2d);
+
+        if (isTwoPlayerMode) {
+            // Player 1's game on the left side
+            g2d.translate(-150, 0); // Shift Player 1's game area to the left
+            player1Facade.renderGame(g2d);
+
+            // Player 2's game on the right side
+            g2d.translate(450, 0); // Shift Player 2's game area to the right
+            player2Facade.renderGame(g2d);
+        } else {
+            // Single-player mode, no translation
+            player1Facade.renderGame(g2d);
+        }
     }
 
     public void adjustGameDimensions(int width, int height) {
-        gameFacade.setGameDimensions(width, height);
+        player1Facade.setGameDimensions(width, height);
+        if (isTwoPlayerMode) {
+            player2Facade.setGameDimensions(width, height);
+        }
     }
 
-    public boolean isGameOver(){
-        return gameFacade.isGameOver();
+    public boolean isGameOver() {
+        if (isTwoPlayerMode) {
+            // Game over is true if either player's game is over in two-player mode
+            return player1Facade.isGameOver() || player2Facade.isGameOver();
+        }
+        // Single-player mode, only check Player 1
+        return player1Facade.isGameOver();
     }
 }
