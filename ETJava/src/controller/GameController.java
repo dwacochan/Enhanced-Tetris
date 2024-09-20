@@ -111,6 +111,6 @@ public class GameController {
     }
 
     public boolean checkGameOver() {
-        return Gameplay.isGameOver();
+        return gameLoop.getGameplay().isGameOver();
     }
 }

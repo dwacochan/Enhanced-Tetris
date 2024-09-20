@@ -5,7 +5,7 @@ import controller.Gameplay;
 
 import java.awt.*;
 
-public class Tetromino {
+public abstract class Tetromino {
     public Block[] blocks = new Block[4];
     public Block[] tempBlocks = new Block[4];
     public int rotation = 0;
@@ -13,6 +13,11 @@ public class Tetromino {
     public boolean settled = false;
     public boolean settling = false;
     private int settlingTimer = 0;
+    private Gameplay gameplay;
+
+    public void setGameplay(Gameplay gameplay) {
+        this.gameplay = gameplay;
+    }
 
     public void create(Color color) {
         for (int i = 0; i < 4; i++) {
@@ -79,7 +84,7 @@ public class Tetromino {
     }
 
     private void checkSettledTetrominoCollision(Block[] blocksToCheck) {
-        for (Block settledBlock : Gameplay.settledTetrominos) {
+        for (Block settledBlock : gameplay.getSettledTetrominos()) {
             for (Block block : blocksToCheck) {
                 if (isCollision(block, settledBlock)) {
                     updateCollisionFlags(block, settledBlock);
@@ -89,7 +94,6 @@ public class Tetromino {
     }
 
     private boolean isCollision(Block movingBlock, Block settledBlock) {
-        // Checks for block overlap with settledBlock
         return movingBlock.getX() < settledBlock.getX() + Block.SIZE &&
                 movingBlock.getX() + Block.SIZE > settledBlock.getX() &&
                 movingBlock.getY() < settledBlock.getY() + Block.SIZE &&
@@ -111,13 +115,13 @@ public class Tetromino {
     }
 
     private void checkWallCollision(Block block) {
-        if (block.getX() < Gameplay.left_x) {
+        if (block.getX() < gameplay.left_x) {
             leftCollide = true;
         }
-        if (block.getX() + Block.SIZE > Gameplay.right_x) {
+        if (block.getX() + Block.SIZE > gameplay.right_x) {
             rightCollide = true;
         }
-        if (block.getY() + Block.SIZE > Gameplay.bottom_y) {
+        if (block.getY() + Block.SIZE > gameplay.bottom_y) {
             bottomCollide = true;
         }
     }
@@ -232,8 +236,8 @@ public class Tetromino {
             if (bottomCollide) {
                 settled = true;
                 for (Block block : blocks) {
-                    if (block.getY() < Gameplay.top_y + Block.SIZE + 1) {
-                        Gameplay.setGameOver(true);
+                    if (block.getY() < gameplay.top_y + Block.SIZE + 1) {
+                        gameplay.setGameOver(true);
                         break;
                     }
                 }
@@ -246,5 +250,17 @@ public class Tetromino {
         for (Block block : blocks) {
             g2d.fillRect(block.getX(), block.getY(), Block.SIZE, Block.SIZE);
         }
+    }
+
+    public Block[] getBlocks() {
+        return blocks;
+    }
+
+    public boolean isSettled() {
+        return settled;
+    }
+
+    public void setSettling(boolean settling) {
+        this.settling = settling;
     }
 }

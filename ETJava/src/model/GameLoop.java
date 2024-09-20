@@ -13,6 +13,11 @@ public class GameLoop extends JPanel implements Runnable {
     private Thread gameThread;
     private boolean running = false;
     private boolean paused = false;
+
+    public Gameplay getGameplay() {
+        return gameplay;
+    }
+
     Gameplay gameplay;
 
     public GameLoop() {
@@ -104,5 +109,6 @@ public class GameLoop extends JPanel implements Runnable {
         Graphics2D g2d = (Graphics2D) g;
         gameplay.draw(g2d);
     }
+
 
 }

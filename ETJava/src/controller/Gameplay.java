@@ -9,57 +9,57 @@ import model.factory.TetrominoFactory;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
 public class Gameplay {
     final int WIDTH = 200;
     final int HEIGHT = 400;
-    public static int left_x;
-    public static int right_x;
-    public static int top_y;
-    public static int bottom_y;
-    Tetromino currentTetromino;
+    public int left_x;
+    public int right_x;
+    public int top_y;
+    public int bottom_y;
+    private Tetromino currentTetromino;
     final int TETROMINOSTART_X;
     final int TETROMINOSTART_Y;
-    public static ArrayList<Block> settledTetrominos = new ArrayList<>();
-    private static boolean gameOver = false;
-
+    private ArrayList<Block> settledTetrominos = new ArrayList<>();
+    private boolean gameOver = false;
 
     public Gameplay(){
-        left_x = (GameLoop.WIDTH/2) - (WIDTH/2);
+        left_x = (GameLoop.WIDTH / 2) - (WIDTH / 2);
         right_x = left_x + WIDTH;
         top_y = 50;
         bottom_y = top_y + HEIGHT;
 
-        TETROMINOSTART_X = left_x + (WIDTH/2) - Block.SIZE;
+        TETROMINOSTART_X = left_x + (WIDTH / 2) - Block.SIZE;
         TETROMINOSTART_Y = top_y + Block.SIZE;
 
         currentTetromino = selectShape();
         currentTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
+        currentTetromino.setGameplay(this);  // Pass instance of Gameplay to Tetromino
     }
 
-    public static boolean isGameOver() {
+    public boolean isGameOver() {
         return gameOver;
     }
 
-    public static void setGameOver(boolean gameOver) {
-        Gameplay.gameOver = gameOver;
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 
-    private Tetromino selectShape(){
+    private Tetromino selectShape() {
         return TetrominoFactory.createTetromino();
     }
 
     public void update() {
-        if (isGameOver()){
+        if (isGameOver()) {
             return;
         }
-        if (currentTetromino.settled) {
-            settledTetrominos.addAll(Arrays.asList(currentTetromino.blocks));
+        if (currentTetromino.isSettled()) {
+            settledTetrominos.addAll(Arrays.asList(currentTetromino.getBlocks()));
 
-            currentTetromino.settling = false;
+            currentTetromino.setSettling(false);
             currentTetromino = selectShape();
             currentTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
+            currentTetromino.setGameplay(this);  // Set reference of Gameplay
 
             checkRowErasure();
         } else {
@@ -67,12 +67,13 @@ public class Gameplay {
         }
     }
 
-    private void checkRowErasure(){
+    private void checkRowErasure() {
         ArrayList<Integer> fullRows = new ArrayList<>();
         checkFullRow(fullRows);
         removeFullRow(fullRows);
         shiftDownRemainingRows(fullRows);
     }
+
     private void checkFullRow(ArrayList<Integer> fullRows) {
         for (int y = top_y; y < bottom_y; y += Block.SIZE) {
             int blockNum = 0;
@@ -103,16 +104,14 @@ public class Gameplay {
         }
     }
 
-
-
-    public void draw(Graphics2D g2d){
+    public void draw(Graphics2D g2d) {
         g2d.setColor(Color.LIGHT_GRAY);
-        g2d.fillRect(left_x-2, top_y-2, WIDTH+4, HEIGHT+4);
+        g2d.fillRect(left_x - 2, top_y - 2, WIDTH + 4, HEIGHT + 4);
         g2d.setColor(Color.BLACK);
         g2d.setStroke(new BasicStroke(2));
-        g2d.drawRect(left_x-2, top_y-2, WIDTH+4, HEIGHT+4);
+        g2d.drawRect(left_x - 2, top_y - 2, WIDTH + 4, HEIGHT + 4);
 
-        if(currentTetromino != null){
+        if (currentTetromino != null) {
             currentTetromino.draw(g2d);
         }
 
@@ -122,15 +121,13 @@ public class Gameplay {
 
         g2d.setColor(Color.BLACK);
         g2d.setFont(g2d.getFont().deriveFont(30f));
-        if(Controls.pause){
+        if (Controls.pause) {
             int x = left_x - 215;
             int y = top_y + 200;
             g2d.drawString("PAUSED", x, y);
             g2d.drawString("Press P to unpause", x - 65, y + 50);
         }
-
     }
-
 
     public void reset() {
         settledTetrominos.clear();
@@ -138,6 +135,10 @@ public class Gameplay {
         setGameOver(false);
         currentTetromino = selectShape();
         currentTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
+        currentTetromino.setGameplay(this);
     }
 
+    public ArrayList<Block> getSettledTetrominos() {
+        return settledTetrominos;
+    }
 }
