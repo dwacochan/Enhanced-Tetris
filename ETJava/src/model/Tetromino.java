@@ -115,13 +115,13 @@ public abstract class Tetromino {
     }
 
     private void checkWallCollision(Block block) {
-        if (block.getX() < gameplay.left_x) {
+        if (block.getX() < gameplay.getLeft_x()) {
             leftCollide = true;
         }
-        if (block.getX() + Block.SIZE > gameplay.right_x) {
+        if (block.getX() + Block.SIZE > gameplay.getRight_x()) {
             rightCollide = true;
         }
-        if (block.getY() + Block.SIZE > gameplay.bottom_y) {
+        if (block.getY() + Block.SIZE > gameplay.getBottom_y()) {
             bottomCollide = true;
         }
     }
@@ -236,7 +236,7 @@ public abstract class Tetromino {
             if (bottomCollide) {
                 settled = true;
                 for (Block block : blocks) {
-                    if (block.getY() < gameplay.top_y + Block.SIZE + 1) {
+                    if (block.getY() < gameplay.getTop_y() + Block.SIZE + 1) {
                         gameplay.setGameOver(true);
                         break;
                     }

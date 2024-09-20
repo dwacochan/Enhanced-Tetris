@@ -2,7 +2,6 @@ package controller;
 
 import model.Block;
 import model.Tetromino;
-import model.tetrominos.*;
 import model.GameLoop;
 import model.factory.TetrominoFactory;
 
@@ -15,15 +14,20 @@ public class Gameplay {
 
     private int width;
     private int height;
-    public int left_x;
-    public int right_x;
-    public int top_y;
-    public int bottom_y;
+    private int left_x;
+    private int right_x;
+    private int top_y;
+    private int bottom_y;
     private Tetromino currentTetromino;
     private int TETROMINOSTART_X;
     private int TETROMINOSTART_Y;
     private ArrayList<Block> settledTetrominos = new ArrayList<>();
     private boolean gameOver = false;
+
+    // Scoring and level tracking
+    private int score = 0;
+    private int rowsErased = 0;
+    private int level = 1;
 
     public Gameplay(int width, int height) {
         this.width = width;
@@ -35,12 +39,12 @@ public class Gameplay {
     }
 
     private void initializeDimensions() {
-        left_x = (GameLoop.WIDTH / 2) - (width / 2);
-        right_x = left_x + width;
-        top_y = 50;
-        bottom_y = top_y + height;
-        TETROMINOSTART_X = left_x + (width / 2) - Block.SIZE;
-        TETROMINOSTART_Y = top_y + Block.SIZE;
+        setLeft_x((GameLoop.WIDTH / 2) - (width / 2));
+        setRight_x(getLeft_x() + width);
+        setTop_y(50);
+        setBottom_y(getTop_y() + height);
+        TETROMINOSTART_X = getLeft_x() + (width / 2) - Block.SIZE;
+        TETROMINOSTART_Y = getTop_y() + Block.SIZE;
     }
 
     public void resetDimensions() {
@@ -80,23 +84,46 @@ public class Gameplay {
     private void checkRowErasure() {
         ArrayList<Integer> fullRows = new ArrayList<>();
         checkFullRow(fullRows);
+        if (!fullRows.isEmpty()){
+            updateScore(fullRows.size());
+            rowsErased += fullRows.size();
+            checkLevelUp();
+        }
         removeFullRow(fullRows);
         shiftDownRemainingRows(fullRows);
     }
 
     private void checkFullRow(ArrayList<Integer> fullRows) {
-        for (int y = top_y; y < bottom_y; y += Block.SIZE) {
+        for (int y = getTop_y(); y < getBottom_y(); y += Block.SIZE) {
             int blockNum = 0;
             for (Block settledBlock : settledTetrominos) {
                 if (settledBlock.getY() == y) {
                     blockNum++;
                 }
             }
-            if (blockNum == (right_x - left_x) / Block.SIZE) {
+            if (blockNum == (getRight_x() - getLeft_x()) / Block.SIZE) {
                 fullRows.add(y);
             }
         }
     }
+
+    private void updateScore(int rowsErased) {
+        switch (rowsErased) {
+            case 1 -> score += 100;
+            case 2 -> score += 300;
+            case 3 -> score += 600;
+            default -> score += 1000; // 4 and over
+        }
+    }
+
+    private void checkLevelUp() {
+        if (rowsErased >= level * 10) {
+            level++;
+            System.out.println("Level up! Now at level: " + level);
+            // TODO: Increase Tetromino falling speed
+        }
+    }
+
 
     private void removeFullRow(ArrayList<Integer> fullRows) {
         for (int row : fullRows) {
@@ -129,8 +156,13 @@ public class Gameplay {
             block.draw(g2d);
         }
 
+        // Draw the score and level
         g2d.setColor(Color.BLACK);
         g2d.setFont(g2d.getFont().deriveFont(30f));
+        g2d.drawString("Score: " + score, left_x - 200, top_y + 100);
+        g2d.drawString("Level: " + level, left_x - 200, top_y + 150);
+
+        // Existing paused drawing logic
         if (Controls.pause) {
             int x = left_x - 215;
             int y = top_y + 200;
@@ -139,6 +171,7 @@ public class Gameplay {
         }
     }
 
+
     public void reset() {
         settledTetrominos.clear();
         Controls.pause = false;
@@ -146,7 +179,13 @@ public class Gameplay {
         currentTetromino = selectShape();
         currentTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
         currentTetromino.setGameplay(this);
+
+        // Reset score and level
+        score = 0;
+        rowsErased = 0;
+        level = 1;
     }
+
 
     public void setWidth(int width) {
         this.width = width;
@@ -166,5 +205,37 @@ public class Gameplay {
 
     public ArrayList<Block> getSettledTetrominos() {
         return settledTetrominos;
+    }
+
+    public int getLeft_x() {
+        return left_x;
+    }
+
+    public void setLeft_x(int left_x) {
+        this.left_x = left_x;
+    }
+
+    public int getRight_x() {
+        return right_x;
+    }
+
+    public void setRight_x(int right_x) {
+        this.right_x = right_x;
+    }
+
+    public int getTop_y() {
+        return top_y;
+    }
+
+    public void setTop_y(int top_y) {
+        this.top_y = top_y;
+    }
+
+    public int getBottom_y() {
+        return bottom_y;
+    }
+
+    public void setBottom_y(int bottom_y) {
+        this.bottom_y = bottom_y;
     }
 }
