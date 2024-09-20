@@ -24,18 +24,27 @@ public class Gameplay {
     private ArrayList<Block> settledTetrominos = new ArrayList<>();
     private boolean gameOver = false;
 
+
+
+    private int gameNumber;
+
     // Scoring and level tracking
     private int score = 0;
     private int rowsErased = 0;
     private int level = 1;
 
-    public Gameplay(int width, int height) {
+    public Gameplay(int width, int height, int gameNumber) {
         this.width = width;
         this.height = height;
+        this.gameNumber = gameNumber;
         initializeDimensions();
         currentTetromino = selectShape();
         currentTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
         currentTetromino.setGameplay(this);  // Pass instance of Gameplay to Tetromino
+    }
+
+    public Gameplay(int width, int height) {
+        this(width,height,1);
     }
 
     private void initializeDimensions() {
@@ -53,6 +62,10 @@ public class Gameplay {
 
     public boolean isGameOver() {
         return gameOver;
+    }
+
+    public int getGameNumber() {
+        return gameNumber;
     }
 
     public void setGameOver(boolean gameOver) {
@@ -106,6 +119,8 @@ public class Gameplay {
             }
         }
     }
+
+
 
     private void updateScore(int rowsErased) {
         switch (rowsErased) {

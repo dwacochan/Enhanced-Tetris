@@ -142,41 +142,54 @@ public abstract class Tetromino {
 
     private void handleMovement() {
         if (settling) return;
-        if (Controls.left) {
+
+        // Determine the current control set based on the game number
+        ControlsSet currentControls = gameplay.getGameNumber() == 1 ? ControlsSet.DEFAULT : ControlsSet.ALTERNATE;
+
+        // Handle left movement
+        if (currentControls.isLeftPressed()) {
             moveLeft();
             checkMovementCollision();
             if (leftCollide) {
                 moveRight();
             }
-            Controls.left = false;
+            currentControls.resetLeft();
         }
 
-        if (Controls.right) {
+        // Handle right movement
+        if (currentControls.isRightPressed()) {
             moveRight();
             checkMovementCollision();
             if (rightCollide) {
                 moveLeft();
             }
-            Controls.right = false;
+            currentControls.resetRight();
         }
 
-        if (Controls.down) {
+        // Handle down movement
+        if (currentControls.isDownPressed()) {
             moveDown();
             checkMovementCollision();
             if (bottomCollide) {
                 moveUp();
             }
-            Controls.down = false;
+            currentControls.resetDown();
         }
     }
 
     private void handleRotation() {
         if (settling) return;
-        if (Controls.up) {
+
+        // Determine the current control set based on the game number
+        ControlsSet currentControls = gameplay.getGameNumber() == 1 ? ControlsSet.DEFAULT : ControlsSet.ALTERNATE;
+
+        // Handle rotation
+        if (currentControls.isUpPressed()) {
             rotate();
-            Controls.up = false;
+            currentControls.resetUp();
         }
     }
+
 
     private void moveLeft() {
         for (Block block : blocks) {

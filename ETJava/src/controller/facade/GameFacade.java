@@ -11,6 +11,10 @@ public class GameFacade {
         gameplay = new Gameplay(width, height);
     }
 
+    public GameFacade(int width, int height, int gameNumber) {
+        gameplay = new Gameplay(width, height,gameNumber);
+    }
+
     public void startNewGame() {
         gameplay.reset();
     }

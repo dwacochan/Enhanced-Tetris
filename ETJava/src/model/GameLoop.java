@@ -23,7 +23,7 @@ public class GameLoop extends JPanel implements Runnable {
         this.setLayout(null);
 
         // Initialize the GameFacade with custom width and height
-        gameFacade = new GameFacade(200, 400);
+        gameFacade = new GameFacade(200, 400,2);
     }
 
     public void startGame() {
