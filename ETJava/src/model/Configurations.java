@@ -1,6 +1,7 @@
 package model;
 
 import com.google.gson.Gson;
+
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -60,6 +61,8 @@ public class Configurations {
     public boolean isExtendModeOn() { return extendModeOn; }
     public void setExtendModeOn(boolean extendModeOn) { this.extendModeOn = extendModeOn; }
 
+    public boolean isSamePlayerType() {return this.player1Type == this.player2Type; }
+
 
 
     // Save configuration to JSON
@@ -99,4 +102,6 @@ public class Configurations {
                 ", player2Type=" + player2Type +
                 '}';
     }
+
+
 }

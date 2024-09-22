@@ -1,1 +1,1 @@
-{"fieldWidth":5,"fieldHeight":26,"gameLevel":8,"musicOn":true,"soundEffectsOn":true,"aiPlayOn":true,"extendModeOn":true,"player1Type":"HUMAN","player2Type":"SERVER"}
+{"fieldWidth":5,"fieldHeight":26,"gameLevel":1,"musicOn":true,"soundEffectsOn":true,"aiPlayOn":false,"extendModeOn":true,"player1Type":"AI","player2Type":"HUMAN"}

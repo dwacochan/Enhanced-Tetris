@@ -52,7 +52,7 @@ public class GameFacade {
     public int getScore() {return gameplay.getScore();}
 
     public int getGameNumber() {
-        return gameNumber;
+        return gameplay.getGameNumber();
     }
 
 

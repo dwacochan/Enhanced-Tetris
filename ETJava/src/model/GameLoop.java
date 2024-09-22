@@ -1,10 +1,9 @@
 package model;
 
-import controller.ExternalPlayer;
+import controller.Controls;
 import controller.GameController;
 import controller.ServerControlledPlayer;
 import controller.facade.GameFacade;
-import controller.Controls;
 import model.factory.TetrominoFactory;
 
 import javax.swing.*;
@@ -137,8 +136,10 @@ public class GameLoop extends JPanel implements Runnable {
         }
         if(isGameOver()){
             //TODO: needs to convert config to string
-            GameController.getInstance().setNewScore(player1Facade.getScore(),player1Facade.getGameNumber(),"config1");
-            GameController.getInstance().setNewScore(player2Facade.getScore(), player2Facade.getGameNumber(), "config1");
+            GameController.getInstance().setNewScore(player1Facade.getScore(),player1Facade.getGameNumber(),getConfigString(gameController.getConfigurations()));
+            if(GameController.getInstance().getConfigurations().isExtendModeOn()){
+                GameController.getInstance().setNewScore(player2Facade.getScore(), player2Facade.getGameNumber(), getConfigString(gameController.getConfigurations()));
+            }
             stopGame();
         }
 
@@ -215,6 +216,26 @@ public class GameLoop extends JPanel implements Runnable {
         }
         // Single-player mode, only check Player 1
         return player1Facade.isGameOver();
+    }
+
+    private String getConfigString (Configurations configurations){
+        int fieldWidth = configurations.getFieldWidth();
+        int fieldHeight = configurations.getFieldHeight();
+        int level = configurations.getGameLevel();
+
+        String strField = fieldWidth+"x"+fieldHeight+"("+level+")";
+        String strMode;
+        if(configurations.isExtendModeOn()){
+            if(configurations.isSamePlayerType()){
+                strMode = configurations.getPlayer1Type().toString() + " Double";
+            }else{
+                strMode = configurations.getPlayer1Type().toString() + " VS " + configurations.getPlayer2Type().toString();
+            }
+        }else{
+            strMode = configurations.getPlayer1Type().toString();
+        }
+
+        return strField + " "+ strMode;
     }
 
 }

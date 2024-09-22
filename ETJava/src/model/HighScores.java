@@ -2,6 +2,7 @@ package model;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -24,7 +25,6 @@ public class HighScores {
 
     // Return the list of scores sorted in descending order
     public List<Score> getScores() {
-        //scores.sort((s1, s2) -> Integer.compare(s2.score(), s1.score()));
         return scores;
     }
 

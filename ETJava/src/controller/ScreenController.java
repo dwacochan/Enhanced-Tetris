@@ -1,11 +1,12 @@
 package controller;
 
-import javax.swing.*;
-import java.awt.*;
 import model.Configurations;
 import model.HighScores;
-import view.*;
 import view.SplashScreen;
+import view.*;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class ScreenController {
     private static ScreenController instance;
@@ -63,6 +64,9 @@ public class ScreenController {
     }
 
     public void showHighScores() {
+        mainFrame.getContentPane().remove(highScoreScreen);
+        highScoreScreen = new HighScoreScreen(GameController.getInstance(),GameController.getInstance().getHighScores());
+        mainFrame.getContentPane().add(highScoreScreen.getPanel(), "view.HighScoreScreen");
         ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "view.HighScoreScreen");
     }
 

@@ -107,10 +107,6 @@ public class GameController {
         return isRunning;
     }
 
-    public void updateHighScores(int score, String name, String config) {
-        highScores.addScore(score, name, config);
-        highScores.saveToFile();
-    }
 
     public void updateConfigurations() {
         configurations.saveToFile();
@@ -124,10 +120,29 @@ public class GameController {
     public void setNewScore(int score,int playerNumber,String config){
         System.out.println("Player " + playerNumber + " scored: " + score);
         if(highScores.isTopTen(score)){
+            switch (playerNumber) {
+                case 1 -> {
+                    if (configurations.getPlayer1Type() != PlayerType.HUMAN) {
+                        highScores.addScore(score, configurations.getPlayer1Type().toString(), config);
+                        return;
+                    }
+                }
+                case 2 -> {
+                    if (configurations.getPlayer2Type() != PlayerType.HUMAN) {
+                        highScores.addScore(score, configurations.getPlayer2Type().toString(), config);
+                        return;
+                    }
+                }
+            }
+
             String playerName = JOptionPane.showInputDialog("Player " + playerNumber + " score is in top 10! Enter your name: ");
-            highScores.addScore(score, playerName,config);
+            highScores.addScore(score,playerName,config);
             highScores.saveToFile();
         }
+    }
+
+    public HighScores getHighScores(){
+        return highScores;
     }
 
 }
