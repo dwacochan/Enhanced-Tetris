@@ -1,10 +1,11 @@
 package controller;
 
+import controller.facade.GameFacade;
 import model.Block;
 import model.Tetromino;
 import model.GameLoop;
 import model.factory.TetrominoFactory;
-import model.player.PlayerType;
+import model.PlayerType;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.Arrays;
 
 public class Gameplay {
 
-
+    private GameController gameController;
     private int width;
     private int height;
     private int left_x;
@@ -27,7 +28,6 @@ public class Gameplay {
     private PlayerType playerType = PlayerType.HUMAN;
 
 
-
     private int gameNumber;
 
     // Scoring and level tracking
@@ -36,20 +36,21 @@ public class Gameplay {
     private int level = 1;
 
     public Gameplay(int width, int height, int gameNumber, PlayerType playerType) {
+        this.gameController = GameController.getInstance();
         this.width = width;
         this.height = height;
         this.gameNumber = gameNumber;
         this.playerType = playerType;
 
-
-
         initializeDimensions();
         currentTetromino = selectShape();
         currentTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
-        currentTetromino.setGameplay(this);  // Pass instance of Gameplay to Tetromino
+        currentTetromino.setGameplay(this);
+
     }
 
     public Gameplay(int width, int height, int gameNumber) {
+        this.gameController = GameController.getInstance();
         this.width = width;
         this.height = height;
         this.gameNumber = gameNumber;
@@ -61,8 +62,26 @@ public class Gameplay {
 
     public Gameplay(int width, int height) {
         this(width,height,1);
+        this.gameController = GameController.getInstance();
     }
 
+
+    public int[][] get2DArray() {
+        int rows = height / Block.SIZE;  // number of rows
+        int cols = width / Block.SIZE;   // number of columns
+        int[][] board = new int[rows][cols];
+
+        for (Block block : settledTetrominos) {
+            int xIndex = (block.getX() - left_x) / Block.SIZE;
+            int yIndex = (block.getY() - top_y) / Block.SIZE;
+
+            if (xIndex >= 0 && xIndex < cols && yIndex >= 0 && yIndex < rows) {
+                board[yIndex][xIndex] = 1;  // Mark as filled
+            }
+        }
+
+        return board;
+    }
 
 
     private void initializeDimensions() {
@@ -109,6 +128,12 @@ public class Gameplay {
             currentTetromino.setGameplay(this);  // Set reference of Gameplay
 
             checkRowErasure();
+
+            // Alert external player of state of game
+            if (gameController.getGameLoop().getExternalPlayer(gameNumber) != null){
+                gameController.getGameLoop().getExternalPlayer(gameNumber).makeCallToServer(settledTetrominos);
+            }
+
         } else {
             currentTetromino.update();
         }

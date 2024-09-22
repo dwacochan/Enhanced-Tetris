@@ -1,4 +1,4 @@
-package model.player;
+package model;
 
 public enum PlayerType {
     HUMAN("Human"),

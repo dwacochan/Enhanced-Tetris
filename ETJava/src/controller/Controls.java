@@ -1,5 +1,8 @@
 package controller;
 
+import model.ControlsSet;
+import model.PlayerType;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.Timer;
@@ -32,49 +35,65 @@ public class Controls {
 
     public static boolean pause;      // Pause for both players
 
-    // Timer to simulate external player controls
-    private static Timer externalPlayerTimer;
+    public static void setExt_1_up(boolean ext_1_up) {
+        Controls.ext_1_up = ext_1_up;
+    }
 
-    // Simulate Player 1 being externally controlled
-    public static void startExternalPlayer1() {
-        // Stop any previous simulation if it is running
-        if (externalPlayerTimer != null) {
-            externalPlayerTimer.cancel();
-        }
+    public static void setExt_1_right(boolean ext_1_right) {
+        Controls.ext_1_right = ext_1_right;
+    }
 
-        // Create a new Timer
-        externalPlayerTimer = new Timer();
+    public static void setExt_1_down(boolean ext_1_down) {
+        Controls.ext_1_down = ext_1_down;
+    }
 
-        // Schedule repeated tasks to simulate key presses in a loop
-        externalPlayerTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                // Simulate external player 1 movement pattern
-                ext_1_up = true;
-                delay(100);  // Wait 0.1 second
-                ext_1_up = false;
-                ext_1_right = true;
-                delay(100);
-                ext_1_right = false;
-                ext_1_down = true;
-                delay(100);
-                ext_1_down = false;
-                ext_1_left = true;
-                delay(100);
-                ext_1_left = false;
+    public static void setExt_1_left(boolean ext_1_left) {
+        Controls.ext_1_left = ext_1_left;
+    }
+
+    public static void setExt_2_up(boolean ext_2_up) {
+        Controls.ext_2_up = ext_2_up;
+    }
+
+    public static void setExt_2_right(boolean ext_2_right) {
+        Controls.ext_2_right = ext_2_right;
+    }
+
+    public static void setExt_2_down(boolean ext_2_down) {
+        Controls.ext_2_down = ext_2_down;
+    }
+
+    public static void setExt_2_left(boolean ext_2_left) {
+        Controls.ext_2_left = ext_2_left;
+    }
+
+    public static ControlsSet getCurrentControls(int gameNumber, PlayerType playerType) {
+        switch(gameNumber){
+            case 1 -> {
+                if (playerType == PlayerType.HUMAN) {
+                    return ControlsSet.DEFAULT;
+                } else if (playerType == PlayerType.EXTERNAL) {
+                    return ControlsSet.EXTERNAL_1;
+                } else {
+                    return ControlsSet.DEFAULT;
+                }
             }
-        }, 0, 500); // Run every second (adjust as necessary)
-    }
+            case 2 -> {
+                if (playerType == PlayerType.HUMAN) {
+                    return ControlsSet.ALTERNATE;
+                } else if (playerType == PlayerType.EXTERNAL) {
+                    return ControlsSet.EXTERNAL_2;
+                } else {
+                    return ControlsSet.ALTERNATE;
+                }
+            }
 
-    // Helper method to create delays between key events
-    private static void delay(int milliseconds) {
-        try {
-            Thread.sleep(milliseconds);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt(); // Restore interrupted status
+            default -> {
+                return ControlsSet.DEFAULT;
+            }
         }
-    }
 
+    }
 
     public static void bindKeys(JComponent comp) {
         if (comp == null) {

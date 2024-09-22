@@ -2,7 +2,6 @@ package model;
 
 import controller.Controls;
 import controller.Gameplay;
-import model.player.PlayerType;
 
 import java.awt.*;
 
@@ -144,32 +143,9 @@ public abstract class Tetromino {
     private void handleMovement() {
         if (settling) return;
 
-        int gameNumber = gameplay.getGameNumber();
-        PlayerType playerType = gameplay.getPlayerType();
-        ControlsSet currentControls = switch(gameNumber){
-            case 1 -> {
-                if (playerType == PlayerType.HUMAN) {
-                    yield ControlsSet.DEFAULT;
-                } else if (playerType == PlayerType.EXTERNAL) {
-                    yield ControlsSet.EXTERNAL_1;
-                } else {
-                    yield ControlsSet.DEFAULT;
-                }
-            }
-            case 2 -> {
-                if (playerType == PlayerType.HUMAN) {
-                    yield ControlsSet.ALTERNATE;
-                } else if (playerType == PlayerType.EXTERNAL) {
-                    yield ControlsSet.EXTERNAL_2;
-                } else {
-                    yield ControlsSet.ALTERNATE;
-                }
-            }
 
-            default -> {
-                yield ControlsSet.DEFAULT;
-            }
-        };
+        ControlsSet currentControls = Controls.getCurrentControls(gameplay.getGameNumber(), gameplay.getPlayerType());
+
 
         // Handle left movement
         if (currentControls.isLeftPressed()) {
@@ -206,7 +182,7 @@ public abstract class Tetromino {
         if (settling) return;
 
         // Determine the current control set based on the game number
-        ControlsSet currentControls = gameplay.getGameNumber() == 1 ? ControlsSet.DEFAULT : ControlsSet.ALTERNATE;
+        ControlsSet currentControls = Controls.getCurrentControls(gameplay.getGameNumber(), gameplay.getPlayerType());
 
         // Handle rotation
         if (currentControls.isUpPressed()) {
