@@ -40,7 +40,48 @@ public enum ControlsSet {
         void resetDown() { Controls.alt_down = false; }
         @Override
         void resetUp() { Controls.alt_up = false; }
+    },
+    EXTERNAL_1 {
+        @Override
+        boolean isLeftPressed() { return Controls.ext_1_left; }
+        @Override
+        boolean isRightPressed() { return Controls.ext_1_right; }
+        @Override
+        boolean isDownPressed() { return Controls.ext_1_down; }
+        @Override
+        boolean isUpPressed() { return Controls.ext_1_up; }
+
+        @Override
+        void resetLeft() { Controls.ext_1_left = false; }
+        @Override
+        void resetRight() { Controls.ext_1_right = false; }
+        @Override
+        void resetDown() { Controls.ext_1_down = false; }
+        @Override
+        void resetUp() { Controls.ext_1_up = false; }
+    },
+    EXTERNAL_2 {
+        @Override
+        boolean isLeftPressed() { return Controls.ext_2_left; }
+        @Override
+        boolean isRightPressed() { return Controls.ext_2_right; }
+        @Override
+        boolean isDownPressed() { return Controls.ext_2_down; }
+        @Override
+        boolean isUpPressed() { return Controls.ext_2_up; }
+
+        @Override
+        void resetLeft() { Controls.ext_2_left = false; }
+        @Override
+        void resetRight() { Controls.ext_2_right = false; }
+        @Override
+        void resetDown() { Controls.ext_2_down = false; }
+        @Override
+        void resetUp() { Controls.ext_2_up = false; }
     };
+
+
+    ;
 
     abstract boolean isLeftPressed();
     abstract boolean isRightPressed();

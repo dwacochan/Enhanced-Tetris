@@ -1,6 +1,8 @@
 package model;
 
+import controller.ExternalPlayer;
 import controller.GameController;
+import controller.ServerControlledPlayer;
 import controller.facade.GameFacade;
 import controller.Controls;
 import model.factory.TetrominoFactory;
@@ -15,6 +17,7 @@ public class GameLoop extends JPanel implements Runnable {
     private Thread gameThread;
     private boolean running = false;
     private boolean paused = false;
+    GameController gameController;
 
     // Two facades, one for each player
     private GameFacade player1Facade;
@@ -23,22 +26,44 @@ public class GameLoop extends JPanel implements Runnable {
     // Toggle for two-player mode
     private boolean isTwoPlayerMode;
 
-    public GameLoop(boolean isTwoPlayerMode) {
-        this.isTwoPlayerMode = isTwoPlayerMode;
+    // External players
+    ServerControlledPlayer serverPlayer1;
+    ServerControlledPlayer serverPlayer2;
+
+    public GameLoop(boolean isTwoPlayerMode, PlayerType player1Type, PlayerType player2Type, GameController gameController) {
+        this.gameController = gameController;
+        this.isTwoPlayerMode = isTwoPlayerMode; // Set whether the game is single-player or two-player
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBackground(Color.WHITE);
         this.setLayout(null);
 
         // Initialize game facade(s) depending on the mode
-        player1Facade = new GameFacade(200, 400, 1); // Player 1 is always present
+        player1Facade = new GameFacade(200, 400, 1, player1Type); // Player 1 is always present
 
         if (isTwoPlayerMode) {
             // Player 2's game area (right side) only initialized in two-player mode
-            player2Facade = new GameFacade(200, 400, 2);
+            player2Facade = new GameFacade(200, 400, 2, player2Type);
         }
     }
 
+
+
     public void startGame() {
+        player1Facade = new GameFacade(200, 400, 1, gameController.getConfigurations().getPlayer1Type());
+        if (gameController.getConfigurations().getPlayer1Type() == PlayerType.SERVER){
+            serverPlayer1 = new ServerControlledPlayer(1);
+        } else {
+            serverPlayer1 = null;
+        }
+        if (gameController.getConfigurations().isExtendModeOn()){
+            if (gameController.getConfigurations().getPlayer2Type() == PlayerType.SERVER){
+                serverPlayer2 = new ServerControlledPlayer(2);
+            } else {
+                serverPlayer2 = null;
+            }
+            player2Facade = new GameFacade(200, 400, 2, gameController.getConfigurations().getPlayer2Type());
+        }
+
         if (gameThread == null || !running) {
             TetrominoFactory.reset();
             gameThread = new Thread(this);
@@ -62,6 +87,18 @@ public class GameLoop extends JPanel implements Runnable {
 
     public void stopGame() {
         if (running) {
+
+            // Kill externalPlayers
+            if (serverPlayer1 != null) {
+                serverPlayer1.stop();
+                serverPlayer1 = null;
+            }
+
+            if (serverPlayer2 != null) {
+                serverPlayer2.stop();
+                serverPlayer2 = null;
+            }
+
             running = false;
             paused = false;
 
@@ -150,6 +187,24 @@ public class GameLoop extends JPanel implements Runnable {
         if (isTwoPlayerMode) {
             player2Facade.setGameDimensions(width, height);
         }
+    }
+
+    public GameFacade getPlayerFacade(int gameNumber) {
+        if (gameNumber == 1) {
+            return player1Facade;
+        } else if (gameNumber == 2) {
+            return player2Facade;
+        }
+        return null;
+    }
+
+    public ServerControlledPlayer getServerControlledPlayer(int gameNumber){
+        if (gameNumber == 1) {
+            return serverPlayer1;
+        } else if (gameNumber == 2) {
+            return serverPlayer2;
+        }
+        return null;
     }
 
     public boolean isGameOver() {

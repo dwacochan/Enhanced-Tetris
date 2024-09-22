@@ -14,6 +14,8 @@ public class Configurations {
     private boolean soundEffectsOn;
     private boolean aiPlayOn;
     private boolean extendModeOn;
+    private PlayerType player1Type;
+    private PlayerType player2Type;
 
     private static final String CONFIG_FILE_PATH = "configurations.json";
 
@@ -26,6 +28,8 @@ public class Configurations {
         this.soundEffectsOn = true;
         this.aiPlayOn = false;
         this.extendModeOn = false;
+        this.player1Type = PlayerType.HUMAN;
+        this.player2Type = PlayerType.HUMAN;
     }
 
     // Getters and setters
@@ -38,6 +42,12 @@ public class Configurations {
     public int getGameLevel() { return gameLevel; }
     public void setGameLevel(int gameLevel) { this.gameLevel = gameLevel; }
 
+    public PlayerType getPlayer1Type() { return player1Type; }
+    public void setPlayer1Type(PlayerType player1Type) { this.player1Type = player1Type; }
+
+    public PlayerType getPlayer2Type() { return player2Type; }
+    public void setPlayer2Type(PlayerType player2Type) { this.player2Type = player2Type; }
+
     public boolean isMusicOn() { return musicOn; }
     public void setMusicOn(boolean musicOn) { this.musicOn = musicOn; }
 
@@ -49,6 +59,7 @@ public class Configurations {
 
     public boolean isExtendModeOn() { return extendModeOn; }
     public void setExtendModeOn(boolean extendModeOn) { this.extendModeOn = extendModeOn; }
+
 
 
     // Save configuration to JSON
@@ -72,5 +83,20 @@ public class Configurations {
             e.printStackTrace();
             return new Configurations(); // Return default if there's an issue
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Configurations{" +
+                "fieldWidth=" + fieldWidth +
+                ", fieldHeight=" + fieldHeight +
+                ", gameLevel=" + gameLevel +
+                ", musicOn=" + musicOn +
+                ", soundEffectsOn=" + soundEffectsOn +
+                ", aiPlayOn=" + aiPlayOn +
+                ", extendModeOn=" + extendModeOn +
+                ", player1Type=" + player1Type +
+                ", player2Type=" + player2Type +
+                '}';
     }
 }
