@@ -115,7 +115,6 @@ public class Gameplay {
     public int[][] getCurrentTetromino2DArray() {
         // Get the blocks of the current Tetromino
         Block[] blocks = currentTetromino.getBlocks();
-        System.out.println(Arrays.toString(blocks));
         return convertBlocksTo2DArray(blocks);
 
     }
@@ -125,7 +124,6 @@ public class Gameplay {
         Tetromino nextTetromino =  TetrominoFactory.peekNextTetromino();
         nextTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
         Block[] blocks = nextTetromino.getBlocks();
-        System.out.println(Arrays.toString(blocks));
         return convertBlocksTo2DArray(blocks);
     }
 

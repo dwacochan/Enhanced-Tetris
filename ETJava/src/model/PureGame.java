@@ -25,7 +25,6 @@ public class PureGame {
         this.cells = cells;
         this.currentShape = currentShape;
         this.nextShape = nextShape;
-        System.out.println("WIDSTH: " + width);
     }
 
     public int getWidth() {

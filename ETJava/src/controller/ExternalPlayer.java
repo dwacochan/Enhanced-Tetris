@@ -1,107 +1,121 @@
 package controller;
 
+import model.OpMove;
 import model.PureGame;
+import model.ServerConnection;
 
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.google.gson.Gson;
+
+
+
+
 public class ExternalPlayer {
     private GameController gameController;
     private int gameNumber;
     private Timer timer;
+    private Timer downTimer;
+    private ServerConnection serverConnection;
 
     public ExternalPlayer(int gameNumber) {
         gameController = GameController.getInstance();
         this.gameNumber = gameNumber;
+        this.downTimer = new Timer();  // Separate timer for downward movement
         this.timer = new Timer();  // Create the timer here
         System.out.println("ExternalPlayer constructor");
+        this.serverConnection = new ServerConnection();
+
     }
 
     public void makeCallToServer(PureGame pureGame) {
-        for (int[] row : pureGame.getCells()) {
-            for (int cell : row) {
-                System.out.print(cell + " ");
-            }
-            System.out.println();
+        // Stop any previous downward movement
+        if (downTimer != null) {
+            downTimer.cancel();
+            downTimer = new Timer();  // Reinitialize the downTimer
         }
-        System.out.println();
-        System.out.println();
-        System.out.println("----------------------");
 
-        System.out.println(" CURRENT TETROMINO ");
-        for (int[] row : pureGame.getCurrentShape()) {
-            for (int cell : row) {
-                System.out.print(cell + " ");
-            }
-            System.out.println();
-        }
-        System.out.println();
-        System.out.println();
-        System.out.println("----------------------");
+        // Convert PureGame to JSON string manually
+        Gson gson = new Gson();
+        String jsonGameState = gson.toJson(pureGame);
+        System.out.println("JSON game state: " + jsonGameState);
 
+        // Call ServerConnection with the PureGame object or directly with the JSON if needed
+        OpMove move = serverConnection.getOptimalMove(pureGame);  // This will internally also JSON-serialize it
+        System.out.println(move);
 
-        System.out.println(" NEXT TETROMINO ");
-        for (int[] row : pureGame.getNextShape()) {
-            for (int cell : row) {
-                System.out.print(cell + " ");
-            }
-            System.out.println();
-        }
-        System.out.println();
-        System.out.println();
-        System.out.println("----------------------");
-    }
+        int halfWidth = pureGame.getWidth() / 2;
+        int movesX = move.opX();  // The number of moves right based on OpMove
+        int movesLeft = halfWidth;  // Move left half of the board width
 
-    // Simulates sending the board state and receiving instructions
-    private List<String> sendBoardStateAndReceiveInstructions() {
-        // For simulation, returning a fixed list of instructions
-        return List.of("left", "right", "right", "up", "down");
-    }
-
-    // Process each instruction with a 0.1s delay between them in an infinite loop
-    public void followInstructions() {
-        List<String> instructions = sendBoardStateAndReceiveInstructions();
-
-        TimerTask task = new TimerTask() {
-            int index = 0;  // Track the current instruction index
+        // Task to move the block to the right according to OpMove's opX
+        TimerTask moveRightTask = new TimerTask() {
+            int moveCount = 0;
 
             @Override
             public void run() {
-                // Get the current instruction
-                String instruction = instructions.get(index);
-
-                // Perform the action based on the instruction
-                switch (instruction) {
-                    case "left":
-                        moveLeft();
-                        break;
-                    case "right":
-                        moveRight();
-                        break;
-                    case "up":
-                        moveUp();
-                        break;
-                    case "down":
-                        moveDown();
-                        break;
-                    default:
-                        break;
-                }
-
-                // Move to the next instruction and loop back if at the end
-                index++;
-                if (index >= instructions.size()) {
-                    index = 0;  // Reset to the beginning for an infinite loop
+                if (moveCount < movesX) {
+                    moveRight();
+                    moveCount++;
+                } else {
+                    // Once done with right moves, start moving down continuously
+                    startDownwardMovement();
+                    cancel();  // Stop the task after completing all right moves
                 }
             }
         };
 
-        // Schedule the task with a 0.1s (100ms) delay between executions
-        timer.schedule(task, 0, 100); // Starts immediately and repeats every 100ms
+        // Task to move the block to the left first (halfWidth moves)
+        TimerTask moveLeftTask = new TimerTask() {
+            int moveCount = 0;
+
+            @Override
+            public void run() {
+                if (moveCount < movesLeft) {
+                    moveLeft();
+                    moveCount++;
+                } else {
+                    // After finishing moving left, start moving right
+                    timer.schedule(moveRightTask, 35, 35);
+                    cancel();  // Stop the left movement task
+                }
+            }
+        };
+
+        // Task to rotate the block first before any movement
+        TimerTask rotateTask = new TimerTask() {
+            int rotateCount = 0;
+
+            @Override
+            public void run() {
+                if (rotateCount < Math.abs(move.opRotate())) {
+                    moveUp();  // Assuming moveUp() rotates the block
+                    rotateCount++;
+                } else {
+                    // After completing rotations, schedule the left movement
+                    timer.schedule(moveLeftTask, 35, 35);  // Start moving left with delay
+                    cancel();  // Stop the rotation task
+                }
+            }
+        };
+
+        // Schedule the rotateTask to run immediately, with a 35ms delay between rotations
+        timer.schedule(rotateTask, 0, 35);
     }
 
-    // Call this method to stop the timer and clean up resources
+    // Call this method to stop the downward movement when needed
+    private void startDownwardMovement() {
+        TimerTask moveDownTask = new TimerTask() {
+            @Override
+            public void run() {
+                moveDown();  // Continuously move down
+            }
+        };
+        downTimer.schedule(moveDownTask, 0, 100);  // Moves down every 100ms (adjust if needed)
+    }
+
     public void stop() {
         System.out.println("Stopping " + this + " number : " + gameNumber);
         if (timer != null) {

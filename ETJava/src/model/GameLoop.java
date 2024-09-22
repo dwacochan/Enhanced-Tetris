@@ -48,17 +48,14 @@ public class GameLoop extends JPanel implements Runnable {
 
     public void startGame() {
         player1Facade = new GameFacade(200, 400, 1, gameController.getConfigurations().getPlayer1Type());
-        System.out.println(gameController.getConfigurations().toString());
         if (gameController.getConfigurations().getPlayer1Type() == PlayerType.EXTERNAL){
             externalPlayer1 = new ExternalPlayer(1);
-            externalPlayer1.followInstructions();
         } else {
             externalPlayer1 = null;
         }
         if (gameController.getConfigurations().isExtendModeOn()){
             if (gameController.getConfigurations().getPlayer2Type() == PlayerType.EXTERNAL){
                 externalPlayer2 = new ExternalPlayer(2);
-                externalPlayer2.followInstructions();
             } else {
                 externalPlayer2 = null;
             }

@@ -24,8 +24,6 @@ public class GameController {
         highScores = new HighScores();
         highScores.loadFromFile();
 
-        System.out.println("Config: " + configurations.toString());
-
         // Set up the main frame
         JFrame mainFrame = new JFrame("Tetris");
         mainFrame.setSize(800, 600);
