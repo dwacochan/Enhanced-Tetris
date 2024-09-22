@@ -4,6 +4,7 @@ import model.Block;
 import model.Tetromino;
 import model.GameLoop;
 import model.factory.TetrominoFactory;
+import model.player.PlayerType;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class Gameplay {
     private int TETROMINOSTART_Y;
     private ArrayList<Block> settledTetrominos = new ArrayList<>();
     private boolean gameOver = false;
+    private PlayerType playerType = PlayerType.HUMAN;
 
 
 
@@ -32,6 +34,20 @@ public class Gameplay {
     private int score = 0;
     private int rowsErased = 0;
     private int level = 1;
+
+    public Gameplay(int width, int height, int gameNumber, PlayerType playerType) {
+        this.width = width;
+        this.height = height;
+        this.gameNumber = gameNumber;
+        this.playerType = playerType;
+
+
+
+        initializeDimensions();
+        currentTetromino = selectShape();
+        currentTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
+        currentTetromino.setGameplay(this);  // Pass instance of Gameplay to Tetromino
+    }
 
     public Gameplay(int width, int height, int gameNumber) {
         this.width = width;
@@ -46,6 +62,8 @@ public class Gameplay {
     public Gameplay(int width, int height) {
         this(width,height,1);
     }
+
+
 
     private void initializeDimensions() {
         setLeft_x((GameLoop.WIDTH / 2) - (width / 2));
@@ -67,6 +85,8 @@ public class Gameplay {
     public int getGameNumber() {
         return gameNumber;
     }
+
+    public PlayerType getPlayerType() { return playerType; }
 
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;

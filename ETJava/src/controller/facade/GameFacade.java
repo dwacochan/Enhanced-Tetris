@@ -1,6 +1,7 @@
 package controller.facade;
 
 import controller.Gameplay;
+import model.player.PlayerType;
 
 import java.awt.*;
 
@@ -13,6 +14,10 @@ public class GameFacade {
 
     public GameFacade(int width, int height, int gameNumber) {
         gameplay = new Gameplay(width, height,gameNumber);
+    }
+
+    public GameFacade(int width, int height, int gameNumber, PlayerType playerType) {
+        gameplay = new Gameplay(width, height, gameNumber, playerType);
     }
 
     public void startNewGame() {

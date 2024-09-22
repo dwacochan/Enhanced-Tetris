@@ -3,6 +3,7 @@ package controller;
 import model.Configurations;
 import model.GameLoop;
 import model.HighScores;
+import model.player.PlayerType;
 
 import javax.swing.*;
 
@@ -23,11 +24,13 @@ public class GameController {
         highScores = new HighScores();
         highScores.loadFromFile();
 
+        System.out.println("Config: " + configurations.toString());
+
         // Set up the main frame
         JFrame mainFrame = new JFrame("Tetris");
         mainFrame.setSize(800, 600);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gameLoop = new GameLoop(true);
+        gameLoop = new GameLoop(true, PlayerType.EXTERNAL, PlayerType.EXTERNAL);
         // Initialize screen controller using the singleton pattern
         screenController = ScreenController.getInstance(mainFrame, this, configurations, highScores);
 

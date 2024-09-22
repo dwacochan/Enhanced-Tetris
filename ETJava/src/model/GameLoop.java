@@ -2,6 +2,7 @@ package model;
 
 import controller.facade.GameFacade;
 import controller.Controls;
+import model.player.PlayerType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,18 +22,20 @@ public class GameLoop extends JPanel implements Runnable {
     // Toggle for two-player mode
     private boolean isTwoPlayerMode;
 
-    public GameLoop(boolean isTwoPlayerMode) {
+    public GameLoop(boolean isTwoPlayerMode, PlayerType player1Type, PlayerType player2Type) {
         this.isTwoPlayerMode = isTwoPlayerMode; // Set whether the game is single-player or two-player
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBackground(Color.WHITE);
         this.setLayout(null);
 
+        Controls.startExternalPlayer1();
+
         // Initialize game facade(s) depending on the mode
-        player1Facade = new GameFacade(200, 400, 1); // Player 1 is always present
+        player1Facade = new GameFacade(200, 400, 1, player1Type); // Player 1 is always present
 
         if (isTwoPlayerMode) {
             // Player 2's game area (right side) only initialized in two-player mode
-            player2Facade = new GameFacade(200, 400, 2);
+            player2Facade = new GameFacade(200, 400, 2, player2Type);
         }
     }
 

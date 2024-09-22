@@ -73,4 +73,17 @@ public class Configurations {
             return new Configurations(); // Return default if there's an issue
         }
     }
+
+    @Override
+    public String toString() {
+        return "Configurations{" +
+                "fieldWidth=" + fieldWidth +
+                ", fieldHeight=" + fieldHeight +
+                ", gameLevel=" + gameLevel +
+                ", musicOn=" + musicOn +
+                ", soundEffectsOn=" + soundEffectsOn +
+                ", aiPlayOn=" + aiPlayOn +
+                ", extendModeOn=" + extendModeOn +
+                '}';
+    }
 }
