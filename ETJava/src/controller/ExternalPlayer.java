@@ -1,8 +1,7 @@
 package controller;
 
-import model.Block;
+import model.PureGame;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -19,12 +18,39 @@ public class ExternalPlayer {
         System.out.println("ExternalPlayer constructor");
     }
 
-    public void makeCallToServer(ArrayList<Block> settledTetrominos) {
-        System.out.println("MAKE CALL TO SERVER FOR PLAYER: " + gameNumber);
-        for (Block block : settledTetrominos) {
-            System.out.println(block);
+    public void makeCallToServer(PureGame pureGame) {
+        for (int[] row : pureGame.getCells()) {
+            for (int cell : row) {
+                System.out.print(cell + " ");
+            }
+            System.out.println();
         }
+        System.out.println();
+        System.out.println();
+        System.out.println("----------------------");
 
+        System.out.println(" CURRENT TETROMINO ");
+        for (int[] row : pureGame.getCurrentShape()) {
+            for (int cell : row) {
+                System.out.print(cell + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+        System.out.println();
+        System.out.println("----------------------");
+
+
+        System.out.println(" NEXT TETROMINO ");
+        for (int[] row : pureGame.getNextShape()) {
+            for (int cell : row) {
+                System.out.print(cell + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+        System.out.println();
+        System.out.println("----------------------");
     }
 
     // Simulates sending the board state and receiving instructions
