@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class Configurations {
@@ -18,6 +20,7 @@ public class Configurations {
     private PlayerType player2Type;
 
     private static final String CONFIG_FILE_PATH = "configurations.json";
+    private static final Logger logger = Logger.getLogger(Configurations.class.getName());
 
     public Configurations() {
         // Default configurations
@@ -66,9 +69,9 @@ public class Configurations {
         Gson gson = new Gson();
         try (FileWriter writer = new FileWriter(CONFIG_FILE_PATH)) {
             gson.toJson(this, writer);
-            System.out.println("Config Saved");
+            logger.info("Config saved successfully.");
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Failed to save configuration", e);
         }
     }
 
@@ -76,10 +79,10 @@ public class Configurations {
     public static Configurations loadFromFile() {
         Gson gson = new Gson();
         try (FileReader reader = new FileReader(CONFIG_FILE_PATH)) {
-            System.out.println("Config Read");
+            logger.info("Config read successfully.");
             return gson.fromJson(reader, Configurations.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Failed to load configuration", e);
             return new Configurations(); // Return default if there's an issue
         }
     }

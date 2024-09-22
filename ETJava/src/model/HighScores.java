@@ -9,13 +9,16 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class HighScores {
-    private List<Score> scores = new ArrayList<Score>();
+    private List<Score> scores;
     private static final String HIGH_SCORES_FILE_PATH = "highscores.json";
+    private static final Logger logger = Logger.getLogger(HighScores.class.getName());
 
     public HighScores() {
-        this.scores = new ArrayList<Score>();
+        this.scores = new ArrayList<>();
     }
 
     // Add a score to the list
@@ -35,10 +38,10 @@ public class HighScores {
     public void saveToFile() {
         Gson gson = new Gson();
         try (FileWriter writer = new FileWriter(HIGH_SCORES_FILE_PATH)) {
-            System.out.println("Highscore Saved");
             gson.toJson(scores, writer);
+            logger.info("Highscore saved successfully.");
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Failed to save high scores.", e);
         }
     }
 
@@ -47,10 +50,12 @@ public class HighScores {
         Gson gson = new Gson();
         try (FileReader reader = new FileReader(HIGH_SCORES_FILE_PATH)) {
             Type scoreListType = new TypeToken<List<Score>>() {}.getType();
-            System.out.println("Highscore Read");
             scores = gson.fromJson(reader, scoreListType);
+            logger.info("Highscore loaded successfully.");
         } catch (IOException e) {
-            e.printStackTrace(); // Load default scores if there's an issue
+            logger.log(Level.SEVERE, "Failed to load high scores.", e);
+            // Optionally, handle the case where the file does not exist or is invalid
+            scores = new ArrayList<>();
         }
     }
 
@@ -67,5 +72,6 @@ public class HighScores {
     public void clearHighScore() {
         scores.clear();
         saveToFile();
+        logger.info("Highscore list cleared.");
     }
 }
