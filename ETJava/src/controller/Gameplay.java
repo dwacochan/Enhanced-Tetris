@@ -132,9 +132,11 @@ public class Gameplay {
         setRight_x(getLeft_x() + width);
         setTop_y(50);
         setBottom_y(getTop_y() + height);
-        TETROMINOSTART_X = getLeft_x() + (width / 2) - Block.SIZE;
+
+        TETROMINOSTART_X = getLeft_x() + (width / 2) - (Block.SIZE / 2) + (width % 2 == 1 ? Block.SIZE / 2 : 0);
         TETROMINOSTART_Y = getTop_y() + Block.SIZE;
     }
+
 
     public void resetDimensions() {
         initializeDimensions();
@@ -267,19 +269,19 @@ public class Gameplay {
             block.draw(g2d);
         }
 
-        // Draw the score and level
         g2d.setColor(Color.BLACK);
         g2d.setFont(g2d.getFont().deriveFont(30f));
-        g2d.drawString("Score: " + score, left_x - 200, top_y + 100);
-        g2d.drawString("Level: " + level, left_x - 200, top_y + 150);
 
-        // Existing paused drawing logic
+        g2d.drawString("Score: " + score, left_x - 10 * Block.SIZE, top_y + 5 * Block.SIZE);
+        g2d.drawString("Level: " + level, left_x - 10 * Block.SIZE, top_y + 7.5f * Block.SIZE);
+
         if (Controls.pause) {
-            int x = left_x - 215;
-            int y = top_y + 200;
+            int x = (int) (left_x - 10.75f * Block.SIZE);
+            int y = top_y + 10 * Block.SIZE;
             g2d.drawString("PAUSED", x, y);
-            g2d.drawString("Press P to unpause", x - 65, y + 50);
+            g2d.drawString("Press P to unpause", (int) (x - 3.25f * Block.SIZE), y + 2.5f * Block.SIZE);
         }
+
     }
 
 

@@ -18,6 +18,8 @@ public class GameLoop extends JPanel implements Runnable {
     private boolean paused = false;
     GameController gameController;
 
+    private final int gameAreaGap = 15;
+
     // Two facades, one for each player
     private GameFacade player1Facade;
     private GameFacade player2Facade;
@@ -48,8 +50,10 @@ public class GameLoop extends JPanel implements Runnable {
 
 
     public void startGame() {
+        int gameWidth = gameController.getConfigurations().getFieldWidth() * Block.SIZE;
+        int gameHeight = gameController.getConfigurations().getFieldHeight() * Block.SIZE;
         this.isTwoPlayerMode = gameController.getConfigurations().isExtendModeOn();
-        player1Facade = new GameFacade(200, 400, 1, gameController.getConfigurations().getPlayer1Type());
+        player1Facade = new GameFacade(gameWidth, gameHeight, 1, gameController.getConfigurations().getPlayer1Type());
         if (gameController.getConfigurations().getPlayer1Type() == PlayerType.SERVER){
             serverPlayer1 = new ServerControlledPlayer(1);
         } else {
@@ -61,7 +65,7 @@ public class GameLoop extends JPanel implements Runnable {
             } else {
                 serverPlayer2 = null;
             }
-            player2Facade = new GameFacade(200, 400, 2, gameController.getConfigurations().getPlayer2Type());
+            player2Facade = new GameFacade(gameWidth, gameHeight, 2, gameController.getConfigurations().getPlayer2Type());
         }
 
         if (gameThread == null || !running) {
@@ -172,11 +176,11 @@ public class GameLoop extends JPanel implements Runnable {
 
         if (isTwoPlayerMode) {
             // Player 1's game on the left side
-            g2d.translate(-150, 0); // Shift Player 1's game area to the left
+            g2d.translate(0, 0); // Shift Player 1's game area to the left
             player1Facade.renderGame(g2d);
 
             // Player 2's game on the right side
-            g2d.translate(450, 0); // Shift Player 2's game area to the right
+            g2d.translate((gameController.getConfigurations().getFieldWidth() + gameAreaGap ) * Block.SIZE, 0); // Shift Player 2's game area to the right
             player2Facade.renderGame(g2d);
         } else {
             // Single-player mode, no translation
