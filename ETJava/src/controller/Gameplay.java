@@ -120,7 +120,7 @@ public class Gameplay {
 
     public int[][] getNextTetromino2DArray() {
 
-        Tetromino nextTetromino =  TetrominoFactory.peekNextTetromino();
+        Tetromino nextTetromino =  TetrominoFactory.peekNextTetromino(this);
         nextTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
         Block[] blocks = nextTetromino.getBlocks();
         return convertBlocksTo2DArray(blocks);
@@ -353,5 +353,9 @@ public class Gameplay {
 
     public void setBottom_y(int bottom_y) {
         this.bottom_y = bottom_y;
+    }
+
+    public int getScore() {
+        return score;
     }
 }

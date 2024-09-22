@@ -12,7 +12,7 @@ import java.util.Queue;
 import java.util.Random;
 
 public class TetrominoFactory {
-    private static Tetromino nextTetromino = generateRandomTetromino();
+    //private static Tetromino nextTetromino = generateRandomTetromino();
 
     private static final Map<Gameplay, Queue<Integer>> gameTetrominoQueues = new HashMap<>();
     private static final List<Integer> initialTetrominoSequence = new LinkedList<>();
@@ -57,7 +57,7 @@ public class TetrominoFactory {
             initializeTetrominoQueueForGame(gameplay);
         }
         Queue<Integer> queue = gameTetrominoQueues.get(gameplay);
-        if (queue.isEmpty()) {
+        if (queue.size()<=5) {
             regenerateTetrominoSequenceForAllGames();
         }
         int tetrominoType = queue.poll();
@@ -73,5 +73,17 @@ public class TetrominoFactory {
     public static synchronized void reset() {
         gameTetrominoQueues.clear();
         generateTetrominoSequence();
+    }
+
+    public static Tetromino peekNextTetromino(Gameplay gameplay) {
+        if (!gameTetrominoQueues.containsKey(gameplay)) {
+            initializeTetrominoQueueForGame(gameplay);
+        }
+        Queue<Integer> queue = gameTetrominoQueues.get(gameplay);
+        if (queue.size()<=5) {
+            regenerateTetrominoSequenceForAllGames();
+        }
+        int tetrominoType = queue.peek();
+        return createTetrominoFromType(tetrominoType);
     }
 }
