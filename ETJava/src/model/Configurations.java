@@ -13,7 +13,6 @@ public class Configurations {
     private int gameLevel;
     private boolean musicOn;
     private boolean soundEffectsOn;
-    private boolean aiPlayOn;
     private boolean extendModeOn;
     private PlayerType player1Type;
     private PlayerType player2Type;
@@ -27,7 +26,6 @@ public class Configurations {
         this.gameLevel = 4;
         this.musicOn = true;
         this.soundEffectsOn = true;
-        this.aiPlayOn = false;
         this.extendModeOn = false;
         this.player1Type = PlayerType.HUMAN;
         this.player2Type = PlayerType.HUMAN;
@@ -55,8 +53,6 @@ public class Configurations {
     public boolean isSoundEffectsOn() { return soundEffectsOn; }
     public void setSoundEffectsOn(boolean soundEffectsOn) { this.soundEffectsOn = soundEffectsOn; }
 
-    public boolean isAiPlayOn() { return aiPlayOn; }
-    public void setAiPlayOn(boolean aiPlayOn) { this.aiPlayOn = aiPlayOn; }
 
     public boolean isExtendModeOn() { return extendModeOn; }
     public void setExtendModeOn(boolean extendModeOn) { this.extendModeOn = extendModeOn; }
@@ -96,7 +92,6 @@ public class Configurations {
                 ", gameLevel=" + gameLevel +
                 ", musicOn=" + musicOn +
                 ", soundEffectsOn=" + soundEffectsOn +
-                ", aiPlayOn=" + aiPlayOn +
                 ", extendModeOn=" + extendModeOn +
                 ", player1Type=" + player1Type +
                 ", player2Type=" + player2Type +
