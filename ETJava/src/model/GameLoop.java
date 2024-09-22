@@ -49,6 +49,7 @@ public class GameLoop extends JPanel implements Runnable {
 
 
     public void startGame() {
+        this.isTwoPlayerMode = gameController.getConfigurations().isExtendModeOn();
         player1Facade = new GameFacade(200, 400, 1, gameController.getConfigurations().getPlayer1Type());
         if (gameController.getConfigurations().getPlayer1Type() == PlayerType.SERVER){
             serverPlayer1 = new ServerControlledPlayer(1);
