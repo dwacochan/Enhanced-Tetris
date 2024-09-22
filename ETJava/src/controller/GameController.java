@@ -69,6 +69,7 @@ public class GameController {
 
     public void showHighScores() {
         screenController.showHighScores();
+        highScores.loadFromFile();
     }
 
     public void hideAllScreens() {
@@ -101,8 +102,8 @@ public class GameController {
         return isRunning;
     }
 
-    public void updateHighScores(int score, String name) {
-        highScores.addScore(score, name);
+    public void updateHighScores(int score, String name, String config) {
+        highScores.addScore(score, name, config);
         highScores.saveToFile();
     }
 
@@ -113,4 +114,15 @@ public class GameController {
     public boolean checkGameOver() {
         return gameLoop.isGameOver();
     }
+
+
+    public void setNewScore(int score,int playerNumber,String config){
+        System.out.println("Player " + playerNumber + " scored: " + score);
+        if(highScores.isTopTen(score)){
+            String playerName = JOptionPane.showInputDialog("Player " + playerNumber + " score is in top 10! Enter your name: ");
+            highScores.addScore(score, playerName,config);
+            highScores.saveToFile();
+        }
+    }
+
 }

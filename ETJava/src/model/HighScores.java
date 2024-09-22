@@ -10,42 +10,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HighScores {
-    private List<Score> scores;
+    private List<Score> scores = new ArrayList<Score>();
     private static final String HIGH_SCORES_FILE_PATH = "highscores.json";
 
     public HighScores() {
-        scores = new ArrayList<>();
-
-        loadScores();
+        this.scores = new ArrayList<Score>();
     }
 
-    public void addScore(int score, String name) {
-        scores.add(new Score(score, name));
+    // Add a score to the list
+    public void addScore(int score, String name, String config) {
+        scores.add(new Score(score, name, config));
     }
 
+    // Return the list of scores sorted in descending order
     public List<Score> getScores() {
-        scores.sort((s1, s2) -> Integer.compare(s2.score(), s1.score()));
+        //scores.sort((s1, s2) -> Integer.compare(s2.score(), s1.score()));
         return scores;
     }
 
-
-    public record Score(int score, String name) {
-    }
-
-
-    private void loadScores() {
-        scores.add(new Score(2000, "John"));
-        scores.add(new Score(1950, "Emily"));
-        scores.add(new Score(1900, "Michael"));
-        scores.add(new Score(1850, "Sophia"));
-        scores.add(new Score(1800, "Daniel"));
-        scores.add(new Score(1750, "Olivia"));
-        scores.add(new Score(1700, "James"));
-        scores.add(new Score(1650, "Isabella"));
-        scores.add(new Score(1600, "David"));
-        scores.add(new Score(1550, "Mia"));
-    }
-
+    // Record class to hold score data
+    public record Score(int score, String name, String config) {}
 
     // Save high scores to JSON
     public void saveToFile() {
@@ -66,12 +50,22 @@ public class HighScores {
             System.out.println("Highscore Read");
             scores = gson.fromJson(reader, scoreListType);
         } catch (IOException e) {
-            e.printStackTrace();
-            loadScores(); // Load default scores if there's an issue
+            e.printStackTrace(); // Load default scores if there's an issue
         }
     }
+
+    // Check if a score qualifies for the top 10
+    public boolean isTopTen(int score) {
+        scores.sort((s1, s2) -> Integer.compare(s2.score(), s1.score()));
+        if (scores.size() < 10) {
+            return true;
+        }
+        return score > scores.get(9).score();
+    }
+
+    // Clear the high scores list and save to file
+    public void clearHighScore() {
+        scores.clear();
+        saveToFile();
+    }
 }
-
-
-
-

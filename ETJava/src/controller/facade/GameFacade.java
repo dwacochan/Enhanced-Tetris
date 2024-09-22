@@ -7,11 +7,14 @@ import java.awt.*;
 public class GameFacade {
     private Gameplay gameplay;
 
+
+    private int gameNumber;
     public GameFacade(int width, int height) {
         gameplay = new Gameplay(width, height);
     }
 
     public GameFacade(int width, int height, int gameNumber) {
+        this.gameNumber = gameNumber;
         gameplay = new Gameplay(width, height,gameNumber);
     }
 
@@ -36,5 +39,12 @@ public class GameFacade {
     public boolean isGameOver() {
         return gameplay.isGameOver();
     }
+
+    public int getScore() {return gameplay.getScore();}
+
+    public int getGameNumber() {
+        return gameNumber;
+    }
+
 
 }

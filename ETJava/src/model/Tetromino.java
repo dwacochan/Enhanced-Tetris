@@ -1,6 +1,7 @@
 package model;
 
 import controller.Controls;
+import controller.GameController;
 import controller.Gameplay;
 
 import java.awt.*;
@@ -250,7 +251,7 @@ public abstract class Tetromino {
                 settled = true;
                 for (Block block : blocks) {
                     if (block.getY() < gameplay.getTop_y() + Block.SIZE + 1) {
-                        gameplay.setGameOver(true);
+                        gameplay.gameOver();
                         break;
                     }
                 }

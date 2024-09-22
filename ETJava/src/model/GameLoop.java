@@ -1,5 +1,6 @@
 package model;
 
+import controller.GameController;
 import controller.facade.GameFacade;
 import controller.Controls;
 import model.factory.TetrominoFactory;
@@ -23,7 +24,7 @@ public class GameLoop extends JPanel implements Runnable {
     private boolean isTwoPlayerMode;
 
     public GameLoop(boolean isTwoPlayerMode) {
-        this.isTwoPlayerMode = isTwoPlayerMode; // Set whether the game is single-player or two-player
+        this.isTwoPlayerMode = isTwoPlayerMode;
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBackground(Color.WHITE);
         this.setLayout(null);
@@ -83,9 +84,9 @@ public class GameLoop extends JPanel implements Runnable {
 
     public void resetGame() {
         stopGame();
-        player1Facade.startNewGame(); // Reset Player 1's game
+        player1Facade.startNewGame();
         if (isTwoPlayerMode) {
-            player2Facade.startNewGame(); // Reset Player 2's game in two-player mode
+            player2Facade.startNewGame();
         }
     }
 
@@ -96,6 +97,13 @@ public class GameLoop extends JPanel implements Runnable {
                 player2Facade.updateGame();  // Update Player 2's game in two-player mode
             }
         }
+        if(isGameOver()){
+            //TODO: needs to convert config to string
+            GameController.getInstance().setNewScore(player1Facade.getScore(),player1Facade.getGameNumber(),"config1");
+            GameController.getInstance().setNewScore(player2Facade.getScore(), player2Facade.getGameNumber(), "config1");
+            stopGame();
+        }
+
     }
 
     @Override
@@ -147,9 +155,10 @@ public class GameLoop extends JPanel implements Runnable {
     public boolean isGameOver() {
         if (isTwoPlayerMode) {
             // Game over is true if either player's game is over in two-player mode
-            return player1Facade.isGameOver() || player2Facade.isGameOver();
+            return player1Facade.isGameOver() && player2Facade.isGameOver();
         }
         // Single-player mode, only check Player 1
         return player1Facade.isGameOver();
     }
+
 }

@@ -68,8 +68,8 @@ public class Gameplay {
         return gameNumber;
     }
 
-    public void setGameOver(boolean gameOver) {
-        this.gameOver = gameOver;
+    public int getScore() {
+        return score;
     }
 
     private Tetromino selectShape() {
@@ -129,6 +129,7 @@ public class Gameplay {
             case 3 -> score += 600;
             default -> score += 1000; // 4 and over
         }
+        // TODO: play sound if > 1
     }
 
     private void checkLevelUp() {
@@ -136,6 +137,7 @@ public class Gameplay {
             level++;
             System.out.println("Level up! Now at level: " + level);
             // TODO: Increase Tetromino falling speed
+            // TODO: Play level up sound
         }
     }
 
@@ -190,7 +192,7 @@ public class Gameplay {
     public void reset() {
         settledTetrominos.clear();
         Controls.pause = false;
-        setGameOver(false);
+        gameOver = false;
         currentTetromino = selectShape();
         currentTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
         currentTetromino.setGameplay(this);
@@ -199,6 +201,11 @@ public class Gameplay {
         score = 0;
         rowsErased = 0;
         level = 1;
+    }
+
+    public void gameOver(){
+        gameOver = true;
+        // TODO: PLAY GAME OVER SOUND
     }
 
 
