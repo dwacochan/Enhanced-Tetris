@@ -2,6 +2,7 @@ package model;
 
 import controller.ExternalPlayer;
 import controller.GameController;
+import controller.ServerControlledPlayer;
 import controller.facade.GameFacade;
 import controller.Controls;
 
@@ -25,8 +26,8 @@ public class GameLoop extends JPanel implements Runnable {
     private boolean isTwoPlayerMode;
 
     // External players
-    ExternalPlayer externalPlayer1;
-    ExternalPlayer externalPlayer2;
+    ServerControlledPlayer serverPlayer1;
+    ServerControlledPlayer serverPlayer2;
 
     public GameLoop(boolean isTwoPlayerMode, PlayerType player1Type, PlayerType player2Type, GameController gameController) {
         this.gameController = gameController;
@@ -48,16 +49,16 @@ public class GameLoop extends JPanel implements Runnable {
 
     public void startGame() {
         player1Facade = new GameFacade(200, 400, 1, gameController.getConfigurations().getPlayer1Type());
-        if (gameController.getConfigurations().getPlayer1Type() == PlayerType.EXTERNAL){
-            externalPlayer1 = new ExternalPlayer(1);
+        if (gameController.getConfigurations().getPlayer1Type() == PlayerType.SERVER){
+            serverPlayer1 = new ServerControlledPlayer(1);
         } else {
-            externalPlayer1 = null;
+            serverPlayer1 = null;
         }
         if (gameController.getConfigurations().isExtendModeOn()){
-            if (gameController.getConfigurations().getPlayer2Type() == PlayerType.EXTERNAL){
-                externalPlayer2 = new ExternalPlayer(2);
+            if (gameController.getConfigurations().getPlayer2Type() == PlayerType.SERVER){
+                serverPlayer2 = new ServerControlledPlayer(2);
             } else {
-                externalPlayer2 = null;
+                serverPlayer2 = null;
             }
             player2Facade = new GameFacade(200, 400, 2, gameController.getConfigurations().getPlayer2Type());
         }
@@ -86,14 +87,14 @@ public class GameLoop extends JPanel implements Runnable {
         if (running) {
 
             // Kill externalPlayers
-            if (externalPlayer1 != null) {
-                externalPlayer1.stop();
-                externalPlayer1 = null;
+            if (serverPlayer1 != null) {
+                serverPlayer1.stop();
+                serverPlayer1 = null;
             }
 
-            if (externalPlayer2 != null) {
-                externalPlayer2.stop();
-                externalPlayer2 = null;
+            if (serverPlayer2 != null) {
+                serverPlayer2.stop();
+                serverPlayer2 = null;
             }
 
             running = false;
@@ -188,11 +189,11 @@ public class GameLoop extends JPanel implements Runnable {
         return null;
     }
 
-    public ExternalPlayer getExternalPlayer(int gameNumber){
+    public ServerControlledPlayer getServerControlledPlayer(int gameNumber){
         if (gameNumber == 1) {
-            return externalPlayer1;
+            return serverPlayer1;
         } else if (gameNumber == 2) {
-            return externalPlayer2;
+            return serverPlayer2;
         }
         return null;
     }

@@ -3,7 +3,7 @@ package model;
 public enum PlayerType {
     HUMAN("Human"),
     AI("AI"),
-    EXTERNAL("External");
+    SERVER("Server");
 
     private final String type;
 

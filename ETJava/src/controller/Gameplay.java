@@ -1,6 +1,5 @@
 package controller;
 
-import controller.facade.GameFacade;
 import model.*;
 import model.factory.TetrominoFactory;
 
@@ -174,8 +173,8 @@ public class Gameplay {
             checkRowErasure();
 
             // Alert external player of state of game
-            if (gameController.getGameLoop().getExternalPlayer(gameNumber) != null){
-                gameController.getGameLoop().getExternalPlayer(gameNumber).makeCallToServer(new PureGame(
+            if (gameController.getGameLoop().getServerControlledPlayer(gameNumber) != null){
+                gameController.getGameLoop().getServerControlledPlayer(gameNumber).decideAndMakeBestMove(new PureGame(
                         width / Block.SIZE,
                         height / Block.SIZE,
                         getBoard2DArray(),

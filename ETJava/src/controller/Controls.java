@@ -72,7 +72,7 @@ public class Controls {
             case 1 -> {
                 if (playerType == PlayerType.HUMAN) {
                     return ControlsSet.DEFAULT;
-                } else if (playerType == PlayerType.EXTERNAL) {
+                } else if (playerType == PlayerType.SERVER) {
                     return ControlsSet.EXTERNAL_1;
                 } else {
                     return ControlsSet.DEFAULT;
@@ -81,7 +81,7 @@ public class Controls {
             case 2 -> {
                 if (playerType == PlayerType.HUMAN) {
                     return ControlsSet.ALTERNATE;
-                } else if (playerType == PlayerType.EXTERNAL) {
+                } else if (playerType == PlayerType.SERVER) {
                     return ControlsSet.EXTERNAL_2;
                 } else {
                     return ControlsSet.ALTERNATE;
