@@ -12,6 +12,7 @@ import java.util.Queue;
 import java.util.Random;
 
 public class TetrominoFactory {
+    private static Tetromino nextTetromino = generateRandomTetromino();
 
     private static final Map<Gameplay, Queue<Integer>> gameTetrominoQueues = new HashMap<>();
     private static final List<Integer> initialTetrominoSequence = new LinkedList<>();
@@ -42,7 +43,7 @@ public class TetrominoFactory {
             case 4 -> new Z();
             case 5 -> new J();
             case 6 -> new L();
-            default -> null;
+            default -> null;  // This should never be hit, as the random is constrained
         };
     }
 

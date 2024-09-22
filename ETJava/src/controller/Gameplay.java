@@ -1,17 +1,17 @@
 package controller;
 
-import model.Block;
-import model.Tetromino;
-import model.GameLoop;
+import model.*;
 import model.factory.TetrominoFactory;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+
+
 public class Gameplay {
 
-
+    private GameController gameController;
     private int width;
     private int height;
     private int left_x;
@@ -23,7 +23,7 @@ public class Gameplay {
     private int TETROMINOSTART_Y;
     private ArrayList<Block> settledTetrominos = new ArrayList<>();
     private boolean gameOver = false;
-
+    private PlayerType playerType = PlayerType.HUMAN;
 
 
     private int gameNumber;
@@ -33,7 +33,22 @@ public class Gameplay {
     private int rowsErased = 0;
     private int level = 1;
 
+    public Gameplay(int width, int height, int gameNumber, PlayerType playerType) {
+        this.gameController = GameController.getInstance();
+        this.width = width;
+        this.height = height;
+        this.gameNumber = gameNumber;
+        this.playerType = playerType;
+
+        initializeDimensions();
+        currentTetromino = selectShape();
+        currentTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
+        currentTetromino.setGameplay(this);
+
+    }
+
     public Gameplay(int width, int height, int gameNumber) {
+        this.gameController = GameController.getInstance();
         this.width = width;
         this.height = height;
         this.gameNumber = gameNumber;
@@ -45,7 +60,72 @@ public class Gameplay {
 
     public Gameplay(int width, int height) {
         this(width,height,1);
+        this.gameController = GameController.getInstance();
     }
+
+
+    public int[][] getBoard2DArray() {
+        int rows = height / Block.SIZE;  // number of rows
+        int cols = width / Block.SIZE;   // number of columns
+        int[][] board = new int[rows][cols];
+
+        for (Block block : settledTetrominos) {
+            int xIndex = (block.getX() - left_x) / Block.SIZE;
+            int yIndex = (block.getY() - top_y) / Block.SIZE;
+
+            if (xIndex >= 0 && xIndex < cols && yIndex >= 0 && yIndex < rows) {
+                board[yIndex][xIndex] = 1;  // Mark as filled
+            }
+        }
+
+        return board;
+    }
+
+    public int[][] convertBlocksTo2DArray(Block[] blocks) {
+        // Find the minimum and maximum X and Y coordinates to determine the bounds
+        int minX = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE;
+        int minY = Integer.MAX_VALUE;
+        int maxY = Integer.MIN_VALUE;
+
+        for (Block block : blocks) {
+            if (block.getX() < minX) minX = block.getX();
+            if (block.getX() > maxX) maxX = block.getX();
+            if (block.getY() < minY) minY = block.getY();
+            if (block.getY() > maxY) maxY = block.getY();
+        }
+
+        // Determine the width and height of the Tetromino shape in block coordinates
+        int width = (maxX - minX) / Block.SIZE + 1;
+        int height = (maxY - minY) / Block.SIZE + 1;
+
+        // Create a 2D array with the size of the Tetromino's bounding box
+        int[][] tetrominoShape = new int[height][width];
+
+        // Map the Tetromino's blocks to the 2D array
+        for (Block block : blocks) {
+            int xIndex = (block.getX() - minX) / Block.SIZE;
+            int yIndex = (block.getY() - minY) / Block.SIZE;
+            tetrominoShape[yIndex][xIndex] = 1;  // Mark block position with 1
+        }
+        return tetrominoShape;
+    }
+
+    public int[][] getCurrentTetromino2DArray() {
+        // Get the blocks of the current Tetromino
+        Block[] blocks = currentTetromino.getBlocks();
+        return convertBlocksTo2DArray(blocks);
+
+    }
+
+    public int[][] getNextTetromino2DArray() {
+
+        Tetromino nextTetromino =  TetrominoFactory.peekNextTetromino();
+        nextTetromino.setPosition(TETROMINOSTART_X, TETROMINOSTART_Y);
+        Block[] blocks = nextTetromino.getBlocks();
+        return convertBlocksTo2DArray(blocks);
+    }
+
 
     private void initializeDimensions() {
         setLeft_x((GameLoop.WIDTH / 2) - (width / 2));
@@ -68,6 +148,8 @@ public class Gameplay {
         return gameNumber;
     }
 
+    public PlayerType getPlayerType() { return playerType; }
+
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
     }
@@ -89,6 +171,18 @@ public class Gameplay {
             currentTetromino.setGameplay(this);  // Set reference of Gameplay
 
             checkRowErasure();
+
+            // Alert external player of state of game
+            if (gameController.getGameLoop().getServerControlledPlayer(gameNumber) != null){
+                gameController.getGameLoop().getServerControlledPlayer(gameNumber).decideAndMakeBestMove(new PureGame(
+                        width / Block.SIZE,
+                        height / Block.SIZE,
+                        getBoard2DArray(),
+                        getCurrentTetromino2DArray(),
+                        getNextTetromino2DArray()
+                ));
+            }
+
         } else {
             currentTetromino.update();
         }

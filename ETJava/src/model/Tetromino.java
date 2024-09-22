@@ -143,8 +143,9 @@ public abstract class Tetromino {
     private void handleMovement() {
         if (settling) return;
 
-        // Determine the current control set based on the game number
-        ControlsSet currentControls = gameplay.getGameNumber() == 1 ? ControlsSet.DEFAULT : ControlsSet.ALTERNATE;
+
+        ControlsSet currentControls = Controls.getCurrentControls(gameplay.getGameNumber(), gameplay.getPlayerType());
+
 
         // Handle left movement
         if (currentControls.isLeftPressed()) {
@@ -181,7 +182,7 @@ public abstract class Tetromino {
         if (settling) return;
 
         // Determine the current control set based on the game number
-        ControlsSet currentControls = gameplay.getGameNumber() == 1 ? ControlsSet.DEFAULT : ControlsSet.ALTERNATE;
+        ControlsSet currentControls = Controls.getCurrentControls(gameplay.getGameNumber(), gameplay.getPlayerType());
 
         // Handle rotation
         if (currentControls.isUpPressed()) {
