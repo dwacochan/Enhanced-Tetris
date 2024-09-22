@@ -155,7 +155,7 @@ public class Gameplay {
     }
 
     private Tetromino selectShape() {
-        return TetrominoFactory.createTetromino();
+        return TetrominoFactory.getNextTetromino(this);
     }
 
     public void update() {

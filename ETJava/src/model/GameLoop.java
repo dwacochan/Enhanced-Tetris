@@ -5,6 +5,7 @@ import controller.GameController;
 import controller.ServerControlledPlayer;
 import controller.facade.GameFacade;
 import controller.Controls;
+import model.factory.TetrominoFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -64,6 +65,7 @@ public class GameLoop extends JPanel implements Runnable {
         }
 
         if (gameThread == null || !running) {
+            TetrominoFactory.reset();
             gameThread = new Thread(this);
             gameThread.start();
             running = true;
