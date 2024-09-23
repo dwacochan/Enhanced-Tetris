@@ -45,33 +45,64 @@ public class GameLoop extends JPanel implements Runnable {
 
     private void initializeLayout() {
         this.removeAll();
-
+        this.setBackground(new Color(238, 238, 238));
         JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
 
         if (isTwoPlayerMode) {
-            this.setLayout(new GridLayout(1, 2));
+            this.setLayout(new GridLayout(1, 2, 10, 0));
+
+            // Wrap player1Panel in a container with padding
+            JPanel player1Container = new JPanel(new BorderLayout());
+            player1Container.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 5));
             player1Panel = new GamePanel(player1Facade);
+            player1Container.add(player1Panel, BorderLayout.CENTER);
+
+            // Wrap player2Panel in a container with padding
+            JPanel player2Container = new JPanel(new BorderLayout());
+            player2Container.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 10));
             player2Panel = new GamePanel(player2Facade);
-            this.add(player1Panel);
-            this.add(player2Panel);
+            player2Container.add(player2Panel, BorderLayout.CENTER);
+
+            // Add both containers to the main panel
+            this.add(player1Container);
+            this.add(player2Container);
+
             if (parentFrame != null) {
-                parentFrame.setSize(new Dimension(player1Facade.getGameplay().getWidth() * 2 + 50,player1Facade.getGameplay().getHeight() + 300));
+                parentFrame.setMinimumSize(null);
+                parentFrame.setSize(new Dimension(
+                        (player1Facade.getGameplay().getWidth() + GamePanel.LEFT_MARGIN + 20) * 2 + 30,
+                        player1Facade.getGameplay().getHeight() + 300
+                ));
+                parentFrame.setMinimumSize(parentFrame.getSize());
                 parentFrame.setLocationRelativeTo(null);
             }
         } else {
             this.setLayout(new BorderLayout());
+
+            // Wrap player1Panel in a container with padding
+            JPanel player1Container = new JPanel(new BorderLayout());
+            player1Container.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
             player1Panel = new GamePanel(player1Facade);
-            this.add(player1Panel, BorderLayout.CENTER);
+            player1Container.add(player1Panel, BorderLayout.CENTER);
+
+            this.add(player1Container, BorderLayout.CENTER);
+
             if (parentFrame != null) {
-                parentFrame.setSize(new Dimension(new Dimension(player1Facade.getGameplay().getWidth() + 50,player1Facade.getGameplay().getHeight() + 300)));
+                parentFrame.setMinimumSize(null);
+                parentFrame.setSize(new Dimension(
+                        player1Facade.getGameplay().getWidth() + GamePanel.LEFT_MARGIN + 20,
+                        player1Facade.getGameplay().getHeight() + 300
+                ));
+                parentFrame.setMinimumSize(parentFrame.getSize());
                 parentFrame.setLocationRelativeTo(null);
             }
-        }
 
+        }
 
         this.revalidate();
         this.repaint();
     }
+
 
 
     public void startGame() {
