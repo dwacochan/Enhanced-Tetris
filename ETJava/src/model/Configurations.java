@@ -19,11 +19,17 @@ public class Configurations {
     private PlayerType player1Type;
     private PlayerType player2Type;
 
-    private static final String CONFIG_FILE_PATH = "configurations.json";
+    private String configFilePath;
     private static final Logger logger = Logger.getLogger(Configurations.class.getName());
 
+
+
     public Configurations() {
-        // Default configurations
+        this("configurations.json");  // Default path
+    }
+
+    public Configurations(String configFilePath) {
+        this.configFilePath = configFilePath;
         this.fieldWidth = 10;
         this.fieldHeight = 20;
         this.gameLevel = 4;
@@ -67,7 +73,7 @@ public class Configurations {
     // Save configuration to JSON
     public void saveToFile() {
         Gson gson = new Gson();
-        try (FileWriter writer = new FileWriter(CONFIG_FILE_PATH)) {
+        try (FileWriter writer = new FileWriter(configFilePath)) {
             gson.toJson(this, writer);
             logger.info("Config saved successfully.");
         } catch (IOException e) {
@@ -76,14 +82,26 @@ public class Configurations {
     }
 
     // Load configuration from JSON
-    public static Configurations loadFromFile() {
+    public static Configurations loadFromFile(String configFilePath) {
         Gson gson = new Gson();
-        try (FileReader reader = new FileReader(CONFIG_FILE_PATH)) {
+        try (FileReader reader = new FileReader(configFilePath)) {
             logger.info("Config read successfully.");
             return gson.fromJson(reader, Configurations.class);
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Failed to load configuration", e);
-            return new Configurations(); // Return default if there's an issue
+            return new Configurations(configFilePath);
+        }
+    }
+
+
+    public static Configurations loadFromFile() {
+        Gson gson = new Gson();
+        try (FileReader reader = new FileReader("configurations.json")) {
+            logger.info("Config read successfully.");
+            return gson.fromJson(reader, Configurations.class);
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Failed to load configuration", e);
+            return new Configurations("configurations.json");
         }
     }
 
