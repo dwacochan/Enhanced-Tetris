@@ -56,4 +56,7 @@ public class GameFacade {
     }
 
 
+    public String getInitialLevel() {
+        return "";
+    }
 }

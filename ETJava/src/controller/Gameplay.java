@@ -1,6 +1,9 @@
 package controller;
 
-import model.*;
+import model.Block;
+import model.PlayerType;
+import model.PureGame;
+import model.Tetromino;
 import model.factory.TetrominoFactory;
 
 import java.awt.*;
@@ -27,6 +30,8 @@ public class Gameplay {
 
 
     private int gameNumber;
+
+
 
     // Scoring and level tracking
     private int score = 0;
@@ -128,12 +133,12 @@ public class Gameplay {
 
 
     private void initializeDimensions() {
-        setLeft_x((GameLoop.WIDTH / 2) - (width / 2));
+        setLeft_x(0);
         setRight_x(getLeft_x() + width);
-        setTop_y(50);
+        setTop_y(0);
         setBottom_y(getTop_y() + height);
 
-        TETROMINOSTART_X = getLeft_x() + (width / 2) - (Block.SIZE / 2) + (width % 2 == 1 ? Block.SIZE / 2 : 0);
+        TETROMINOSTART_X = getLeft_x() + ((getRight_x() - getLeft_x()) / Block.SIZE / 2) * Block.SIZE;
         TETROMINOSTART_Y = getTop_y() + Block.SIZE;
     }
 
@@ -359,5 +364,13 @@ public class Gameplay {
 
     public int getScore() {
         return score;
+    }
+
+    public int getRowsErased() {
+        return rowsErased;
+    }
+
+    public int getLevel() {
+        return level;
     }
 }
