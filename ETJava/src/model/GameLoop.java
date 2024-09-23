@@ -90,7 +90,7 @@ public class GameLoop extends JPanel implements Runnable {
             if (parentFrame != null) {
                 parentFrame.setMinimumSize(null);
                 parentFrame.setSize(new Dimension(
-                        player1Facade.getGameplay().getWidth() + GamePanel.LEFT_MARGIN + 20,
+                        player1Facade.getGameplay().getWidth() + GamePanel.LEFT_MARGIN + 20 + 30,
                         player1Facade.getGameplay().getHeight() + 300
                 ));
                 parentFrame.setMinimumSize(parentFrame.getSize());
