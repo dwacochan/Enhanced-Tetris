@@ -275,16 +275,16 @@ public class Gameplay {
         }
 
         g2d.setColor(Color.BLACK);
-        g2d.setFont(g2d.getFont().deriveFont(30f));
+        g2d.setFont(g2d.getFont().deriveFont(10f));
 
-        g2d.drawString("Score: " + score, left_x - 10 * Block.SIZE, top_y + 5 * Block.SIZE);
-        g2d.drawString("Level: " + level, left_x - 10 * Block.SIZE, top_y + 7.5f * Block.SIZE);
+//        g2d.drawString("Score: " + score, left_x - 10 * Block.SIZE, top_y + 5 * Block.SIZE);
+//        g2d.drawString("Level: " + level, left_x - 10 * Block.SIZE, top_y + 7.5f * Block.SIZE);
 
         if (Controls.pause) {
-            int x = (int) (left_x - 10.75f * Block.SIZE);
-            int y = top_y + 10 * Block.SIZE;
+            int x = (int) (left_x + 10.75f * Block.SIZE);
+            int y = top_y + 5 * Block.SIZE;
             g2d.drawString("PAUSED", x, y);
-            g2d.drawString("Press P to unpause", (int) (x - 3.25f * Block.SIZE), y + 2.5f * Block.SIZE);
+            g2d.drawString("Press P to unpause", (int) (x - 2.5f * Block.SIZE), y + 1f * Block.SIZE);
         }
 
     }
