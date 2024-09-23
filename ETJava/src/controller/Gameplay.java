@@ -261,7 +261,7 @@ public class Gameplay {
     }
 
     public void draw(Graphics2D g2d) {
-        g2d.setColor(Color.LIGHT_GRAY);
+        g2d.setColor(new Color(238, 238, 238));
         g2d.fillRect(left_x - 2, top_y - 2, width + 4, height + 4);
         g2d.setColor(Color.BLACK);
         g2d.setStroke(new BasicStroke(2));
