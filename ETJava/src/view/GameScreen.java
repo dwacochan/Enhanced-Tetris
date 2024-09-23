@@ -47,7 +47,9 @@ public class GameScreen extends AbstractScreen {
 
                 if (choice == JOptionPane.YES_OPTION) {
                     gameController.stopGame();
+                    JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
                     gameController.showMainMenu();
+
                 } else {
                     gameController.resumeGame();
                 }
@@ -56,4 +58,6 @@ public class GameScreen extends AbstractScreen {
             }
         };
     }
+
+
 }
