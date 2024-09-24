@@ -51,19 +51,16 @@ public class GameLoop extends JPanel implements Runnable {
         if (isTwoPlayerMode) {
             this.setLayout(new GridLayout(1, 2, 10, 0));
 
-            // Wrap player1Panel in a container with padding
             JPanel player1Container = new JPanel(new BorderLayout());
             player1Container.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 5));
             player1Panel = new GamePanel(player1Facade);
             player1Container.add(player1Panel, BorderLayout.CENTER);
 
-            // Wrap player2Panel in a container with padding
             JPanel player2Container = new JPanel(new BorderLayout());
             player2Container.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 10));
             player2Panel = new GamePanel(player2Facade);
             player2Container.add(player2Panel, BorderLayout.CENTER);
 
-            // Add both containers to the main panel
             this.add(player1Container);
             this.add(player2Container);
 
@@ -79,7 +76,6 @@ public class GameLoop extends JPanel implements Runnable {
         } else {
             this.setLayout(new BorderLayout());
 
-            // Wrap player1Panel in a container with padding
             JPanel player1Container = new JPanel(new BorderLayout());
             player1Container.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
             player1Panel = new GamePanel(player1Facade);
@@ -214,7 +210,7 @@ public class GameLoop extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        double drawInterval = 1000000000 / FPS;
+        double drawInterval = (double) 1000000000 / (FPS * GameController.getInstance().getConfigurations().getGameLevel());
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
@@ -259,14 +255,12 @@ public class GameLoop extends JPanel implements Runnable {
 
     public boolean isGameOver() {
         if (isTwoPlayerMode) {
-            // Game over is true if both players' games are over in two-player mode
             return player1Facade.isGameOver() && player2Facade.isGameOver();
         }
-        // Single-player mode, only check Player 1
         return player1Facade.isGameOver();
     }
 
-    private String getConfigString(Configurations configurations) {
+    private static String getConfigString(Configurations configurations) {
         int fieldWidth = configurations.getFieldWidth();
         int fieldHeight = configurations.getFieldHeight();
         int level = configurations.getGameLevel();
