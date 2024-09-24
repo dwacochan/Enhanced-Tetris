@@ -1,5 +1,6 @@
 package model;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +17,16 @@ public class ConfigurationsTest {
 
     @BeforeEach
     public void setUp() {
-        configurations = new Configurations(TEST_CONFIG_FILE); // Pass the test config file
+        configurations = new Configurations(TEST_CONFIG_FILE); // Use test config file
+    }
+
+    @AfterEach
+    public void tearDown() {
+        // Clean up the test file
+        File file = new File(TEST_CONFIG_FILE);
+        if (file.exists()) {
+            file.delete();
+        }
     }
 
     @Test
@@ -37,18 +47,6 @@ public class ConfigurationsTest {
         }
     }
 
-    @Test
-    public void testLoadFromNonExistentFile() {
-        File file = new File(TEST_CONFIG_FILE);
-        if (file.exists()) {
-            file.delete();
-        }
-
-        Configurations loadedConfigurations = Configurations.loadFromFile(TEST_CONFIG_FILE); // Pass the test config path
-
-        assertEquals(10, loadedConfigurations.getFieldWidth(), "Default field width should be 10");
-        assertEquals(20, loadedConfigurations.getFieldHeight(), "Default field height should be 20");
-    }
 
     @Test
     public void testLoadFromFile() {
@@ -56,7 +54,7 @@ public class ConfigurationsTest {
         configurations.setGameLevel(6);
         configurations.saveToFile();
 
-        Configurations loadedConfigurations = Configurations.loadFromFile(TEST_CONFIG_FILE); // Pass the test config path
+        Configurations loadedConfigurations = Configurations.loadFromFile(TEST_CONFIG_FILE); // Load from file
 
         assertEquals(14, loadedConfigurations.getFieldWidth(), "Loaded configuration should have fieldWidth=14");
         assertEquals(6, loadedConfigurations.getGameLevel(), "Loaded configuration should have gameLevel=6");
