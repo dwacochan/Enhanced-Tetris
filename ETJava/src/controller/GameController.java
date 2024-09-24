@@ -1,7 +1,6 @@
 package controller;
 
 import model.Configurations;
-import model.GameLoop;
 import model.HighScores;
 import model.PlayerType;
 

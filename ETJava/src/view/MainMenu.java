@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import controller.GameController;
-import model.AbstractScreen;
 
 public class MainMenu extends AbstractScreen implements ActionListener {
     JButton playButton, configButton, highScoresButton, exitButton;
