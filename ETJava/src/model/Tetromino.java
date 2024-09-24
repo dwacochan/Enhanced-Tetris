@@ -1,7 +1,6 @@
 package model;
 
 import controller.Controls;
-import controller.GameController;
 import controller.Gameplay;
 
 import java.awt.*;
@@ -47,6 +46,7 @@ public abstract class Tetromino {
             snapBackRotation();
         }
     }
+
 
     private void snapBackRotation() {
         switch (this.rotation) {

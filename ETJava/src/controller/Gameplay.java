@@ -5,6 +5,7 @@ import model.PlayerType;
 import model.PureGame;
 import model.Tetromino;
 import model.factory.TetrominoFactory;
+import model.tetrominos.O;
 import view.GamePanel;
 
 import java.awt.*;
@@ -308,8 +309,14 @@ public class Gameplay {
         g2d.drawString("Score: " + score, getCenteredX("Score: " + score, metrics), top_y + halfSectionHeight * 11);
         g2d.drawString("Next Tetromino: ", getCenteredX("Next Tetromino: ", metrics), top_y + halfSectionHeight * 13);
         Tetromino nextTetromino = TetrominoFactory.peekNextTetromino(this);
+
         int remainingSpace = bottom_y - (top_y + halfSectionHeight * 13);
-        nextTetromino.setPosition(left_x-(GamePanel.LEFT_MARGIN / 2)-Block.SIZE,top_y + halfSectionHeight * 13 + remainingSpace/2);
+
+        if(nextTetromino instanceof O){
+            nextTetromino.setPosition(left_x-(GamePanel.LEFT_MARGIN / 2)-Block.SIZE,top_y + halfSectionHeight * 13 + remainingSpace/3);
+        }else{
+            nextTetromino.setPosition(left_x-(GamePanel.LEFT_MARGIN / 2)-Block.SIZE,top_y + halfSectionHeight * 13 + remainingSpace/2);
+        }
         nextTetromino.draw(g2d);
     }
 

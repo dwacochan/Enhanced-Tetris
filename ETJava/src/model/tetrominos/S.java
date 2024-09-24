@@ -16,10 +16,10 @@ public class S extends Tetromino {
         blocks[0].setY(y);
         blocks[1].setX(x);
         blocks[1].setY(y - Block.SIZE);
-        blocks[2].setX(x + Block.SIZE);
+        blocks[2].setX(x - Block.SIZE);
         blocks[2].setY(y);
         blocks[3].setX(x + Block.SIZE);
-        blocks[3].setY(y + Block.SIZE);
+        blocks[3].setY(y - Block.SIZE);
     }
 
     public void getRotation0(){

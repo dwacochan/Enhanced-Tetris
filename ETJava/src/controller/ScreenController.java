@@ -48,6 +48,7 @@ public class ScreenController {
     }
 
     public void showMainMenu() {
+        mainFrame.setMinimumSize(null);
         mainFrame.setSize(new Dimension(800,600));
         mainFrame.revalidate();
         mainFrame.repaint();

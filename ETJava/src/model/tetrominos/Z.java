@@ -14,12 +14,12 @@ public class Z extends Tetromino {
     public void setPosition(int x, int y){
         blocks[0].setX(x);
         blocks[0].setY(y);
-        blocks[1].setX(x);
-        blocks[1].setY(y - Block.SIZE);
-        blocks[2].setX(x - Block.SIZE);
-        blocks[2].setY(y);
+        blocks[1].setX(x + Block.SIZE);
+        blocks[1].setY(y);
+        blocks[2].setX(x);
+        blocks[2].setY(y - Block.SIZE);
         blocks[3].setX(x - Block.SIZE);
-        blocks[3].setY(y + Block.SIZE);
+        blocks[3].setY(y - Block.SIZE);
     }
 
     public void getRotation0(){
