@@ -1,8 +1,7 @@
 package view;
 
 import controller.GameController;
-import model.AbstractScreen;
-import model.GameLoop;
+import controller.GameLoop;
 
 import javax.swing.*;
 import java.awt.*;

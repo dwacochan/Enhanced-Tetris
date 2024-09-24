@@ -1,7 +1,6 @@
 package view;
 
 import controller.GameController;
-import model.AbstractScreen;
 import model.HighScores;
 
 import javax.swing.*;
