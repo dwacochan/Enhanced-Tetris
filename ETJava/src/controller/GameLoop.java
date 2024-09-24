@@ -1,9 +1,9 @@
-package model;
+package controller;
 
-import controller.Controls;
-import controller.GameController;
-import controller.ServerControlledPlayer;
 import controller.facade.GameFacade;
+import model.Block;
+import model.Configurations;
+import model.PlayerType;
 import model.factory.TetrominoFactory;
 import view.GamePanel;
 

@@ -1,1 +1,1 @@
-{"fieldWidth":10,"fieldHeight":19,"gameLevel":1,"musicOn":true,"soundEffectsOn":true,"extendModeOn":true,"player1Type":"AI","player2Type":"HUMAN","configFilePath":"configurations.json"}
+{"fieldWidth":5,"fieldHeight":15,"gameLevel":5,"musicOn":true,"soundEffectsOn":true,"extendModeOn":true,"player1Type":"HUMAN","player2Type":"AI","configFilePath":"configurations.json"}
