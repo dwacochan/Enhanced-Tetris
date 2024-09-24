@@ -280,10 +280,10 @@ public class Gameplay {
         g2d.setFont(g2d.getFont().deriveFont(10f));
 
         if (Controls.pause) {
-            int x = (int) (left_x + 10.75f * Block.SIZE);
+            int x = (int) (left_x + 0.5f * Block.SIZE);
             int y = top_y + 5 * Block.SIZE;
             g2d.drawString("PAUSED", x, y);
-            g2d.drawString("Press P to unpause", (int) (x - 2.5f * Block.SIZE), y + 1f * Block.SIZE);
+            g2d.drawString("Press P to unpause", (int) (x), y + 1f * Block.SIZE);
         }
 
         int halfSectionHeight = this.height / 16;
@@ -291,7 +291,6 @@ public class Gameplay {
         g2d.setColor(Color.BLACK);
         g2d.setFont(new Font("Arial", Font.PLAIN, 20));
 
-        // Get FontMetrics once
         FontMetrics metrics = g2d.getFontMetrics();
 
         g2d.drawString("Game Info: (Player " + this.gameNumber + ")", getCenteredX("Game Info: (Player " + this.gameNumber + ")", metrics), top_y + halfSectionHeight);
@@ -323,7 +322,7 @@ public class Gameplay {
     // Helper method to center text in the left margin
     private int getCenteredX(String text, FontMetrics metrics) {
         int textWidth = metrics.stringWidth(text);
-        int marginWidth = GamePanel.LEFT_MARGIN;  // Left margin width
+        int marginWidth = GamePanel.LEFT_MARGIN;
         return left_x - marginWidth + (marginWidth - textWidth) / 2;
     }
 
