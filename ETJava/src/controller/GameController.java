@@ -135,6 +135,9 @@ public class GameController {
             }
 
             String playerName = JOptionPane.showInputDialog("Player " + playerNumber + " score is in top 10! Enter your name: ");
+            if (playerName == null || playerName.trim().isEmpty()) {
+                playerName = "Anonymous";  // Default name
+            }
             highScores.addScore(score,playerName,config);
             highScores.saveToFile();
         }
