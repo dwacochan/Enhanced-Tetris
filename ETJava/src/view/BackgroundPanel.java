@@ -1,10 +1,11 @@
 package view;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import javax.imageio.ImageIO;
+import java.util.Objects;
 
 public class BackgroundPanel extends JPanel {
     private BufferedImage backgroundImage;
@@ -12,7 +13,7 @@ public class BackgroundPanel extends JPanel {
     public BackgroundPanel(String resourcePath) {
         try {
             // Load image using getResourceAsStream
-            backgroundImage = ImageIO.read(getClass().getResourceAsStream(resourcePath));
+            backgroundImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(resourcePath)));
         } catch (IOException e) {
             e.printStackTrace();
         }

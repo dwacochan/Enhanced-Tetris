@@ -1,14 +1,15 @@
 package view;
 
-import javax.swing.*;
 import controller.GameController;
 
+import javax.swing.*;
+
 public abstract class AbstractScreen extends JPanel {
-    protected JPanel mainPanel;
+    protected BackgroundPanel mainPanel;
     protected GameController gameController;
 
     public AbstractScreen(GameController gameController) {
-        mainPanel = new JPanel();
+        mainPanel = new BackgroundPanel("/resources/MainMenuBackground.jpg");
         this.gameController = gameController;
     }
 

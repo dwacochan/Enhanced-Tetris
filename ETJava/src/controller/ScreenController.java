@@ -50,6 +50,7 @@ public class ScreenController {
     public void showMainMenu() {
         mainFrame.setMinimumSize(null);
         mainFrame.setSize(new Dimension(800,600));
+        mainFrame.setMinimumSize(mainFrame.getSize());
         mainFrame.revalidate();
         mainFrame.repaint();
         ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "view.MainMenu");
