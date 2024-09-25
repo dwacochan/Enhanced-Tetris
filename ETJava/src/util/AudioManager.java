@@ -24,6 +24,11 @@ public class AudioManager {
 
     public void playMusic(String filepath) {
         try {
+            // Avoid restarting the music if it's already playing the same file
+            if (clip != null && clip.isRunning() && filepath.equals(currentFilePath)) {
+                return; // Music is already playing, so no need to restart
+            }
+
             if (clip == null || !filepath.equals(currentFilePath)) {
                 // If it's a new clip or a different file, load the new music
                 if (clip != null && clip.isOpen()) {

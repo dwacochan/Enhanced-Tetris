@@ -33,7 +33,6 @@ public class MainMenu extends AbstractScreen implements ActionListener {
         // Title with white outline
         OutlinedLabel titleLabel = new OutlinedLabel("Main Menu", JLabel.CENTER, Color.WHITE);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setForeground(Color.BLACK); // Set the text color to black
 
         gbc.insets = new Insets(20, 10, 20, 10); // Larger padding for the title
         backgroundPanel.add(titleLabel, gbc);
@@ -70,7 +69,6 @@ public class MainMenu extends AbstractScreen implements ActionListener {
         // Author label with white outline
         OutlinedLabel authorLabel = new OutlinedLabel("Author: Daniel De Calmer", JLabel.CENTER, Color.WHITE);
         authorLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-        authorLabel.setForeground(Color.BLACK); // Set the text color to black
 
         // Add empty border to ensure the text is not cut off
         authorLabel.setBorder(BorderFactory.createEmptyBorder(5, 12, 5, 12)); // 5px top/bottom padding, 10px left/right padding
