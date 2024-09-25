@@ -6,10 +6,17 @@ import java.awt.*;
 public class OutlinedLabel extends JLabel {
 
     private Color outlineColor;
+    private int thickness;
 
     public OutlinedLabel(String text, int horizontalAlignment, Color outlineColor) {
         super(text, horizontalAlignment);
         this.outlineColor = outlineColor;
+    }
+
+    public OutlinedLabel(String text, int horizontalAlignment, Color outlineColor, int thickness) {
+        super(text, horizontalAlignment);
+        this.outlineColor = outlineColor;
+        this.thickness = thickness;
     }
 
     @Override
