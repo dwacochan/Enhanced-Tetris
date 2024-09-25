@@ -3,7 +3,6 @@ package view;
 import controller.GameController;
 import model.Configurations;
 import model.PlayerType;
-import util.AudioManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,11 +25,9 @@ public class ConfigurationScreen extends AbstractScreen {
         OutlinedLabel label = new OutlinedLabel("Configurations", JLabel.CENTER, Color.BLACK);
         label.setForeground(Color.WHITE);
         label.setFont(new Font("Arial", Font.BOLD, 24));
-
         JPanel titlePanel = new JPanel(new GridBagLayout());
         titlePanel.setOpaque(false);
         titlePanel.add(label);
-
         mainPanel.add(titlePanel, BorderLayout.NORTH);
 
         JPanel configurationPanel = getConfigurationPanel();
@@ -38,23 +35,18 @@ public class ConfigurationScreen extends AbstractScreen {
 
         BottomPanel bottomPanel = new BottomPanel(gameController, "Draco Zhang", e -> {
             saveConfigurations();
-            AudioManager.getInstance().pauseMusic();
-            AudioManager.getInstance().playMusic("/resources/mainmenu.wav"); // Play main menu music
             gameController.showMainMenu();
         });
-
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
     }
 
     private JPanel getConfigurationPanel() {
         JPanel configurationPanel = new JPanel(new GridLayout(1, 3, 10, 10));
-        configurationPanel.setOpaque(true);
-        configurationPanel.setBackground(new Color(0, 0, 0, 150));
+        configurationPanel.setOpaque(false);
 
         // Increased vertical gaps from 10 to 20
         JPanel labelsPanel = new JPanel(new GridLayout(8, 1, 10, 20));
         labelsPanel.setOpaque(false);
-
         labelsPanel.add(createStyledLabel("Field Width:"));
         labelsPanel.add(createStyledLabel("Field Height:"));
         labelsPanel.add(createStyledLabel("Game Level:"));
@@ -63,7 +55,6 @@ public class ConfigurationScreen extends AbstractScreen {
         labelsPanel.add(createStyledLabel("Extend Mode (On/Off):"));
         labelsPanel.add(createStyledLabel("Player 1 Type:"));
         labelsPanel.add(createStyledLabel("Player 2 Type:"));
-
         // Increased vertical gaps from 10 to 20
         JPanel controlsPanel = new JPanel(new GridLayout(8, 1, 10, 20));
         controlsPanel.setOpaque(false);
@@ -75,7 +66,6 @@ public class ConfigurationScreen extends AbstractScreen {
         musicCheckBox = styleCheckBox(new JCheckBox("", configurations.isMusicOn()));
         soundEffectCheckBox = styleCheckBox(new JCheckBox("", configurations.isSoundEffectsOn()));
         extendModeCheckBox = styleCheckBox(new JCheckBox("", configurations.isExtendModeOn()));
-
         player1TypeComboBox = styleComboBox(new JComboBox<>(PlayerType.values()));
         player1TypeComboBox.setSelectedItem(configurations.getPlayer1Type());
 
@@ -112,17 +102,16 @@ public class ConfigurationScreen extends AbstractScreen {
         slider.setMajorTickSpacing((slider.getMaximum() - slider.getMinimum()) / 5);
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);
-        slider.setForeground(Color.WHITE);
-        slider.setBackground(Color.WHITE);
-        slider.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        slider.setForeground(Color.DARK_GRAY);
+        slider.setBackground(Color.LIGHT_GRAY);
+        slider.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         return slider;
     }
-
     private JCheckBox styleCheckBox(JCheckBox checkBox) {
         checkBox.setFont(new Font("Courier New", Font.BOLD, 12));
         checkBox.setForeground(Color.DARK_GRAY);
         checkBox.setBackground(Color.LIGHT_GRAY);
-        checkBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        checkBox.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         return checkBox;
     }
 
@@ -130,7 +119,7 @@ public class ConfigurationScreen extends AbstractScreen {
         comboBox.setFont(new Font("Courier New", Font.BOLD, 12));
         comboBox.setForeground(Color.DARK_GRAY);
         comboBox.setBackground(Color.LIGHT_GRAY);
-        comboBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        comboBox.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         return comboBox;
     }
 
