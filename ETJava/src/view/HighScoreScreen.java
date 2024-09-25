@@ -2,6 +2,7 @@ package view;
 
 import controller.GameController;
 import model.HighScores;
+import util.AudioManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,7 +42,12 @@ public class HighScoreScreen extends AbstractScreen {
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
-        BottomPanel bottomPanel = new BottomPanel(gameController, "Elijah De Calmer");
+        BottomPanel bottomPanel = new BottomPanel(gameController, "Elijah De Calmer", e -> {
+            AudioManager.getInstance().pauseMusic();
+            AudioManager.getInstance().playMusic("/resources/mainmenu.wav"); // Play main menu music
+            gameController.showMainMenu();
+        });
+
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
     }
 

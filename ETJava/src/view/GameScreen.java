@@ -2,6 +2,7 @@ package view;
 
 import controller.GameController;
 import controller.GameLoop;
+import util.AudioManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,6 +38,7 @@ public class GameScreen extends AbstractScreen {
 
             // Pause the game
             gameController.pauseGame();
+            AudioManager.getInstance().pauseMusic();
             if (wasRunning) {
                 // Show confirmation dialog
                 int choice = JOptionPane.showConfirmDialog(mainPanel,
@@ -47,10 +49,13 @@ public class GameScreen extends AbstractScreen {
                 if (choice == JOptionPane.YES_OPTION) {
                     gameController.stopGame();
                     JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+                    AudioManager.getInstance().stopMusic();
+                    AudioManager.getInstance().playMusic("/resources/mainmenu.wav");
                     gameController.showMainMenu();
 
                 } else {
                     gameController.resumeGame();
+                    AudioManager.getInstance().playMusic("/resources/GameMusic.wav");
                 }
             } else {
                 gameController.showMainMenu();

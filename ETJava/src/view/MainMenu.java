@@ -94,18 +94,18 @@ public class MainMenu extends AbstractScreen implements ActionListener {
     }
 
     // Handle button actions
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == playButton) {
             System.out.println("Play button clicked");
-            AudioManager.getInstance().pauseMusic(); // Pause the music when switching to game screen
             gameController.showGameScreen();
         } else if (e.getSource() == configButton) {
             System.out.println("Settings button clicked");
-            AudioManager.getInstance().pauseMusic(); // Pause the music when switching to settings
+            AudioManager.getInstance().playMusic("/resources/CafeAmbience.wav"); // Play Cafe Ambience music
             gameController.showSettings();
         } else if (e.getSource() == highScoresButton) {
             System.out.println("High Scores button clicked");
-            AudioManager.getInstance().pauseMusic(); // Pause the music when switching to high scores
+            AudioManager.getInstance().playMusic("/resources/CafeAmbience.wav"); // Play Cafe Ambience music
             gameController.showHighScores();
         } else if (e.getSource() == exitButton) {
             int response = JOptionPane.showConfirmDialog(this,
@@ -113,9 +113,10 @@ public class MainMenu extends AbstractScreen implements ActionListener {
                     "Exit Confirmation",
                     JOptionPane.YES_NO_OPTION);
             if (response == JOptionPane.YES_OPTION) {
-                AudioManager.getInstance().pauseMusic(); // Pause the music when exiting
+                AudioManager.getInstance().stopMusic(); // Stop the music when exiting
                 System.exit(0);
             }
         }
     }
+
 }

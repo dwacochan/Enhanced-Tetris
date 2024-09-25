@@ -2,6 +2,7 @@ package controller;
 
 import model.Configurations;
 import model.HighScores;
+import util.AudioManager;
 import view.SplashScreen;
 import view.*;
 
@@ -53,6 +54,7 @@ public class ScreenController {
         mainFrame.setMinimumSize(mainFrame.getSize());
         mainFrame.revalidate();
         mainFrame.repaint();
+        AudioManager.getInstance().playMusic("/resources/mainmenu.wav"); // Play main menu music
         ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "view.MainMenu");
     }
 
@@ -61,10 +63,12 @@ public class ScreenController {
     }
 
     public void showGameScreen() {
+        AudioManager.getInstance().stopMusic(); // Stop any music before starting the game
         ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "view.GameScreen");
     }
 
     public void showSettings() {
+        AudioManager.getInstance().playMusic("/resources/CafeAmbience.wav"); // Play Cafe Ambience music
         ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "Settings");
     }
 
@@ -72,6 +76,7 @@ public class ScreenController {
         mainFrame.getContentPane().remove(highScoreScreen);
         highScoreScreen = new HighScoreScreen(GameController.getInstance(),GameController.getInstance().getHighScores());
         mainFrame.getContentPane().add(highScoreScreen.getPanel(), "view.HighScoreScreen");
+        AudioManager.getInstance().playMusic("/resources/CafeAmbience.wav"); // Play Cafe Ambience music
         ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "view.HighScoreScreen");
     }
 

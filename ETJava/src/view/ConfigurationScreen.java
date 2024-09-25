@@ -3,6 +3,7 @@ package view;
 import controller.GameController;
 import model.Configurations;
 import model.PlayerType;
+import util.AudioManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,8 +32,11 @@ public class ConfigurationScreen extends AbstractScreen {
 
         BottomPanel bottomPanel = new BottomPanel(gameController, "Draco Zhang", e -> {
             saveConfigurations();
+            AudioManager.getInstance().pauseMusic();
+            AudioManager.getInstance().playMusic("/resources/mainmenu.wav"); // Play main menu music
             gameController.showMainMenu();
         });
+
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
     }
 

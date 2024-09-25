@@ -72,11 +72,13 @@ public class GameController {
         // Pause the main menu music when switching to the game screen
         AudioManager.getInstance().pauseMusic();
 
+
         // Show the game screen and start the game
         screenController.showGameScreen();
         gameLoop.resetGame();
         isRunning = true;
         gameLoop.startGame();
+        AudioManager.getInstance().playMusic("/resources/GameMusic.wav");
     }
 
     public void showSettings() {
@@ -114,10 +116,12 @@ public class GameController {
             gameLoop.resumeGame();
             isRunning = true;
         }
+        AudioManager.getInstance().playMusic("/resources/GameMusic.wav");
     }
 
     public void stopGame() {
         gameLoop.stopGame();
+        AudioManager.getInstance().stopMusic();
         isRunning = false;
         configurations.saveToFile();
         highScores.saveToFile();
