@@ -3,6 +3,7 @@ package controller;
 import model.Configurations;
 import model.HighScores;
 import model.PlayerType;
+import util.AudioManager;
 
 import javax.swing.*;
 
@@ -16,6 +17,9 @@ public class GameController {
     // Game model
     private GameLoop gameLoop;
 
+    // Music file path for the main menu
+    private final String menuMusicFilePath = "/resources/mainmenu.wav";
+
     // Private constructor to prevent direct instantiation
     private GameController() {
         // Load configurations and high scores from file
@@ -28,6 +32,7 @@ public class GameController {
         mainFrame.setSize(800, 600);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameLoop = new GameLoop(configurations.isExtendModeOn(), configurations.getPlayer1Type(), configurations.getPlayer2Type(), this);
+
         // Initialize screen controller using the singleton pattern
         screenController = ScreenController.getInstance(mainFrame, this, configurations, highScores);
 
@@ -50,16 +55,24 @@ public class GameController {
         return GameControllerHolder.instance;
     }
 
-    public GameLoop getGameLoop(){
+    public GameLoop getGameLoop() {
         return this.gameLoop;
     }
 
     // Screen control methods
     public void showMainMenu() {
+        // Resume or play the main menu music
+        AudioManager.getInstance().playMusic(menuMusicFilePath);
+
+        // Show the main menu screen
         screenController.showMainMenu();
     }
 
     public void showGameScreen() {
+        // Pause the main menu music when switching to the game screen
+        AudioManager.getInstance().pauseMusic();
+
+        // Show the game screen and start the game
         screenController.showGameScreen();
         gameLoop.resetGame();
         isRunning = true;
@@ -67,11 +80,19 @@ public class GameController {
     }
 
     public void showSettings() {
+        // Pause the main menu music when switching to the settings screen
+        AudioManager.getInstance().pauseMusic();
+
+        // Show the settings screen and load configurations
         screenController.showSettings();
         Configurations.loadFromFile();
     }
 
     public void showHighScores() {
+        // Pause the main menu music when switching to the high scores screen
+        AudioManager.getInstance().pauseMusic();
+
+        // Show the high scores screen and load high scores
         screenController.showHighScores();
         highScores.loadFromFile();
     }
@@ -106,7 +127,6 @@ public class GameController {
         return isRunning;
     }
 
-
     public void updateConfigurations() {
         configurations.saveToFile();
     }
@@ -115,10 +135,9 @@ public class GameController {
         return gameLoop.isGameOver();
     }
 
-
-    public void setNewScore(int score,int playerNumber,String config){
+    public void setNewScore(int score, int playerNumber, String config) {
         System.out.println("Player " + playerNumber + " scored: " + score);
-        if(highScores.isTopTen(score)){
+        if (highScores.isTopTen(score)) {
             switch (playerNumber) {
                 case 1 -> {
                     if (configurations.getPlayer1Type() != PlayerType.HUMAN) {
@@ -138,13 +157,12 @@ public class GameController {
             if (playerName == null || playerName.trim().isEmpty()) {
                 playerName = "Anonymous";  // Default name
             }
-            highScores.addScore(score,playerName,config);
+            highScores.addScore(score, playerName, config);
             highScores.saveToFile();
         }
     }
 
-    public HighScores getHighScores(){
+    public HighScores getHighScores() {
         return highScores;
     }
-
 }

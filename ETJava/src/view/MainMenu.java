@@ -6,67 +6,98 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import controller.GameController;
+import util.AudioManager;
 
 public class MainMenu extends AbstractScreen implements ActionListener {
     JButton playButton, configButton, highScoresButton, exitButton;
+    private final String musicFilePath = "/resources/mainmenu.wav";
 
     public MainMenu(GameController gameController) {
         super(gameController);
 
-        mainPanel.setLayout(new GridLayout(1, 3));
+        // Use the singleton AudioManager to play or resume the menu music
+        AudioManager.getInstance().playMusic(musicFilePath);
 
-        mainPanel.add(new JPanel());
+        // Load your background image with a 16:9 aspect ratio
+        BackgroundPanel backgroundPanel = new BackgroundPanel("/resources/MainMenuBackground.jpg");
+        backgroundPanel.setLayout(new GridBagLayout()); // Use GridBagLayout to center the buttons
 
-        JPanel centerPanel = new JPanel(new GridLayout(6, 12, 10, 10));
+        // Create a GridBagConstraints object to control the layout
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10); // Padding around each component
+        gbc.gridx = 0;
+        gbc.gridy = GridBagConstraints.RELATIVE; // Stack components vertically
+        gbc.fill = GridBagConstraints.NONE; // No stretching
+        gbc.anchor = GridBagConstraints.CENTER; // Center the components
 
-        // Title
-        JLabel titleLabel = new JLabel("Main Menu", JLabel.CENTER);
+        // Title with white outline
+        OutlinedLabel titleLabel = new OutlinedLabel("Main Menu", JLabel.CENTER, Color.WHITE);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        centerPanel.add(titleLabel);
+        titleLabel.setForeground(Color.BLACK); // Set the text color to black
+
+        gbc.insets = new Insets(20, 10, 20, 10); // Larger padding for the title
+        backgroundPanel.add(titleLabel, gbc);
 
         // Play Button
         playButton = new JButton("Play");
         playButton.setFont(new Font("Arial", Font.PLAIN, 18));
+        playButton.setPreferredSize(new Dimension(200, 50)); // Set a fixed size for the buttons
         playButton.addActionListener(this);
-        centerPanel.add(playButton);
+        gbc.insets = new Insets(10, 10, 10, 10); // Regular padding for buttons
+        backgroundPanel.add(playButton, gbc);
 
         // Settings Button
         configButton = new JButton("Settings");
         configButton.setFont(new Font("Arial", Font.PLAIN, 18));
+        configButton.setPreferredSize(new Dimension(200, 50));
         configButton.addActionListener(this);
-        centerPanel.add(configButton);
+        backgroundPanel.add(configButton, gbc);
 
         // High Scores Button
         highScoresButton = new JButton("High Scores");
         highScoresButton.setFont(new Font("Arial", Font.PLAIN, 18));
+        highScoresButton.setPreferredSize(new Dimension(200, 50));
         highScoresButton.addActionListener(this);
-        centerPanel.add(highScoresButton);
+        backgroundPanel.add(highScoresButton, gbc);
 
         // Exit Button
         exitButton = new JButton("Exit");
         exitButton.setFont(new Font("Arial", Font.PLAIN, 18));
+        exitButton.setPreferredSize(new Dimension(200, 50));
         exitButton.addActionListener(this);
-        centerPanel.add(exitButton);
+        backgroundPanel.add(exitButton, gbc);
 
-        JLabel authorLabel = new JLabel("Author: Daniel De Calmer", JLabel.CENTER);
-        centerPanel.add(authorLabel);
+        // Author label with white outline
+        OutlinedLabel authorLabel = new OutlinedLabel("Author: Daniel De Calmer", JLabel.CENTER, Color.WHITE);
+        authorLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        authorLabel.setForeground(Color.BLACK); // Set the text color to black
 
-        mainPanel.add(centerPanel);
+        // Add empty border to ensure the text is not cut off
+        authorLabel.setBorder(BorderFactory.createEmptyBorder(5, 12, 5, 12)); // 5px top/bottom padding, 10px left/right padding
 
-        mainPanel.add(new JPanel());
+        gbc.insets = new Insets(20, 10, 10, 10); // Larger padding for the label
+        backgroundPanel.add(authorLabel, gbc);
+
+        // Add the background panel to the main panel
+        mainPanel.setLayout(new BorderLayout());
+        mainPanel.add(backgroundPanel, BorderLayout.CENTER);
 
         setVisible(true);
     }
 
+    // Handle button actions
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == playButton) {
             System.out.println("Play button clicked");
+            AudioManager.getInstance().pauseMusic(); // Pause the music when switching to game screen
             gameController.showGameScreen();
         } else if (e.getSource() == configButton) {
             System.out.println("Settings button clicked");
+            AudioManager.getInstance().pauseMusic(); // Pause the music when switching to settings
             gameController.showSettings();
         } else if (e.getSource() == highScoresButton) {
             System.out.println("High Scores button clicked");
+            AudioManager.getInstance().pauseMusic(); // Pause the music when switching to high scores
             gameController.showHighScores();
         } else if (e.getSource() == exitButton) {
             int response = JOptionPane.showConfirmDialog(this,
@@ -74,6 +105,7 @@ public class MainMenu extends AbstractScreen implements ActionListener {
                     "Exit Confirmation",
                     JOptionPane.YES_NO_OPTION);
             if (response == JOptionPane.YES_OPTION) {
+                AudioManager.getInstance().pauseMusic(); // Pause the music when exiting
                 System.exit(0);
             }
         }
