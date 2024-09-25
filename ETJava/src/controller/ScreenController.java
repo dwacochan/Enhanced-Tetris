@@ -63,7 +63,7 @@ public class ScreenController {
     }
 
     public void showGameScreen() {
-        AudioManager.getInstance().stopMusic(); // Stop any music before starting the game
+        AudioManager.getInstance().pauseMusic(); // Stop any music before starting the game
         ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "view.GameScreen");
     }
 

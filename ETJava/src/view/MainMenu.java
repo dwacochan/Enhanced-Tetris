@@ -101,10 +101,12 @@ public class MainMenu extends AbstractScreen implements ActionListener {
             gameController.showGameScreen();
         } else if (e.getSource() == configButton) {
             System.out.println("Settings button clicked");
+            AudioManager.getInstance().pauseMusic();
             AudioManager.getInstance().playMusic("/resources/CafeAmbience.wav"); // Play Cafe Ambience music
             gameController.showSettings();
         } else if (e.getSource() == highScoresButton) {
             System.out.println("High Scores button clicked");
+            AudioManager.getInstance().pauseMusic();
             AudioManager.getInstance().playMusic("/resources/CafeAmbience.wav"); // Play Cafe Ambience music
             gameController.showHighScores();
         } else if (e.getSource() == exitButton) {
@@ -113,7 +115,6 @@ public class MainMenu extends AbstractScreen implements ActionListener {
                     "Exit Confirmation",
                     JOptionPane.YES_NO_OPTION);
             if (response == JOptionPane.YES_OPTION) {
-                AudioManager.getInstance().stopMusic(); // Stop the music when exiting
                 System.exit(0);
             }
         }
