@@ -68,7 +68,7 @@ public class SplashScreen extends AbstractScreen {
      * Starts the fade-out effect by gradually increasing the alpha value to fade to black.
      */
     private void startFadeOut() {
-        int fadeDuration = 1000; // 1 second
+        int fadeDuration = 2000; // 2 seconds
         int fadeInterval = 5;   // Update every 5 milliseconds
         int steps = fadeDuration / fadeInterval; // Total number of steps
 
@@ -103,7 +103,7 @@ public class SplashScreen extends AbstractScreen {
      * Starts the fade-in effect by gradually decreasing the alpha value to reveal the main menu screenshot.
      */
     private void startFadeIn() {
-        int fadeDuration = 1000; // 1 second
+        int fadeDuration = 500; // 0.5 second
         int fadeInterval = 5;   // Update every 5 milliseconds
         int steps = fadeDuration / fadeInterval; // Total number of steps
 
