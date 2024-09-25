@@ -37,15 +37,15 @@ public class MainMenu extends AbstractScreen implements ActionListener {
         gbc.insets = new Insets(20, 15, 20, 15); // Larger padding for the title
         backgroundPanel.add(titleLabel, gbc);
 
-        // Play Button with dark blue neon
+        // Play Button with cyan neon
         playButton = new JButton("Play");
         playButton.setFont(new Font("Courier New", Font.BOLD, 18));
         playButton.setPreferredSize(new Dimension(200, 50)); // Set a fixed size for the buttons
         playButton.setOpaque(true); // Make the button opaque
         playButton.setContentAreaFilled(true); // Ensure the content area is filled
         playButton.setBackground(Color.BLACK); // Set background to black
-        playButton.setForeground(new Color(0, 0, 255)); // Dark blue neon text
-        playButton.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 255), 2)); // Dark blue neon border
+        playButton.setForeground(Color.CYAN); // Cyan neon text
+        playButton.setBorder(BorderFactory.createLineBorder(Color.CYAN, 2)); // Cyan neon border
         playButton.addActionListener(this);
         gbc.insets = new Insets(10, 10, 10, 10); // Regular padding for buttons
         backgroundPanel.add(playButton, gbc);
