@@ -17,7 +17,7 @@ public class SplashScreen extends AbstractScreen {
 
         // Load the PNG image
         try {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("resources/splashScreenOption2.png");
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("resources/newSplashScreen.png");
             if (inputStream == null) {
                 System.out.println("Image not found!");
             } else {
@@ -45,10 +45,21 @@ public class SplashScreen extends AbstractScreen {
                 int imageWidth = splashImage.getWidth();
                 int imageHeight = splashImage.getHeight();
 
-                int x = (panelWidth - imageWidth) / 2;
-                int y = (panelHeight - imageHeight) / 2;
+                // Calculate the scaling factor to fit the image within the panel
+                double widthScale = (double) panelWidth / imageWidth;
+                double heightScale = (double) panelHeight / imageHeight;
+                double scale = Math.max(widthScale, heightScale); // Scale to fill panel
 
-                g.drawImage(splashImage, x, y, this);
+                // Calculate the new dimensions for the image
+                int newImageWidth = (int) (scale * imageWidth);
+                int newImageHeight = (int) (scale * imageHeight);
+
+                // Calculate the x and y coordinates to crop the image
+                int x = (newImageWidth - panelWidth) / 2;
+                int y = (newImageHeight - panelHeight) / 2;
+
+                // Draw the cropped and scaled image
+                g.drawImage(splashImage, -x, -y, newImageWidth, newImageHeight, this);
             }
         }
     }
