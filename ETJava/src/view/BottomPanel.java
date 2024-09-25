@@ -14,18 +14,25 @@ public class BottomPanel extends JPanel {
 
     // Constructor with an optional ActionListener
     public BottomPanel(GameController gameController, String authorName, ActionListener backButtonListener) {
-        this.backButtonListener = backButtonListener; // Store the optional listener
-
+        this.backButtonListener = backButtonListener;
+        this.setOpaque(false);
         setLayout(new BorderLayout());
 
         backButton = new JButton("Back");
+        backButton.setFont(new Font("Courier New", Font.BOLD, 18));
+        backButton.setOpaque(true);
+        //backButton.setContentAreaFilled(true);
+        backButton.setBackground(Color.BLACK);
+        backButton.setForeground(Color.CYAN);
+        backButton.setBorder(BorderFactory.createLineBorder(Color.CYAN, 2));
         backButton.setPreferredSize(new Dimension(150, 50));
         // Default behavior
         backButton.addActionListener(Objects.requireNonNullElseGet(backButtonListener, () -> e -> gameController.showMainMenu())); // Additional custom behavior
         add(backButton, BorderLayout.SOUTH);
 
-        JLabel authorLabel = new JLabel("Author: " + authorName, JLabel.CENTER);
-        add(authorLabel, BorderLayout.NORTH);
+        OutlinedLabel authorLabel = new OutlinedLabel("Author: " + authorName, JLabel.CENTER,Color.WHITE);
+        authorLabel.setFont((new Font("Courier New", Font.BOLD, 18)));
+        add(authorLabel, BorderLayout.CENTER);
 
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
     }
