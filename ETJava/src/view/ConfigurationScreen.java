@@ -113,7 +113,7 @@ public class ConfigurationScreen extends AbstractScreen {
         slider.setPaintLabels(true);
         slider.setForeground(Color.DARK_GRAY);
         slider.setBackground(Color.LIGHT_GRAY);
-        slider.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        slider.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         return slider;
     }
 
@@ -121,7 +121,7 @@ public class ConfigurationScreen extends AbstractScreen {
         checkBox.setFont(new Font("Courier New", Font.BOLD, 12));
         checkBox.setForeground(Color.DARK_GRAY);
         checkBox.setBackground(Color.LIGHT_GRAY);
-        checkBox.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        checkBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         return checkBox;
     }
 
@@ -129,7 +129,7 @@ public class ConfigurationScreen extends AbstractScreen {
         comboBox.setFont(new Font("Courier New", Font.BOLD, 12));
         comboBox.setForeground(Color.DARK_GRAY);
         comboBox.setBackground(Color.LIGHT_GRAY);
-        comboBox.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        comboBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         return comboBox;
     }
 
