@@ -13,6 +13,11 @@ public abstract class AbstractScreen extends JPanel {
         this.gameController = gameController;
     }
 
+    public AbstractScreen(GameController gameController,String path) {
+        mainPanel = new BackgroundPanel(path);
+        this.gameController = gameController;
+    }
+
     public JPanel getPanel() {
         return mainPanel;
     }
