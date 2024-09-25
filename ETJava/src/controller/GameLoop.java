@@ -12,6 +12,8 @@ import java.awt.*;
 
 public class GameLoop extends JPanel implements Runnable {
     final int FPS = 60;
+
+    private double drawInterval;
     private Thread gameThread;
     private boolean running = false;
     private boolean paused = false;
@@ -35,8 +37,8 @@ public class GameLoop extends JPanel implements Runnable {
         this.gameController = gameController;
         this.isTwoPlayerMode = isTwoPlayerMode;
 
-        player1Facade = new GameFacade(100, 100, 1, gameController.getConfigurations().getPlayer1Type());
-        player2Facade = new GameFacade(100, 100, 2, gameController.getConfigurations().getPlayer2Type());
+        player1Facade = new GameFacade(100, 100, 1, gameController.getConfigurations().getPlayer1Type(),gameController.getConfigurations().getGameLevel());
+        player2Facade = new GameFacade(100, 100, 2, gameController.getConfigurations().getPlayer2Type(),gameController.getConfigurations().getGameLevel());
 
         this.setBackground(Color.WHITE);
 
@@ -109,7 +111,7 @@ public class GameLoop extends JPanel implements Runnable {
         int gameWidth = gameController.getConfigurations().getFieldWidth() * Block.SIZE;
         int gameHeight = gameController.getConfigurations().getFieldHeight() * Block.SIZE;
         this.isTwoPlayerMode = gameController.getConfigurations().isExtendModeOn();
-        player1Facade = new GameFacade(gameWidth, gameHeight, 1, gameController.getConfigurations().getPlayer1Type());
+        player1Facade = new GameFacade(gameWidth, gameHeight, 1, gameController.getConfigurations().getPlayer1Type(),gameController.getConfigurations().getGameLevel());
         player1Panel = new GamePanel(player1Facade);
 
         if (gameController.getConfigurations().getPlayer1Type() == PlayerType.SERVER) {
@@ -124,7 +126,7 @@ public class GameLoop extends JPanel implements Runnable {
             } else {
                 serverPlayer2 = null;
             }
-            player2Facade = new GameFacade(gameWidth, gameHeight, 2, gameController.getConfigurations().getPlayer2Type());
+            player2Facade = new GameFacade(gameWidth, gameHeight, 2, gameController.getConfigurations().getPlayer2Type(),gameController.getConfigurations().getGameLevel());
             player2Panel = new GamePanel(player2Facade);
         } else {
             player2Facade = null;
@@ -198,6 +200,7 @@ public class GameLoop extends JPanel implements Runnable {
 
     private void update() {
         if (!paused && !Controls.pause) {
+            drawInterval = (double) 1000000000 / (FPS * GameController.getInstance().getConfigurations().getGameLevel());
             player1Facade.updateGame();  // Update Player 1's game
             if (isTwoPlayerMode) {
                 player2Facade.updateGame();  // Update Player 2's game in two-player mode
@@ -214,7 +217,7 @@ public class GameLoop extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        double drawInterval = (double) 1000000000 / (FPS * GameController.getInstance().getConfigurations().getGameLevel());
+        drawInterval = (double) 1000000000 / (FPS * GameController.getInstance().getConfigurations().getGameLevel());
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;

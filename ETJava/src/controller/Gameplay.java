@@ -40,12 +40,13 @@ public class Gameplay {
     private int rowsErased = 0;
     private int level = 1;
 
-    public Gameplay(int width, int height, int gameNumber, PlayerType playerType) {
+    public Gameplay(int width, int height, int gameNumber, PlayerType playerType, int level) {
         this.gameController = GameController.getInstance();
         this.width = width;
         this.height = height;
         this.gameNumber = gameNumber;
         this.playerType = playerType;
+        this.level = level;
 
         initializeDimensions();
         currentTetromino = selectShape();
@@ -236,7 +237,7 @@ public class Gameplay {
     }
 
     private void checkLevelUp() {
-        if (rowsErased >= level * 10) {
+        if (rowsErased % 10 == 0) {
             level++;
             System.out.println("Level up! Now at level: " + level);
             // TODO: Increase Tetromino falling speed

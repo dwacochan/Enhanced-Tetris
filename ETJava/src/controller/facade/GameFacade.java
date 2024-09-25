@@ -19,8 +19,8 @@ public class GameFacade {
         gameplay = new Gameplay(width, height,gameNumber);
     }
 
-    public GameFacade(int width, int height, int gameNumber, PlayerType playerType) {
-        gameplay = new Gameplay(width, height, gameNumber, playerType);
+    public GameFacade(int width, int height, int gameNumber, PlayerType playerType, int level) {
+        gameplay = new Gameplay(width, height, gameNumber, playerType, level);
     }
 
     public Gameplay getGameplay() {
