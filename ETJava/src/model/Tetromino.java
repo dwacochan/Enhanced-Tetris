@@ -261,9 +261,8 @@ public abstract class Tetromino {
     }
 
     public void draw(Graphics2D g2d) {
-        g2d.setColor(blocks[0].getColor());
         for (Block block : blocks) {
-            g2d.fillRect(block.getX(), block.getY(), Block.SIZE, Block.SIZE);
+            block.draw(g2d);
         }
     }
 

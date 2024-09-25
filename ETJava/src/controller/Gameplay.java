@@ -262,62 +262,137 @@ public class Gameplay {
     }
 
     public void draw(Graphics2D g2d) {
-        g2d.setColor(new Color(238, 238, 238));
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // Draw the background for the game area
+        g2d.setColor(Color.DARK_GRAY);
         g2d.fillRect(left_x - 2, top_y - 2, width + 4, height + 4);
+
+        // Draw the grid lines (dark grey)
+        g2d.setColor(Color.WHITE);
+        for (int i = left_x; i <= left_x + width; i += Block.SIZE) {
+            g2d.drawLine(i, top_y, i, top_y + height);  // Vertical grid lines
+        }
+        for (int i = top_y; i <= top_y + height; i += Block.SIZE) {
+            g2d.drawLine(left_x, i, left_x + width, i);  // Horizontal grid lines
+        }
+
+        // Draw the border around the game area
         g2d.setColor(Color.BLACK);
         g2d.setStroke(new BasicStroke(2));
         g2d.drawRect(left_x - 2, top_y - 2, width + 4, height + 4);
 
+        // Draw the current Tetromino
         if (currentTetromino != null) {
             currentTetromino.draw(g2d);
         }
 
+        // Draw settled Tetrominos
         for (Block block : settledTetrominos) {
             block.draw(g2d);
         }
 
-        g2d.setColor(Color.BLACK);
-        g2d.setFont(g2d.getFont().deriveFont(10f));
-
+        // Draw pause message if paused
         if (Controls.pause) {
+            g2d.setColor(new Color(0, 0, 0, 180));
+            g2d.fillRect(left_x, top_y + 5 * Block.SIZE - Block.SIZE, width, 2 * Block.SIZE);
+            g2d.setColor(Color.WHITE);
+            g2d.setFont(g2d.getFont().deriveFont(24f));
             int x = (int) (left_x + 0.5f * Block.SIZE);
             int y = top_y + 5 * Block.SIZE;
             g2d.drawString("PAUSED", x, y);
-            g2d.drawString("Press P to unpause", (int) (x), y + 1f * Block.SIZE);
+            g2d.drawString("Press P to unpause", x, y + Block.SIZE);
         }
 
-        int halfSectionHeight = this.height / 16;
+        // Game Info section - Left Sidebar
+        // Add a gradient background for the sidebar
+        int sidebarX = left_x - 200;
+        int sidebarY = top_y - 2;
+        int sidebarWidth = 200;
+        int sidebarHeight = height + 4;
+        GradientPaint sidebarGradient = new GradientPaint(sidebarX, sidebarY, new Color(45, 45, 45), sidebarX + sidebarWidth, sidebarY + sidebarHeight, new Color(30, 30, 30));
+        g2d.setPaint(sidebarGradient);
+        g2d.fillRect(sidebarX, sidebarY, sidebarWidth, sidebarHeight);
 
+        // Draw a border for the sidebar
         g2d.setColor(Color.BLACK);
-        g2d.setFont(new Font("Arial", Font.PLAIN, 20));
+        g2d.drawRect(sidebarX, sidebarY, sidebarWidth, sidebarHeight);
 
+        // Game Info Text
+        g2d.setFont(new Font("Arial", Font.BOLD, 22));
+        g2d.setColor(Color.WHITE);
         FontMetrics metrics = g2d.getFontMetrics();
 
-        g2d.drawString("Game Info: (Player " + this.gameNumber + ")", getCenteredX("Game Info: (Player " + this.gameNumber + ")", metrics), top_y + halfSectionHeight);
+        int halfSectionHeight = this.height / 16;
+        int infoStartX = sidebarX + 20;
+        int infoStartY = sidebarY + halfSectionHeight;
 
-        PlayerType playerType;
-        if (gameNumber == 1) {
-            playerType = GameController.getInstance().getConfigurations().getPlayer1Type();
-        } else {
-            playerType = GameController.getInstance().getConfigurations().getPlayer2Type();
+        // Title with shadow effect
+        g2d.setColor(new Color(255, 215, 0)); // Gold for title
+        g2d.drawString("Game Info", infoStartX, infoStartY);
+
+        // Draw a divider line
+        g2d.setColor(Color.LIGHT_GRAY);
+        g2d.drawLine(infoStartX, infoStartY + 10, infoStartX + 180, infoStartY + 10);
+
+        // Draw player-specific information
+        g2d.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        g2d.setColor(Color.WHITE);
+
+        PlayerType playerType = gameNumber == 1
+                ? GameController.getInstance().getConfigurations().getPlayer1Type()
+                : GameController.getInstance().getConfigurations().getPlayer2Type();
+
+        String[] labels = {
+                "Player Type: ",
+                "Initial Level: ",
+                "Current Level: ",
+                "Lines Erased: ",
+                "Score: "
+        };
+
+        String[] values = {
+                playerType.toString(),
+                String.valueOf(GameController.getInstance().getConfigurations().getGameLevel()),
+                String.valueOf(level),
+                String.valueOf(rowsErased),
+                String.valueOf(score)
+        };
+
+        // Display each label and value
+        for (int i = 0; i < labels.length; i++) {
+            String text = labels[i] + values[i];
+            int textY = infoStartY + halfSectionHeight * (2 + i * 2);
+            g2d.setColor(new Color(0, 0, 0, 150)); // Shadow color
+            g2d.drawString(text, infoStartX + 2, textY + 2); // Shadow effect
+
+            g2d.setColor(Color.WHITE); // Main text color
+            g2d.drawString(text, infoStartX, textY);
         }
-        g2d.drawString("Player Type: " + playerType.toString(), getCenteredX("Player Type: " + playerType.toString(), metrics), top_y + halfSectionHeight * 3);
-        g2d.drawString("Initial Level: " + GameController.getInstance().getConfigurations().getGameLevel(), getCenteredX("Initial Level: " + GameController.getInstance().getConfigurations().getGameLevel(), metrics), top_y + halfSectionHeight * 5);
-        g2d.drawString("Current Level: " + level, getCenteredX("Current Level: " + level, metrics), top_y + halfSectionHeight * 7);
-        g2d.drawString("Line Erased: " + rowsErased, getCenteredX("Line Erased: " + rowsErased, metrics), top_y + halfSectionHeight * 9);
-        g2d.drawString("Score: " + score, getCenteredX("Score: " + score, metrics), top_y + halfSectionHeight * 11);
-        g2d.drawString("Next Tetromino: ", getCenteredX("Next Tetromino: ", metrics), top_y + halfSectionHeight * 13);
+
+        // Draw the next tetromino text
+        String nextTetrominoLabel = "Next Tetromino:";
+        int nextTetrominoY = infoStartY + halfSectionHeight * 12;
+        g2d.setColor(new Color(0, 0, 0, 150)); // Shadow color
+        g2d.drawString(nextTetrominoLabel, infoStartX + 2, nextTetrominoY + 2); // Shadow effect
+
+        g2d.setColor(Color.WHITE);
+        g2d.drawString(nextTetrominoLabel, infoStartX, nextTetrominoY);
+
+        // Drawing the next Tetromino
         Tetromino nextTetromino = TetrominoFactory.peekNextTetromino(this);
+        int remainingSpace = bottom_y - (top_y + halfSectionHeight * 12);
 
-        int remainingSpace = bottom_y - (top_y + halfSectionHeight * 13);
-
-        if(nextTetromino instanceof O){
-            nextTetromino.setPosition(left_x-(GamePanel.LEFT_MARGIN / 2)-Block.SIZE,top_y + halfSectionHeight * 13 + remainingSpace/3);
-        }else{
-            nextTetromino.setPosition(left_x-(GamePanel.LEFT_MARGIN / 2)-Block.SIZE,top_y + halfSectionHeight * 13 + remainingSpace/2);
+        if (nextTetromino instanceof O) {
+            nextTetromino.setPosition(sidebarX + sidebarWidth / 2 - Block.SIZE / 2, nextTetrominoY + halfSectionHeight - Block.SIZE * 2 + remainingSpace / 4);
+        } else {
+            nextTetromino.setPosition(sidebarX + sidebarWidth / 2 - Block.SIZE / 2, nextTetrominoY + halfSectionHeight - Block.SIZE + remainingSpace / 3);
         }
+
         nextTetromino.draw(g2d);
     }
+
+
 
     // Helper method to center text in the left margin
     private int getCenteredX(String text, FontMetrics metrics) {
