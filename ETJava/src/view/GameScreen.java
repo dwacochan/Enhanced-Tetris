@@ -11,7 +11,7 @@ public class GameScreen extends AbstractScreen {
     private GameLoop gameLoop;
 
     public GameScreen(GameController gameController) {
-        super(gameController);
+        super(gameController,"/resources/PlayScreen.jpg");
 
         mainPanel.setLayout(new BorderLayout());
 

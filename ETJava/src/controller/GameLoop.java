@@ -45,6 +45,7 @@ public class GameLoop extends JPanel implements Runnable {
 
     private void initializeLayout() {
         this.removeAll();
+        this.setOpaque(false);
         this.setBackground(new Color(238, 238, 238));
         JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
 
@@ -53,11 +54,13 @@ public class GameLoop extends JPanel implements Runnable {
 
             JPanel player1Container = new JPanel(new BorderLayout());
             player1Container.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 5));
+            player1Container.setOpaque(false);
             player1Panel = new GamePanel(player1Facade);
             player1Container.add(player1Panel, BorderLayout.CENTER);
 
             JPanel player2Container = new JPanel(new BorderLayout());
             player2Container.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 10));
+            player2Container.setOpaque(false);
             player2Panel = new GamePanel(player2Facade);
             player2Container.add(player2Panel, BorderLayout.CENTER);
 
@@ -78,6 +81,7 @@ public class GameLoop extends JPanel implements Runnable {
 
             JPanel player1Container = new JPanel(new BorderLayout());
             player1Container.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            player1Container.setOpaque(false);
             player1Panel = new GamePanel(player1Facade);
             player1Container.add(player1Panel, BorderLayout.CENTER);
 
