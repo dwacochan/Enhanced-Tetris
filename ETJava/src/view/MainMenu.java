@@ -18,7 +18,6 @@ public class MainMenu extends AbstractScreen implements ActionListener {
         // Use the singleton AudioManager to play or resume the menu music
         AudioManager.getInstance().playMusic(musicFilePath);
 
-        // Load your background image with a 16:9 aspect ratio
         BackgroundPanel backgroundPanel = new BackgroundPanel("/resources/MainMenuBackground.jpg");
         backgroundPanel.setLayout(new GridBagLayout()); // Use GridBagLayout to center the buttons
 
@@ -31,50 +30,61 @@ public class MainMenu extends AbstractScreen implements ActionListener {
         gbc.anchor = GridBagConstraints.CENTER; // Center the components
 
         // Title with white outline
-        OutlinedLabel titleLabel = new OutlinedLabel("Main Menu", JLabel.CENTER, Color.WHITE);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-
-        gbc.insets = new Insets(20, 10, 20, 10); // Larger padding for the title
+        OutlinedLabel titleLabel = new OutlinedLabel("Main Menu", JLabel.CENTER, Color.BLACK);
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setFont(new Font("Courier New", Font.BOLD, 24));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 20));
+        gbc.insets = new Insets(20, 15, 20, 15); // Larger padding for the title
         backgroundPanel.add(titleLabel, gbc);
 
-        // Play Button
+        // Play Button with dark blue neon
         playButton = new JButton("Play");
-        playButton.setFont(new Font("Arial", Font.PLAIN, 18));
+        playButton.setFont(new Font("Courier New", Font.BOLD, 18));
         playButton.setPreferredSize(new Dimension(200, 50)); // Set a fixed size for the buttons
+        playButton.setOpaque(true); // Make the button opaque
+        playButton.setContentAreaFilled(true); // Ensure the content area is filled
+        playButton.setBackground(Color.BLACK); // Set background to black
+        playButton.setForeground(new Color(0, 0, 255)); // Dark blue neon text
+        playButton.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 255), 2)); // Dark blue neon border
         playButton.addActionListener(this);
         gbc.insets = new Insets(10, 10, 10, 10); // Regular padding for buttons
         backgroundPanel.add(playButton, gbc);
 
-        // Settings Button
+        // Settings Button with orange neon
         configButton = new JButton("Settings");
-        configButton.setFont(new Font("Arial", Font.PLAIN, 18));
+        configButton.setFont(new Font("Courier New", Font.BOLD, 18));
         configButton.setPreferredSize(new Dimension(200, 50));
+        configButton.setOpaque(true); // Make the button opaque
+        configButton.setContentAreaFilled(true); // Ensure the content area is filled
+        configButton.setBackground(Color.BLACK); // Set background to black
+        configButton.setForeground(new Color(255, 165, 0)); // Orange neon text
+        configButton.setBorder(BorderFactory.createLineBorder(new Color(255, 165, 0), 2)); // Orange neon border
         configButton.addActionListener(this);
         backgroundPanel.add(configButton, gbc);
 
-        // High Scores Button
+        // High Scores Button with green neon
         highScoresButton = new JButton("High Scores");
-        highScoresButton.setFont(new Font("Arial", Font.PLAIN, 18));
+        highScoresButton.setFont(new Font("Courier New", Font.BOLD, 18));
         highScoresButton.setPreferredSize(new Dimension(200, 50));
+        highScoresButton.setOpaque(true); // Make the button opaque
+        highScoresButton.setContentAreaFilled(true); // Ensure the content area is filled
+        highScoresButton.setBackground(Color.BLACK); // Set background to black
+        highScoresButton.setForeground(new Color(0, 255, 0)); // Green neon text
+        highScoresButton.setBorder(BorderFactory.createLineBorder(new Color(0, 255, 0), 2)); // Green neon border
         highScoresButton.addActionListener(this);
         backgroundPanel.add(highScoresButton, gbc);
 
-        // Exit Button
+        // Exit Button with red neon
         exitButton = new JButton("Exit");
-        exitButton.setFont(new Font("Arial", Font.PLAIN, 18));
+        exitButton.setFont(new Font("Courier New", Font.BOLD, 18));
         exitButton.setPreferredSize(new Dimension(200, 50));
+        exitButton.setOpaque(true); // Make the button opaque
+        exitButton.setContentAreaFilled(true); // Ensure the content area is filled
+        exitButton.setBackground(Color.BLACK); // Set background to black
+        exitButton.setForeground(new Color(255, 0, 0)); // Red neon text
+        exitButton.setBorder(BorderFactory.createLineBorder(new Color(255, 0, 0), 2)); // Red neon border
         exitButton.addActionListener(this);
         backgroundPanel.add(exitButton, gbc);
-
-        // Author label with white outline
-        OutlinedLabel authorLabel = new OutlinedLabel("Author: Daniel De Calmer", JLabel.CENTER, Color.WHITE);
-        authorLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-
-        // Add empty border to ensure the text is not cut off
-        authorLabel.setBorder(BorderFactory.createEmptyBorder(5, 12, 5, 12)); // 5px top/bottom padding, 10px left/right padding
-
-        gbc.insets = new Insets(20, 10, 10, 10); // Larger padding for the label
-        backgroundPanel.add(authorLabel, gbc);
 
         // Add the background panel to the main panel
         mainPanel.setLayout(new BorderLayout());

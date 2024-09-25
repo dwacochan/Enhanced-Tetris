@@ -1,7 +1,5 @@
 import controller.GameController;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
 import view.SplashScreen;
 import javax.swing.SwingUtilities;
 

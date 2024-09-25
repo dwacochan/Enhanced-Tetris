@@ -17,11 +17,14 @@ public class OutlinedLabel extends JLabel {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Draw outline (slightly offset around the text)
+        // Draw thicker outline (increase the loop range for thicker effect)
         g2.setColor(outlineColor);
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                g2.drawString(getText(), getInsets().left + i, getInsets().top + j + g2.getFontMetrics().getAscent());
+        int outlineThickness = 2; // Set the thickness of the outline (increase for thicker)
+        for (int i = -outlineThickness; i <= outlineThickness; i++) {
+            for (int j = -outlineThickness; j <= outlineThickness; j++) {
+                if (i != 0 || j != 0) { // Avoid drawing at the center (where the text will be)
+                    g2.drawString(getText(), getInsets().left + i, getInsets().top + j + g2.getFontMetrics().getAscent());
+                }
             }
         }
 
