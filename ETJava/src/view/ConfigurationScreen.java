@@ -15,14 +15,14 @@ public class ConfigurationScreen extends AbstractScreen {
     private JCheckBox musicCheckBox, soundEffectCheckBox, extendModeCheckBox;
     private JComboBox<PlayerType> player1TypeComboBox, player2TypeComboBox;
 
-
     public ConfigurationScreen(GameController gameController, Configurations configurations) {
         super(gameController);
         this.configurations = configurations;
 
         mainPanel.setLayout(new BorderLayout());
 
-        JLabel label = new JLabel("Configurations", JLabel.CENTER);
+        OutlinedLabel label = new OutlinedLabel("Configurations", JLabel.CENTER, Color.BLACK);
+        label.setForeground(Color.WHITE);
         label.setFont(new Font("Arial", Font.BOLD, 24));
         mainPanel.add(label, BorderLayout.NORTH);
 
@@ -37,25 +37,35 @@ public class ConfigurationScreen extends AbstractScreen {
     }
 
     private JPanel getConfigurationPanel() {
-        JPanel configurationPanel = new JPanel();
-        configurationPanel.setLayout(new GridLayout(1, 3, 10, 10));
+        JPanel configurationPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        configurationPanel.setOpaque(true);
+        configurationPanel.setBackground(new Color(0, 0, 0, 150));
 
-        // Column 1: Labels
         JPanel labelsPanel = new JPanel();
         labelsPanel.setLayout(new GridLayout(9, 1, 10, 10));
+        labelsPanel.setOpaque(false);
+        labelsPanel.setBackground(new Color(0, 0, 0, 150));
 
-        labelsPanel.add(new JLabel("Field Width (No of cells):", JLabel.CENTER));
-        labelsPanel.add(new JLabel("Field Height (No of cells):", JLabel.CENTER));
-        labelsPanel.add(new JLabel("Game Level:", JLabel.CENTER));
-        labelsPanel.add(new JLabel("Music (On/Off):", JLabel.CENTER));
-        labelsPanel.add(new JLabel("Sound Effect (On/Off):", JLabel.CENTER));
-        labelsPanel.add(new JLabel("Extend Mode (On/Off):", JLabel.CENTER));
-        labelsPanel.add(new JLabel("Player 1 Type:", JLabel.CENTER));
-        labelsPanel.add(new JLabel("Player 2 Type:", JLabel.CENTER));
+        labelsPanel.add(createOutlinedLabel("Field Width (No of cells):"));
+        labelsPanel.add(createOutlinedLabel("Field Height (No of cells):"));
+        labelsPanel.add(createOutlinedLabel("Game Level:"));
+        labelsPanel.add(createOutlinedLabel("Music (On/Off):"));
+        labelsPanel.add(createOutlinedLabel("Sound Effect (On/Off):"));
+        labelsPanel.add(createOutlinedLabel("Extend Mode (On/Off):"));
+        labelsPanel.add(createOutlinedLabel("Player 1 Type:"));
+        labelsPanel.add(createOutlinedLabel("Player 2 Type:"));
 
-        // Column 2: Sliders and Checkboxes
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0.1;
+        gbc.fill = GridBagConstraints.BOTH;
+        configurationPanel.add(labelsPanel, gbc);
+
         JPanel controlsPanel = new JPanel();
         controlsPanel.setLayout(new GridLayout(9, 1, 10, 10));
+        controlsPanel.setOpaque(false);
+        controlsPanel.setBackground(new Color(0, 0, 0, 150));
 
         fieldWidthSlider = new JSlider(5, 15, configurations.getFieldWidth());
         fieldHeightSlider = new JSlider(15, 30, configurations.getFieldHeight());
@@ -69,45 +79,80 @@ public class ConfigurationScreen extends AbstractScreen {
 
         player2TypeComboBox = new JComboBox<>(PlayerType.values());
         player2TypeComboBox.setSelectedItem(configurations.getPlayer2Type());
-        player2TypeComboBox.setEnabled(configurations.isExtendModeOn()); // Disable player 2 combo box by default
+        player2TypeComboBox.setEnabled(configurations.isExtendModeOn());
 
         configureSlider(fieldWidthSlider, fieldHeightSlider, gameLevelSlider);
         addComponentsToPanel(controlsPanel, fieldWidthSlider, fieldHeightSlider, gameLevelSlider, musicCheckBox, soundEffectCheckBox, extendModeCheckBox, player1TypeComboBox, player2TypeComboBox);
 
-        // Column 3: Values (for visual confirmation)
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 0.35;
+        gbc.fill = GridBagConstraints.BOTH;
+        configurationPanel.add(controlsPanel, gbc);
+
+
         JPanel valuesPanel = new JPanel();
         valuesPanel.setLayout(new GridLayout(9, 1, 10, 10));
+        valuesPanel.setOpaque(false);
+        valuesPanel.setBackground(new Color(0, 0, 0, 150));
 
-        JLabel fieldWidthValue = new JLabel(getStringFromComponent(fieldWidthSlider));
-        JLabel fieldHeightValue = new JLabel(getStringFromComponent(fieldHeightSlider));
-        JLabel gameLevelValue = new JLabel(getStringFromComponent(gameLevelSlider));
-        JLabel musicValue = new JLabel(getStringFromComponent(musicCheckBox));
-        JLabel soundEffectValue = new JLabel(getStringFromComponent(soundEffectCheckBox));
-        JLabel extendModeValue = new JLabel(getStringFromComponent(extendModeCheckBox));
-        JLabel player1TypeValue = new JLabel(Objects.requireNonNull(player1TypeComboBox.getSelectedItem()).toString());
-        JLabel player2TypeValue = new JLabel(Objects.requireNonNull(player2TypeComboBox.getSelectedItem()).toString());
+        valuesPanel.add(createOutlinedLabel(fieldWidthSlider));
+        valuesPanel.add(createOutlinedLabel(fieldHeightSlider));
+        valuesPanel.add(createOutlinedLabel(gameLevelSlider));
+        valuesPanel.add(createOutlinedLabel(musicCheckBox));
+        valuesPanel.add(createOutlinedLabel(soundEffectCheckBox));
+        valuesPanel.add(createOutlinedLabel(extendModeCheckBox));
+        valuesPanel.add(createOutlinedLabel(player1TypeComboBox));
+        valuesPanel.add(createOutlinedLabel(player2TypeComboBox));
 
-        addListenerEvent(fieldWidthValue, fieldWidthSlider);
-        addListenerEvent(fieldHeightValue, fieldHeightSlider);
-        addListenerEvent(gameLevelValue, gameLevelSlider);
-        addListenerEvent(musicValue, musicCheckBox);
-        addListenerEvent(soundEffectValue, soundEffectCheckBox);
-        addListenerEvent(extendModeValue, extendModeCheckBox);
-        addListenerEvent(player1TypeValue, player1TypeComboBox);
-        addListenerEvent(player2TypeValue, player2TypeComboBox);
-
-        addComponentsToPanel(valuesPanel, fieldWidthValue, fieldHeightValue, gameLevelValue, musicValue, soundEffectValue, extendModeValue, player1TypeValue, player2TypeValue);
-
-        extendModeCheckBox.addItemListener(e -> player2TypeComboBox.setEnabled(extendModeCheckBox.isSelected()));
-
-        configurationPanel.add(labelsPanel);
-        configurationPanel.add(controlsPanel);
-        configurationPanel.add(valuesPanel);
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.weightx = 0.2;
+        gbc.fill = GridBagConstraints.BOTH;
+        configurationPanel.add(valuesPanel, gbc);
 
         return configurationPanel;
     }
 
-    // Handle JSlider and JCheckBox changes by updating configurations
+
+    // Overloaded methods to create an OutlinedLabel for both static and dynamic text
+
+    // Static text
+    private OutlinedLabel createOutlinedLabel(String text) {
+        OutlinedLabel label = new OutlinedLabel(text, JLabel.CENTER, Color.BLACK);
+        label.setFont(new Font("Courier New", Font.BOLD, 16));
+        label.setForeground(Color.WHITE);
+        return label;
+    }
+
+    // Dynamic values (e.g., sliders, checkboxes, combo boxes)
+    private OutlinedLabel createOutlinedLabel(JComponent component) {
+        String valueText = getStringFromComponent(component);
+        OutlinedLabel label = new OutlinedLabel(valueText, JLabel.CENTER, Color.BLACK);
+        label.setFont(new Font("Courier New", Font.BOLD, 16));
+        label.setForeground(Color.WHITE);
+
+        // Add listeners for dynamic updates
+        if (component instanceof JSlider slider) {
+            slider.addChangeListener(e -> {
+                label.setText(getStringFromComponent(slider));
+                reloadScreen(); // Reload the screen when slider is changed
+            });
+        } else if (component instanceof JCheckBox checkBox) {
+            checkBox.addItemListener(e -> {
+                label.setText(getStringFromComponent(checkBox));
+                reloadScreen(); // Reload the screen when checkbox is changed
+            });
+        } else if (component instanceof JComboBox<?> comboBox) {
+            comboBox.addItemListener(e -> {
+                label.setText(Objects.requireNonNull(comboBox.getSelectedItem()).toString());
+                reloadScreen(); // Reload the screen when combobox is changed
+            });
+        }
+        return label;
+    }
+
+
     private static void configureSlider(JSlider... sliders) {
         for (JSlider slider : sliders) {
             slider.setMajorTickSpacing(1);
@@ -122,16 +167,6 @@ public class ConfigurationScreen extends AbstractScreen {
         }
     }
 
-    private static void addListenerEvent(JLabel label, JComponent component) {
-        if (component instanceof JSlider slider) {
-            slider.addChangeListener(e -> label.setText(getStringFromComponent(slider)));
-        } else if (component instanceof JCheckBox checkBox) {
-            checkBox.addItemListener(e -> label.setText(getStringFromComponent(checkBox)));
-        } else if (component instanceof JComboBox comboBox) {
-            comboBox.addItemListener(e -> label.setText(Objects.requireNonNull(comboBox.getSelectedItem()).toString()));
-        }
-    }
-
     private static String getStringFromComponent(JComponent component) {
         if (component instanceof JSlider slider) {
             return String.valueOf(slider.getValue());
@@ -141,7 +176,6 @@ public class ConfigurationScreen extends AbstractScreen {
         return "";
     }
 
-    // Save the current configuration to JSON
     private void saveConfigurations() {
         configurations.setFieldWidth(fieldWidthSlider.getValue());
         configurations.setFieldHeight(fieldHeightSlider.getValue());
@@ -154,7 +188,12 @@ public class ConfigurationScreen extends AbstractScreen {
             configurations.setPlayer2Type((PlayerType) player2TypeComboBox.getSelectedItem());
         }
 
-        // Save to JSON
         configurations.saveToFile();
     }
+
+    private void reloadScreen() {
+        mainPanel.revalidate();
+        mainPanel.repaint();
+    }
+
 }
