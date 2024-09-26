@@ -243,13 +243,14 @@ public class Gameplay {
         if(gameController.getConfigurations().isSoundEffectsOn()){
             AudioManager.getInstance().playSound("/resources/RowClear.wav");
         };
+        checkLevelUp();
 
     }
 
     private void checkLevelUp() {
         if (rowsErased % 10 == 0) {
             level++;
-            System.out.println("Level up! Now at level: " + level);
+            //System.out.println("Level up! Now at level: " + level);
 
             // Sound effect for levelling up
             if(gameController.getConfigurations().isSoundEffectsOn()){

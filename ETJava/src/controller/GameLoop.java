@@ -162,7 +162,7 @@ public class GameLoop extends JPanel implements Runnable {
                     int currentLevel = facade.getLevel();
                     drawInterval = (double) 1000000000 / (FPS * currentLevel);
 
-                    System.out.println(playerLabel + " Level: " + currentLevel);
+                    //System.out.println(playerLabel + " Level: " + currentLevel);
                     facade.updateGame();
                 }
 
