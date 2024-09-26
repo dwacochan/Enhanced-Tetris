@@ -102,8 +102,8 @@ public class ConfigurationScreen extends AbstractScreen {
         slider.setMajorTickSpacing((slider.getMaximum() - slider.getMinimum()) / 5);
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);
-        slider.setForeground(Color.DARK_GRAY);
-        slider.setBackground(Color.LIGHT_GRAY);
+        slider.setForeground(Color.WHITE);
+        slider.setBackground(Color.WHITE);
         slider.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         return slider;
     }
