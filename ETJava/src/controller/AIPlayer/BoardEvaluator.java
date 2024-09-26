@@ -14,7 +14,7 @@ public class BoardEvaluator {
     // 2 1 2 1 500
     // 2 2 2 1 900
 
-    private int getAggregateHeight(int[][] board) {
+    int getAggregateHeight(int[][] board) {
         int aggregateHeight = 0;
         for (int x = 0; x < board[0].length; x++) {
             aggregateHeight += getColumnHeight(board, x);
@@ -22,7 +22,7 @@ public class BoardEvaluator {
         return aggregateHeight;
     }
 
-    private int getColumnHeight(int[][] board, int col) {
+    int getColumnHeight(int[][] board, int col) {
         for (int y = 0; y < board.length; y++) {
             if (board[y][col] != 0) {
                 return board.length - y;
@@ -31,7 +31,7 @@ public class BoardEvaluator {
         return 0;
     }
 
-    private int getHoles(int[][] board) {
+    int getHoles(int[][] board) {
         int holes = 0;
         for (int x = 0; x < board[0].length; x++) {
             boolean blockFound = false;
@@ -46,7 +46,7 @@ public class BoardEvaluator {
         return holes;
     }
 
-    private int getClearedLines(int[][] board) {
+    int getClearedLines(int[][] board) {
         int clearedLines = 0;
         for (int y = 0; y < board.length; y++) {
             boolean isFull = true;
@@ -63,7 +63,7 @@ public class BoardEvaluator {
         return clearedLines;
     }
 
-    private int getBumpiness(int[][] board) {
+    int getBumpiness(int[][] board) {
         int bumpiness = 0;
         int[] heights = new int[board[0].length];
         for (int x = 0; x < board[0].length; x++) {

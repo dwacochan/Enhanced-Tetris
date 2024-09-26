@@ -5,7 +5,10 @@ import model.Move;
 import model.OpMove;
 import model.PureGame;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class AIControlledPlayer extends ExternalPlayer {
     private BoardEvaluator evaluator;
@@ -21,7 +24,7 @@ public class AIControlledPlayer extends ExternalPlayer {
         this.tetrisAI = new TetrisAI(evaluator);
     }
 
-    private enum TetrominoType {
+    enum TetrominoType {
         I, O, T, S, Z, J, L, UNKNOWN
     }
 
@@ -114,7 +117,7 @@ public class AIControlledPlayer extends ExternalPlayer {
         timer.schedule(rotateTask, 35, 35);
     }
 
-    private OpMove computeBestMove(PureGame pureGame) {
+    OpMove computeBestMove(PureGame pureGame) {
         int[][] board = pureGame.getCells();
         int[][] currentShape = pureGame.getCurrentShape();
 
@@ -149,12 +152,12 @@ public class AIControlledPlayer extends ExternalPlayer {
         return new OpMove(movesX, rotations);
     }
 
-    private int getCalibrationOffset(TetrominoType shapeType, int rotation) {
+    int getCalibrationOffset(TetrominoType shapeType, int rotation) {
         Map<Integer, Integer> rotationOffsets = SHAPE_CALIBRATION.getOrDefault(shapeType, new HashMap<>());
         return rotationOffsets.getOrDefault(rotation, 0);
     }
 
-    private TetrominoType identifyShape(int[][] shape) {
+    TetrominoType identifyShape(int[][] shape) {
         // Convert the shape array to a string representation
         String shapeString = shapeArrayToString(shape);
 
@@ -178,7 +181,7 @@ public class AIControlledPlayer extends ExternalPlayer {
         }
     }
 
-    private String shapeArrayToString(int[][] shape) {
+    String shapeArrayToString(int[][] shape) {
         StringBuilder sb = new StringBuilder();
         for (int y = 0; y < shape.length; y++) {
             for (int x = 0; x < shape[0].length; x++) {

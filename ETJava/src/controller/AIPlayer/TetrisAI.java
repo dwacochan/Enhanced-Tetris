@@ -1,6 +1,5 @@
 package controller.AIPlayer;
 
-import controller.AIPlayer.BoardEvaluator;
 import model.Move;
 
 public class TetrisAI {
@@ -38,7 +37,7 @@ public class TetrisAI {
         return bestMove;
     }
 
-    private int[][] rotateShape(int[][] shape, int rotations) {
+    int[][] rotateShape(int[][] shape, int rotations) {
         int[][] rotatedShape = shape;
         for (int i = 0; i < rotations; i++) {
             rotatedShape = rotate90(rotatedShape);
@@ -46,7 +45,7 @@ public class TetrisAI {
         return rotatedShape;
     }
 
-    private int[][] rotate90(int[][] shape) {
+    int[][] rotate90(int[][] shape) {
         int rows = shape.length;
         int cols = shape[0].length;
         int[][] rotated = new int[cols][rows];
@@ -58,7 +57,7 @@ public class TetrisAI {
         return rotated;
     }
 
-    private int getLeftPadding(int[][] shape) {
+    int getLeftPadding(int[][] shape) {
         int padding = shape[0].length;
         for (int y = 0; y < shape.length; y++) {
             for (int x = 0; x < shape[0].length; x++) {
@@ -71,7 +70,7 @@ public class TetrisAI {
         return padding;
     }
 
-    private int getRightPadding(int[][] shape) {
+    int getRightPadding(int[][] shape) {
         int padding = 0;
         for (int y = 0; y < shape.length; y++) {
             for (int x = shape[0].length - 1; x >= 0; x--) {
@@ -84,7 +83,7 @@ public class TetrisAI {
         return padding;
     }
 
-    private int[][] simulateDrop(int[][] board, int[][] shape, int col) {
+    int[][] simulateDrop(int[][] board, int[][] shape, int col) {
         int[][] newBoard = copyBoard(board);
         int row = -getTopPadding(shape);
 
@@ -99,7 +98,7 @@ public class TetrisAI {
         return newBoard;
     }
 
-    private boolean canPlace(int[][] board, int[][] shape, int row, int col) {
+    boolean canPlace(int[][] board, int[][] shape, int row, int col) {
         for (int y = 0; y < shape.length; y++) {
             for (int x = 0; x < shape[0].length; x++) {
                 if (shape[y][x] != 0) {
@@ -114,7 +113,7 @@ public class TetrisAI {
         return true;
     }
 
-    private void placePiece(int[][] board, int[][] shape, int row, int col) {
+    void placePiece(int[][] board, int[][] shape, int row, int col) {
         for (int y = 0; y < shape.length; y++) {
             for (int x = 0; x < shape[0].length; x++) {
                 if (shape[y][x] != 0) {
@@ -128,7 +127,7 @@ public class TetrisAI {
         }
     }
 
-    private int[][] copyBoard(int[][] board) {
+    int[][] copyBoard(int[][] board) {
         int[][] newBoard = new int[board.length][board[0].length];
         for (int y = 0; y < board.length; y++) {
             System.arraycopy(board[y], 0, newBoard[y], 0, board[0].length);
@@ -136,7 +135,7 @@ public class TetrisAI {
         return newBoard;
     }
 
-    private int getTopPadding(int[][] shape) {
+    int getTopPadding(int[][] shape) {
         int padding = shape.length;
         for (int y = 0; y < shape.length; y++) {
             for (int x = 0; x < shape[0].length; x++) {
