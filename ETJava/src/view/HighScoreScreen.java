@@ -45,7 +45,6 @@ public class HighScoreScreen extends AbstractScreen {
         BottomPanel bottomPanel = new BottomPanel(gameController, "Elijah De Calmer", e -> {
             AudioManager.getInstance().pauseMusic();
             AudioManager.getInstance().playMusic("/resources/mainmenu.wav"); // Play main menu music
-            gameController.showMainMenu();
         });
 
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);

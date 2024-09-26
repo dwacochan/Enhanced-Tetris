@@ -36,7 +36,6 @@ public class ConfigurationScreen extends AbstractScreen {
 
         BottomPanel bottomPanel = new BottomPanel(gameController, "Draco Zhang", e -> {
             saveConfigurations();
-            gameController.showMainMenu();
         });
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
     }

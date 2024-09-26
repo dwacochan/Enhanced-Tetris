@@ -57,8 +57,6 @@ public class GameScreen extends AbstractScreen {
                     gameController.resumeGame();
                     AudioManager.getInstance().playMusic("/resources/GameMusic.wav");
                 }
-            } else {
-                gameController.showMainMenu();
             }
         };
     }
