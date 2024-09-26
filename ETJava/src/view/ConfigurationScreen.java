@@ -104,8 +104,8 @@ public class ConfigurationScreen extends AbstractScreen {
         slider.setFont(new Font("Courier New", Font.BOLD, 12));
         slider.setMajorTickSpacing((slider.getMaximum() - slider.getMinimum()) / 5);
         slider.setPaintLabels(true);
-        slider.setForeground(Color.WHITE);
-        slider.setBackground(Color.BLACK);
+        slider.setForeground(Color.BLACK);
+        slider.setBackground(Color.WHITE);
 
         // Apply custom UI
         slider.setUI(new CustomSliderUI(slider));
