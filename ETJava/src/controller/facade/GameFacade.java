@@ -55,7 +55,7 @@ public class GameFacade {
         return gameplay.getGameNumber();
     }
 
-
+    public int getLevel() {return gameplay.getLevel();}
     public String getInitialLevel() {
         return "";
     }

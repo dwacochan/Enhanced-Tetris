@@ -15,6 +15,8 @@ public class GameLoop extends JPanel implements Runnable {
 
     private double drawInterval;
     private Thread gameThread;
+    private Thread player1Thread;
+    private Thread player2Thread;
     private boolean running = false;
     private boolean paused = false;
     private GameController gameController;
@@ -37,8 +39,8 @@ public class GameLoop extends JPanel implements Runnable {
         this.gameController = gameController;
         this.isTwoPlayerMode = isTwoPlayerMode;
 
-        player1Facade = new GameFacade(100, 100, 1, gameController.getConfigurations().getPlayer1Type(),gameController.getConfigurations().getGameLevel());
-        player2Facade = new GameFacade(100, 100, 2, gameController.getConfigurations().getPlayer2Type(),gameController.getConfigurations().getGameLevel());
+        player1Facade = new GameFacade(100, 100, 1, gameController.getConfigurations().getPlayer1Type(), gameController.getConfigurations().getGameLevel());
+        player2Facade = new GameFacade(100, 100, 2, gameController.getConfigurations().getPlayer2Type(), gameController.getConfigurations().getGameLevel());
 
         this.setBackground(Color.WHITE);
 
@@ -105,13 +107,11 @@ public class GameLoop extends JPanel implements Runnable {
         this.repaint();
     }
 
-
-
     public void startGame() {
         int gameWidth = gameController.getConfigurations().getFieldWidth() * Block.SIZE;
         int gameHeight = gameController.getConfigurations().getFieldHeight() * Block.SIZE;
         this.isTwoPlayerMode = gameController.getConfigurations().isExtendModeOn();
-        player1Facade = new GameFacade(gameWidth, gameHeight, 1, gameController.getConfigurations().getPlayer1Type(),gameController.getConfigurations().getGameLevel());
+        player1Facade = new GameFacade(gameWidth, gameHeight, 1, gameController.getConfigurations().getPlayer1Type(), gameController.getConfigurations().getGameLevel());
         player1Panel = new GamePanel(player1Facade);
 
         if (gameController.getConfigurations().getPlayer1Type() == PlayerType.SERVER) {
@@ -126,7 +126,7 @@ public class GameLoop extends JPanel implements Runnable {
             } else {
                 serverPlayer2 = null;
             }
-            player2Facade = new GameFacade(gameWidth, gameHeight, 2, gameController.getConfigurations().getPlayer2Type(),gameController.getConfigurations().getGameLevel());
+            player2Facade = new GameFacade(gameWidth, gameHeight, 2, gameController.getConfigurations().getPlayer2Type(), gameController.getConfigurations().getGameLevel());
             player2Panel = new GamePanel(player2Facade);
         } else {
             player2Facade = null;
@@ -142,8 +142,51 @@ public class GameLoop extends JPanel implements Runnable {
             gameThread.start();
             running = true;
             paused = false;
+
+            // Start separate threads for each player facade
+            startFacadeThreads();
         }
     }
+
+
+    Runnable createFacadeThread(GameFacade facade, String playerLabel) {
+        return () -> {
+            double drawInterval = (double) 1000000000 / (FPS * facade.getLevel());
+
+            while (running) {
+                if (!paused) {
+                    // Check if the level changed and update the interval
+                    int currentLevel = facade.getLevel();
+                    drawInterval = (double) 1000000000 / (FPS * currentLevel);
+
+                    System.out.println(playerLabel + " Level: " + currentLevel);
+                    facade.updateGame();
+                }
+
+                try {
+                    long sleepTimeMillis = (long) (drawInterval / 1_000_000);
+                    Thread.sleep(sleepTimeMillis);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        };
+    }
+    private void startFacadeThreads() {
+
+        // Start thread for Player 1
+        player1Thread = new Thread(createFacadeThread(player1Facade, "Player 1"));
+        player1Thread.start();
+
+        // Start thread for Player 2 if two-player mode is enabled
+        if (isTwoPlayerMode) {
+            player2Thread = new Thread(createFacadeThread(player2Facade, "Player 2"));
+            player2Thread.start();
+        }
+    }
+
+
+
 
     public void pauseGame() {
         if (running && !paused) {
@@ -159,36 +202,44 @@ public class GameLoop extends JPanel implements Runnable {
 
     public void stopGame() {
         if (running) {
-            // Stop external players
-            if (serverPlayer1 != null) {
-                serverPlayer1.stop();
-                serverPlayer1 = null;
-            }
-
-            if (serverPlayer2 != null) {
-                serverPlayer2.stop();
-                serverPlayer2 = null;
-            }
+            stopExternalPlayers();
 
             running = false;
             paused = false;
 
-            // Interrupt the game thread to exit the wait state if it's paused
-            if (gameThread != null) {
-                gameThread.interrupt();
-            }
-
-            try {
-                // Ensure the game thread finishes execution
-                gameThread.join();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt(); // Preserve the interrupt status
-                System.out.println("Stopping game");
-            } finally {
-                gameThread = null; // Clean up the reference to the game thread
+            stopAndCleanupThread(gameThread);
+            stopAndCleanupThread(player1Thread);
+            if (isTwoPlayerMode) {
+                stopAndCleanupThread(player2Thread);
             }
         }
     }
+
+    private void stopExternalPlayers() {
+        if (serverPlayer1 != null) {
+            serverPlayer1.stop();
+            serverPlayer1 = null;
+        }
+
+        if (serverPlayer2 != null) {
+            serverPlayer2.stop();
+            serverPlayer2 = null;
+        }
+    }
+
+    private void stopAndCleanupThread(Thread thread) {
+        if (thread != null) {
+            thread.interrupt();
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                System.out.println("Stopping game");
+            }
+            thread = null;
+        }
+    }
+
 
     public void resetGame() {
         stopGame();
@@ -200,11 +251,7 @@ public class GameLoop extends JPanel implements Runnable {
 
     private void update() {
         if (!paused && !Controls.pause) {
-            drawInterval = (double) 1000000000 / (FPS * GameController.getInstance().getConfigurations().getGameLevel());
-            player1Facade.updateGame();  // Update Player 1's game
-            if (isTwoPlayerMode) {
-                player2Facade.updateGame();  // Update Player 2's game in two-player mode
-            }
+            drawInterval = (double) 1000000000 / (FPS);
         }
         if (isGameOver()) {
             GameController.getInstance().setNewScore(player1Facade.getScore(), player1Facade.getGameNumber(), getConfigString(gameController.getConfigurations()));
