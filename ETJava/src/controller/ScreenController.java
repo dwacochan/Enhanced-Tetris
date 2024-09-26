@@ -22,7 +22,7 @@ public class ScreenController {
     private ManholeScene manholeScene;
 
 
-    private ScreenController(JFrame mainFrame, GameController gameController, Configurations configurations, HighScores highScores) {
+    public ScreenController(JFrame mainFrame, GameController gameController, Configurations configurations, HighScores highScores) {
         this.mainFrame = mainFrame;
 
         mainFrame.getContentPane().setLayout(new CardLayout());
@@ -30,10 +30,17 @@ public class ScreenController {
         mainMenu = new MainMenu(gameController);
         splashScreen = new SplashScreen(gameController);
         gameScreen = new GameScreen(gameController);
-        configurationScreen = new ConfigurationScreen(gameController, configurations);  // Pass model.Configurations to Settings
+        configurationScreen = new ConfigurationScreen(gameController, configurations);
         highScoreScreen = new HighScoreScreen(gameController, highScores);
 
+        // Set the names of the panels
+        mainMenu.getPanel().setName("view.MainMenu");
+        splashScreen.getPanel().setName("view.SplashScreen");
+        gameScreen.getPanel().setName("view.GameScreen");
+        configurationScreen.getPanel().setName("Settings");
+        highScoreScreen.getPanel().setName("view.HighScoreScreen");
 
+        // Add panels to the content pane with card names
         mainFrame.getContentPane().add(mainMenu.getPanel(), "view.MainMenu");
         mainFrame.getContentPane().add(splashScreen.getPanel(), "view.SplashScreen");
         mainFrame.getContentPane().add(gameScreen.getPanel(), "view.GameScreen");
@@ -42,6 +49,7 @@ public class ScreenController {
 
         mainFrame.setVisible(true);
     }
+
 
     // Static method to provide global access to the single instance
     public static synchronized ScreenController getInstance(JFrame mainFrame, GameController gameController, Configurations configurations, HighScores highScores) {
