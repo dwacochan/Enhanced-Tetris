@@ -37,7 +37,7 @@ public class ManholeScene extends AbstractScreen {
             // Stop the manhole scene music
             AudioManager.getInstance().pauseMusic();
             // Return to the main menu (which will handle playing the main menu music)
-//            gameController.showMainMenu();
+            gameController.showMainMenu();
         });
 
         // Add the back button to the bottom of the panel

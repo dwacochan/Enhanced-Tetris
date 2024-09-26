@@ -36,15 +36,12 @@ public class HighScoreScreen extends AbstractScreen {
         mainPanel.add(topPanel, BorderLayout.NORTH);
 
         JPanel scoresPanel = getScoresPanel(highScores);
-//        JScrollPane scrollPane = new JScrollPane(scoresPanel);
-//        scrollPane.setOpaque(false);
-//        scrollPane.getViewport().setOpaque(false);
-//        scrollPane.setBorder(BorderFactory.createEmptyBorder());
         mainPanel.add(scoresPanel, BorderLayout.CENTER);
 
         BottomPanel bottomPanel = new BottomPanel(gameController, "Elijah De Calmer", e -> {
             AudioManager.getInstance().pauseMusic();
             AudioManager.getInstance().playMusic("/resources/mainmenu.wav"); // Play main menu music
+            gameController.showMainMenu();
         });
 
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
