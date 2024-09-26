@@ -1,5 +1,6 @@
 package controller;
 
+import controller.AIPlayer.AIControlledPlayer;
 import controller.facade.GameFacade;
 import model.Block;
 import model.Configurations;
@@ -38,6 +39,9 @@ public class GameLoop extends JPanel implements Runnable {
     // External players
     private ServerControlledPlayer serverPlayer1;
     private ServerControlledPlayer serverPlayer2;
+
+    private AIControlledPlayer aiPlayer1;
+    private AIControlledPlayer aiPlayer2;
 
     public GameLoop(boolean isTwoPlayerMode, PlayerType player1Type, PlayerType player2Type, GameController gameController) {
         this.gameController = gameController;
@@ -120,6 +124,8 @@ public class GameLoop extends JPanel implements Runnable {
 
         if (gameController.getConfigurations().getPlayer1Type() == PlayerType.SERVER) {
             serverPlayer1 = new ServerControlledPlayer(1);
+        } else if (gameController.getConfigurations().getPlayer1Type() == PlayerType.AI) {
+            aiPlayer1 = new AIControlledPlayer(1);
         } else {
             serverPlayer1 = null;
         }
@@ -127,6 +133,8 @@ public class GameLoop extends JPanel implements Runnable {
         if (isTwoPlayerMode) {
             if (gameController.getConfigurations().getPlayer2Type() == PlayerType.SERVER) {
                 serverPlayer2 = new ServerControlledPlayer(2);
+            } else if (gameController.getConfigurations().getPlayer2Type() == PlayerType.AI){
+                  aiPlayer2 = new AIControlledPlayer(2);
             } else {
                 serverPlayer2 = null;
             }
@@ -207,6 +215,16 @@ public class GameLoop extends JPanel implements Runnable {
     public void stopGame() {
         if (running) {
             stopExternalPlayers();
+
+            if (aiPlayer1 != null) {
+                aiPlayer1.stop();
+                aiPlayer1 = null;
+            }
+
+            if (aiPlayer2 != null) {
+                aiPlayer2.stop();
+                aiPlayer2 = null;
+            }
 
             running = false;
             paused = false;
@@ -314,6 +332,15 @@ public class GameLoop extends JPanel implements Runnable {
             return serverPlayer1;
         } else if (gameNumber == 2) {
             return serverPlayer2;
+        }
+        return null;
+    }
+
+    public AIControlledPlayer getAIControlledPlayer(int gameNumber) {
+        if (gameNumber == 1) {
+            return aiPlayer1;
+        } else if (gameNumber == 2) {
+            return aiPlayer2;
         }
         return null;
     }

@@ -22,7 +22,7 @@ public class S extends Tetromino {
         blocks[3].setY(y - Block.SIZE);
     }
 
-    public void getRotation0(){
+    public void getRotation1(){
 
         tempBlocks[0].setX(blocks[0].getX());
         tempBlocks[0].setY(blocks[0].getY());
@@ -33,11 +33,11 @@ public class S extends Tetromino {
         tempBlocks[3].setX(blocks[0].getX() + Block.SIZE);
         tempBlocks[3].setY(blocks[0].getY() + Block.SIZE);
 
-        updateRotation(0);
+        updateRotation(1);
 
     }
 
-    public void getRotation1(){
+    public void getRotation0(){
 
         tempBlocks[0].setX(blocks[0].getX());
         tempBlocks[0].setY(blocks[0].getY());
@@ -48,7 +48,7 @@ public class S extends Tetromino {
         tempBlocks[3].setX(blocks[0].getX() + Block.SIZE);
         tempBlocks[3].setY(blocks[0].getY() - Block.SIZE);
 
-        updateRotation(1);
+        updateRotation(0);
 
     }
 

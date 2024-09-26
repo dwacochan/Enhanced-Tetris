@@ -78,8 +78,8 @@ public class Controls {
                     return ControlsSet.DEFAULT;
                 } else if (playerType == PlayerType.SERVER) {
                     return ControlsSet.EXTERNAL_1;
-                } else {
-                    return ControlsSet.DEFAULT;
+                } else if (playerType == PlayerType.AI) {
+                    return ControlsSet.EXTERNAL_1;
                 }
             }
             case 2 -> {
@@ -87,8 +87,8 @@ public class Controls {
                     return ControlsSet.ALTERNATE;
                 } else if (playerType == PlayerType.SERVER) {
                     return ControlsSet.EXTERNAL_2;
-                } else {
-                    return ControlsSet.ALTERNATE;
+                } else if (playerType == PlayerType.AI){
+                    return ControlsSet.EXTERNAL_2;
                 }
             }
 
@@ -97,6 +97,7 @@ public class Controls {
             }
         }
 
+        return null;
     }
 
     public static void bindKeys(JComponent comp) {

@@ -198,6 +198,18 @@ public class Gameplay {
                 ));
             }
 
+            if (gameController.getGameLoop().getAIControlledPlayer(gameNumber) != null){
+                gameController.getGameLoop().getAIControlledPlayer(gameNumber).decideAndMakeBestMove(
+                        new PureGame(
+                                width / Block.SIZE,
+                                height / Block.SIZE,
+                                getBoard2DArray(),
+                                getCurrentTetromino2DArray(),
+                                getNextTetromino2DArray()
+                        )
+                );
+            }
+
         } else {
             currentTetromino.update();
         }
