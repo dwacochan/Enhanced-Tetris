@@ -102,6 +102,12 @@ public class GameController {
         highScores.loadFromFile();
     }
 
+    public void showManholeScene() {
+        AudioManager.getInstance().pauseMusic();
+        screenController.showManholeScene();  // Implement this method in your ScreenController
+    }
+
+
     public void hideAllScreens() {
         screenController.hideAllScreens();
     }

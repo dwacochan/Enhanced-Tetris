@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import controller.GameController;
 import util.AudioManager;
@@ -24,16 +26,17 @@ public class MainMenu extends AbstractScreen implements ActionListener {
         // Create a GridBagConstraints object to control the layout
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10); // Padding around each component
-        gbc.gridx = 0;
+        gbc.gridx = GridBagConstraints.CENTER;
         gbc.gridy = GridBagConstraints.RELATIVE; // Stack components vertically
         gbc.fill = GridBagConstraints.NONE; // No stretching
         gbc.anchor = GridBagConstraints.CENTER; // Center the components
 
         // Title with white outline
-        OutlinedLabel titleLabel = new OutlinedLabel("Main Menu", JLabel.CENTER, Color.BLACK);
+        OutlinedLabel titleLabel = new OutlinedLabel("      Main Menu", JLabel.CENTER, Color.BLACK);
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setFont(new Font("Courier New", Font.BOLD, 24));
         titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 20));
+        titleLabel.setPreferredSize(new Dimension(340, 50));
         gbc.insets = new Insets(20, 15, 20, 15); // Larger padding for the title
         backgroundPanel.add(titleLabel, gbc);
 
@@ -86,6 +89,31 @@ public class MainMenu extends AbstractScreen implements ActionListener {
         exitButton.addActionListener(this);
         backgroundPanel.add(exitButton, gbc);
 
+        // Load the manhole cover image and scale it down to 2% of its original size
+        ImageIcon originalIcon = new ImageIcon(getClass().getResource("/resources/manhole.png"));
+        Image scaledImage = originalIcon.getImage().getScaledInstance(
+                (int) (originalIcon.getIconWidth() * 0.02),
+                (int) (originalIcon.getIconHeight() * 0.02),
+                Image.SCALE_SMOOTH); // Use smooth scaling
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+        // Create the JLabel with the scaled image
+        JLabel manholeCover = new JLabel(scaledIcon);
+
+        // Add a MouseListener to the manhole cover to handle the click event
+        manholeCover.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                gameController.showManholeScene();  // Show the manhole scene
+            }
+        });
+
+        // Configure gbc to place the manhole cover in the bottom-left
+        gbc.gridy = GridBagConstraints.SOUTHWEST; // Stack it below other components
+        gbc.anchor = GridBagConstraints.LAST_LINE_START; // Bottom-left corner
+        gbc.insets = new Insets(85, 10, 10, 10); // Add space around the image
+        backgroundPanel.add(manholeCover, gbc);
+
         // Add the background panel to the main panel
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add(backgroundPanel, BorderLayout.CENTER);
@@ -119,5 +147,4 @@ public class MainMenu extends AbstractScreen implements ActionListener {
             }
         }
     }
-
 }

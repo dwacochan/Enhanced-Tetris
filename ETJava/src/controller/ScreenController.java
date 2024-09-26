@@ -19,6 +19,8 @@ public class ScreenController {
     private GameScreen gameScreen;
     private ConfigurationScreen configurationScreen;
     private HighScoreScreen highScoreScreen;
+    private ManholeScene manholeScene;
+
 
     private ScreenController(JFrame mainFrame, GameController gameController, Configurations configurations, HighScores highScores) {
         this.mainFrame = mainFrame;
@@ -30,6 +32,7 @@ public class ScreenController {
         gameScreen = new GameScreen(gameController);
         configurationScreen = new ConfigurationScreen(gameController, configurations);  // Pass model.Configurations to Settings
         highScoreScreen = new HighScoreScreen(gameController, highScores);
+
 
         mainFrame.getContentPane().add(mainMenu.getPanel(), "view.MainMenu");
         mainFrame.getContentPane().add(splashScreen.getPanel(), "view.SplashScreen");
@@ -79,6 +82,24 @@ public class ScreenController {
         AudioManager.getInstance().playMusic("/resources/CafeAmbience.wav"); // Play Cafe Ambience music
         ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "view.HighScoreScreen");
     }
+
+    public void showManholeScene() {
+        // Instantiate ManholeScene only when it's first needed (lazy initialization)
+        if (manholeScene == null) {
+            manholeScene = new ManholeScene(GameController.getInstance());
+            mainFrame.getContentPane().add(manholeScene.getPanel(), "ManholeScene");
+        }
+
+        // Stop any currently playing music before starting the manhole scene music
+        AudioManager.getInstance().pauseMusic();
+        AudioManager.getInstance().playMusic("/resources/ManholeScene.wav");
+
+        // Show the ManholeScene using CardLayout
+        ((CardLayout) mainFrame.getContentPane().getLayout()).show(mainFrame.getContentPane(), "ManholeScene");
+    }
+
+
+
 
     public void hideAllScreens() {
         for (Component comp : mainFrame.getContentPane().getComponents()) {

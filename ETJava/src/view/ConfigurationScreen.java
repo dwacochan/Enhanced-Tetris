@@ -7,6 +7,7 @@ import model.PlayerType;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
+import javax.swing.plaf.basic.BasicSliderUI;
 
 public class ConfigurationScreen extends AbstractScreen {
 
@@ -55,6 +56,7 @@ public class ConfigurationScreen extends AbstractScreen {
         labelsPanel.add(createStyledLabel("Extend Mode (On/Off):"));
         labelsPanel.add(createStyledLabel("Player 1 Type:"));
         labelsPanel.add(createStyledLabel("Player 2 Type:"));
+
         // Increased vertical gaps from 10 to 20
         JPanel controlsPanel = new JPanel(new GridLayout(8, 1, 10, 20));
         controlsPanel.setOpaque(false);
@@ -97,16 +99,65 @@ public class ConfigurationScreen extends AbstractScreen {
         return configurationPanel;
     }
 
+    // Method to style the slider
     private JSlider styleSlider(JSlider slider) {
         slider.setFont(new Font("Courier New", Font.BOLD, 12));
         slider.setMajorTickSpacing((slider.getMaximum() - slider.getMinimum()) / 5);
-        slider.setPaintTicks(true);
         slider.setPaintLabels(true);
-        slider.setForeground(Color.DARK_GRAY);
-        slider.setBackground(Color.LIGHT_GRAY);
-        slider.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        slider.setForeground(Color.WHITE);
+        slider.setBackground(Color.BLACK);
+
+        // Apply custom UI
+        slider.setUI(new CustomSliderUI(slider));
+
         return slider;
     }
+
+    // Custom UI class for the slider
+    public static class CustomSliderUI extends BasicSliderUI {
+
+        public CustomSliderUI(JSlider slider) {
+            super(slider);
+        }
+
+        @Override
+        public void paintThumb(Graphics g) {
+            if (thumbRect == null) {
+                return;
+            }
+
+            // Get the thumb bounds
+            Rectangle knobBounds = thumbRect;
+            int w = knobBounds.width;
+            int h = knobBounds.height;
+
+            // Draw the thumb
+            Graphics2D g2d = (Graphics2D) g.create();
+
+            // Enable anti-aliasing
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            // Translate to the position of thumbRect
+            g2d.translate(knobBounds.x, knobBounds.y);
+
+            // Set the thumb color (white)
+            g2d.setColor(Color.WHITE);
+            g2d.fillOval(0, 0, w, h);
+
+            // Draw the outline (black)
+            g2d.setColor(Color.BLACK);
+            g2d.drawOval(0, 0, w - 1, h - 1); // Subtract 1 to fit inside the rectangle
+
+            g2d.dispose();
+        }
+
+        @Override
+        public void paintTrack(Graphics g) {
+            super.paintTrack(g);
+            // You can also customize the track here if needed
+        }
+    }
+
     private JCheckBox styleCheckBox(JCheckBox checkBox) {
         checkBox.setFont(new Font("Courier New", Font.BOLD, 12));
         checkBox.setForeground(Color.DARK_GRAY);
@@ -119,7 +170,6 @@ public class ConfigurationScreen extends AbstractScreen {
         comboBox.setFont(new Font("Courier New", Font.BOLD, 12));
         comboBox.setForeground(Color.DARK_GRAY);
         comboBox.setBackground(Color.LIGHT_GRAY);
-        comboBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         return comboBox;
     }
 
