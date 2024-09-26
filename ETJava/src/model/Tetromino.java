@@ -48,6 +48,7 @@ public abstract class Tetromino {
     }
 
 
+
     private void snapBackRotation() {
         switch (this.rotation) {
             case 0 -> getRotation0();
@@ -132,13 +133,13 @@ public abstract class Tetromino {
             settle();
             return;
         }
-
         checkMovementCollision();
 
         handleFalling();
 
         handleMovement();
         handleRotation();
+
     }
 
     private void handleMovement() {
@@ -223,9 +224,11 @@ public abstract class Tetromino {
             case 1 -> getRotation2();
             case 2 -> getRotation3();
             case 3 -> getRotation0();
+
         }
         checkRotationCollision();
         if (leftCollide || rightCollide || bottomCollide) {
+            System.out.println("COLLIDED ON ROTATE");
             snapBackRotation();
         }
     }
