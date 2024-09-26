@@ -226,13 +226,14 @@ public class Gameplay {
 
 
 
-    private void updateScore(int rowsErased) {
+    void updateScore(int rowsErased) {
         switch (rowsErased) {
             case 1 -> score += 100;
             case 2 -> score += 300;
             case 3 -> score += 600;
             default -> score += 1000; // 4 and over
         }
+        checkLevelUp();
         // TODO: play sound if > 1
     }
 
@@ -252,7 +253,7 @@ public class Gameplay {
         }
     }
 
-    private void shiftDownRemainingRows(ArrayList<Integer> fullRows) {
+    void shiftDownRemainingRows(ArrayList<Integer> fullRows) {
         for (int row : fullRows) {
             for (Block settledBlock : settledTetrominos) {
                 if (settledBlock.getY() < row) {
@@ -488,4 +489,6 @@ public class Gameplay {
     public int getLevel() {
         return level;
     }
+
+
 }
