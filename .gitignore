@@ -28,7 +28,3 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-
-# Ignore configurations and scores
-configurations.json
-highscores.json
