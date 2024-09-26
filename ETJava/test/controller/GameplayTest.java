@@ -1,10 +1,13 @@
 package controller;
+
 import model.Block;
 import model.PlayerType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.awt.Color;
+
+import java.awt.*;
 import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GameplayTest {
@@ -105,7 +108,7 @@ public class GameplayTest {
 
     @Test
     public void testLevelUp() {
-        gameplay.updateScore(10);// Simulate 10 rows erased
+        gameplay.setRowsErased(10);// Simulate 10 rows erased
         assertEquals(2, gameplay.getLevel());
     }
 

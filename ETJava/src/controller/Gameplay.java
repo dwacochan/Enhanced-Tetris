@@ -242,8 +242,11 @@ public class Gameplay {
         if(gameController.getConfigurations().isSoundEffectsOn()){
             AudioManager.getInstance().playSound("/resources/RowClear.wav");
         };
+    }
 
-
+    void setRowsErased(int rowsErased){
+        this.rowsErased = rowsErased;
+        checkLevelUp();
     }
 
 

@@ -18,11 +18,11 @@ public class GameLoop extends JPanel implements Runnable {
     private Thread gameThread;
     private Thread player1Thread;
     private Thread player2Thread;
-    private boolean running = false;
+    private volatile boolean running = false;
 
 
 
-    private boolean paused = false;
+    private volatile boolean paused = false;
     private GameController gameController;
 
     // Two facades, one for each player
@@ -158,7 +158,7 @@ public class GameLoop extends JPanel implements Runnable {
             double drawInterval = (double) 1000000000 / (FPS * facade.getLevel());
 
             while (running) {
-                if (!paused) {
+                if (!paused && !Controls.pause) {
                     // Check if the level changed and update the interval
                     int currentLevel = facade.getLevel();
                     drawInterval = (double) 1000000000 / (FPS * currentLevel);
