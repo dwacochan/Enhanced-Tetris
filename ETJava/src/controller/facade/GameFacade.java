@@ -48,6 +48,7 @@ public class GameFacade {
     public boolean isGameOver() {
         return gameplay.isGameOver();
     }
+    public void setGameOver() {gameplay.setGameOver();}
 
     public int getScore() {return gameplay.getScore();}
 

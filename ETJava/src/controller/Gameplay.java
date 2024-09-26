@@ -154,6 +154,10 @@ public class Gameplay {
         return gameOver;
     }
 
+    public void setGameOver(){
+        gameOver = true;
+    }
+
     public int getGameNumber() {
         return gameNumber;
     }

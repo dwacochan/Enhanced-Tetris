@@ -7,7 +7,10 @@ import java.util.TimerTask;
 
 public abstract class ExternalPlayer {
     protected GameController gameController;
-    protected int gameNumber;
+
+
+
+    private int gameNumber;
     protected Timer timer;
     protected Timer downTimer;
 
@@ -92,5 +95,9 @@ public abstract class ExternalPlayer {
                 }
             }
         }, 50);  // Reset after 50ms to simulate key release
+    }
+
+    public int getGameNumber() {
+        return gameNumber;
     }
 }

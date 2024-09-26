@@ -18,12 +18,15 @@ public class GameLoop extends JPanel implements Runnable {
     private Thread player1Thread;
     private Thread player2Thread;
     private boolean running = false;
+
+
+
     private boolean paused = false;
     private GameController gameController;
 
     // Two facades, one for each player
     private GameFacade player1Facade;
-    private GameFacade player2Facade;
+    private GameFacade player2Facade = null;
 
     private GamePanel player1Panel;
     private GamePanel player2Panel;
@@ -292,7 +295,7 @@ public class GameLoop extends JPanel implements Runnable {
     public GameFacade getPlayerFacade(int gameNumber) {
         if (gameNumber == 1) {
             return player1Facade;
-        } else if (gameNumber == 2) {
+        } else if (gameNumber == 2 && isTwoPlayerMode) {
             return player2Facade;
         }
         return null;
@@ -314,6 +317,7 @@ public class GameLoop extends JPanel implements Runnable {
         return player1Facade.isGameOver();
     }
 
+
     private static String getConfigString(Configurations configurations) {
         int fieldWidth = configurations.getFieldWidth();
         int fieldHeight = configurations.getFieldHeight();
@@ -332,5 +336,14 @@ public class GameLoop extends JPanel implements Runnable {
         }
 
         return strField + " " + strMode;
+    }
+
+
+    public boolean isRunning() {
+        return running;
+    }
+
+    public boolean isPaused() {
+        return paused;
     }
 }
