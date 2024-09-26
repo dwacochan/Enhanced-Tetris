@@ -5,6 +5,7 @@ import model.Block;
 import model.Configurations;
 import model.PlayerType;
 import model.factory.TetrominoFactory;
+import util.AudioManager;
 import view.GamePanel;
 
 import javax.swing.*;
@@ -261,6 +262,13 @@ public class GameLoop extends JPanel implements Runnable {
             if (isTwoPlayerMode) {
                 GameController.getInstance().setNewScore(player2Facade.getScore(), player2Facade.getGameNumber(), getConfigString(gameController.getConfigurations()));
             }
+
+            AudioManager.getInstance().stopMusic();
+
+            // Sound effect for game over
+            if(gameController.getConfigurations().isSoundEffectsOn()){
+                AudioManager.getInstance().playSound("/resources/GameOver.wav");
+            };
             stopGame();
         }
     }

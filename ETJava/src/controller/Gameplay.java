@@ -209,7 +209,6 @@ public class Gameplay {
         if (!fullRows.isEmpty()){
             updateScore(fullRows.size());
             rowsErased += fullRows.size();
-            checkLevelUp();
         }
         removeFullRow(fullRows);
         shiftDownRemainingRows(fullRows);
@@ -243,12 +242,15 @@ public class Gameplay {
         if(gameController.getConfigurations().isSoundEffectsOn()){
             AudioManager.getInstance().playSound("/resources/RowClear.wav");
         };
-        checkLevelUp();
+
 
     }
 
+
+    final int levelUpThreshold = 10;
     private void checkLevelUp() {
-        if (rowsErased % 10 == 0) {
+        System.out.println(rowsErased);
+        if (rowsErased >= level*levelUpThreshold) {
             level++;
             //System.out.println("Level up! Now at level: " + level);
 
@@ -256,8 +258,6 @@ public class Gameplay {
             if(gameController.getConfigurations().isSoundEffectsOn()){
                 AudioManager.getInstance().playSound("/resources/LevelUp.wav");
             };
-
-            // TODO: Increase Tetromino falling speed
         }
     }
 
@@ -276,6 +276,7 @@ public class Gameplay {
                 }
             }
         }
+        checkLevelUp();
     }
 
     public void draw(Graphics2D g2d) {
@@ -438,12 +439,7 @@ public class Gameplay {
     public void gameOver(){
         gameOver = true;
 
-        AudioManager.getInstance().stopMusic();
 
-        // Sound effect for game over
-        if(gameController.getConfigurations().isSoundEffectsOn()){
-            AudioManager.getInstance().playSound("/resources/GameOver.wav");
-        };
 
     }
 

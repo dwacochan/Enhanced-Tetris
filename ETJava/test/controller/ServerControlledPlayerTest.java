@@ -53,6 +53,13 @@ public class ServerControlledPlayerTest {
         assertTrue(completed, "The player did not complete actions in time");
 
         // Verify the sequence of actions
+        List<String> expectedAction = getExpectedAction(predefinedMove, pureGame);
+
+        // Assert that the actions match
+        assertEquals(expectedAction, player.actions, "The sequence of actions should match the expected sequence");
+    }
+
+    private static List<String> getExpectedAction(OpMove predefinedMove, PureGame pureGame) {
         int rotateCount = Math.abs(predefinedMove.opRotate());
         int moveLeftCount = pureGame.getWidth() / 2;
         int moveRightCount = predefinedMove.opX();
@@ -69,9 +76,7 @@ public class ServerControlledPlayerTest {
             expectedAction.add("moveRight");
         }
         expectedAction.add("startDownwardMovement");
-
-        // Assert that the actions match
-        assertEquals(expectedAction, player.actions, "The sequence of actions should match the expected sequence");
+        return expectedAction;
     }
 
     private static PureGame getPureGame() {
