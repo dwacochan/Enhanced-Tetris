@@ -78,7 +78,10 @@ public class GameController {
         gameLoop.resetGame();
         isRunning = true;
         gameLoop.startGame();
-        AudioManager.getInstance().playMusic("/resources/GameMusic.wav");
+        if(configurations.isMusicOn()){
+            AudioManager.getInstance().playMusic("/resources/GameMusic.wav");
+        }
+
     }
 
     public void showSettings() {
@@ -122,7 +125,10 @@ public class GameController {
             gameLoop.resumeGame();
             isRunning = true;
         }
-        AudioManager.getInstance().playMusic("/resources/GameMusic.wav");
+        if(configurations.isMusicOn()){
+            AudioManager.getInstance().playMusic("/resources/GameMusic.wav");
+        }
+
     }
 
     public void stopGame() {

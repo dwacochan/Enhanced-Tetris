@@ -35,6 +35,10 @@ public class Controls {
 
     public static boolean pause;      // Pause for both players
 
+    // Controls for toggling the music and sound effects
+    public static boolean music;
+    public static boolean soundfx;
+
     public static void setExt_1_up(boolean ext_1_up) {
         Controls.ext_1_up = ext_1_up;
     }
