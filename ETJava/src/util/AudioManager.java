@@ -9,7 +9,9 @@ import java.util.Map;
 public class AudioManager {
     private static AudioManager instance; // Singleton instance
     private Clip clip;
+    private Clip sfxClip;
     private String currentFilePath;
+    private String sfxCurrentFilePath;
     private boolean isPaused = false; // Track if the clip is paused
 
     // Map to store the positions of different audio files
@@ -101,5 +103,28 @@ public class AudioManager {
     // Clear all saved positions (if necessary)
     public void resetAllPositions() {
         clipPositions.clear();
+    }
+
+    public void playSound(String filepath) {
+        try {
+
+            // If it's the same sound effect is already playing, do nothing
+            if (sfxClip != null && sfxClip.isRunning() && filepath.equals(sfxCurrentFilePath)) {
+                return;
+            }
+
+            // Load and play the new sound effect
+            URL soundURL = getClass().getResource(filepath);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundURL);
+            sfxClip = AudioSystem.getClip();
+            sfxClip.open(audioInputStream);
+            sfxCurrentFilePath = filepath;
+
+            sfxClip.start(); // Start playing
+            isPaused = false; // Reset paused state
+
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
     }
 }

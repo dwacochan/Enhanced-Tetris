@@ -6,6 +6,7 @@ import model.PureGame;
 import model.Tetromino;
 import model.factory.TetrominoFactory;
 import model.tetrominos.O;
+import util.AudioManager;
 import view.GamePanel;
 
 import java.awt.*;
@@ -233,15 +234,25 @@ public class Gameplay {
             case 3 -> score += 600;
             default -> score += 1000; // 4 and over
         }
-        // TODO: play sound if > 1
+
+        // Sound effect for row clearing
+        if(gameController.getConfigurations().isSoundEffectsOn()){
+            AudioManager.getInstance().playSound("/resources/RowClear.wav");
+        };
+
     }
 
     private void checkLevelUp() {
         if (rowsErased % 10 == 0) {
             level++;
             System.out.println("Level up! Now at level: " + level);
+
+            // Sound effect for levelling up
+            if(gameController.getConfigurations().isSoundEffectsOn()){
+                AudioManager.getInstance().playSound("/resources/LevelUp.wav");
+            };
+
             // TODO: Increase Tetromino falling speed
-            // TODO: Play level up sound
         }
     }
 
@@ -421,7 +432,14 @@ public class Gameplay {
 
     public void gameOver(){
         gameOver = true;
-        // TODO: PLAY GAME OVER SOUND
+
+        AudioManager.getInstance().stopMusic();
+
+        // Sound effect for game over
+        if(gameController.getConfigurations().isSoundEffectsOn()){
+            AudioManager.getInstance().playSound("/resources/GameOver.wav");
+        };
+
     }
 
 
