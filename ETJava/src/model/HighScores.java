@@ -28,11 +28,18 @@ public class HighScores {
 
     // Return the list of scores sorted in descending order
     public List<Score> getScores() {
+        scores.sort(null);
         return scores;
     }
 
-    // Record class to hold score data
-    public record Score(int score, String name, String config) {}
+    // Record class to hold score data and implement Comparable interface
+    public record Score(int score, String name, String config) implements Comparable<Score> {
+        @Override
+        public int compareTo(Score other) {
+            // Sorting in descending order of score
+            return Integer.compare(other.score, this.score);
+        }
+    }
 
     // Save high scores to JSON
     public void saveToFile() {
@@ -54,14 +61,13 @@ public class HighScores {
             logger.info("Highscore loaded successfully.");
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Failed to load high scores.", e);
-            // Optionally, handle the case where the file does not exist or is invalid
             scores = new ArrayList<>();
         }
     }
 
     // Check if a score qualifies for the top 10
     public boolean isTopTen(int score) {
-        scores.sort((s1, s2) -> Integer.compare(s2.score(), s1.score()));
+        scores.sort(null);
         if (scores.size() < 10) {
             return true;
         }

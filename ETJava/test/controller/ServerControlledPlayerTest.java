@@ -23,7 +23,7 @@ public class ServerControlledPlayerTest {
 
     @Test
     public void testDecideAndMakeBestMove() throws InterruptedException {
-        // Given
+
         int gameNumber = 1;
         OpMove predefinedMove = new OpMove(3, 2); // Example move: move 3 units right, rotate 2 times
         TestableServerControlledPlayer player = new TestableServerControlledPlayer(gameNumber, predefinedMove);
@@ -82,7 +82,7 @@ public class ServerControlledPlayerTest {
     private static PureGame getPureGame() {
         int width = 10;
         int height = 20;
-        int[][] cells = new int[height][width]; // Assuming an empty game board
+        int[][] cells = new int[height][width];
         int[][] currentShape = new int[][] {
                 {1, 1},
                 {1, 1}
